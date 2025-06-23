@@ -22,7 +22,7 @@ namespace FastScriptReload.Examples
 		/*  EXPERIMENTAL: Add new fields at runtime (editor rendered)
 		 *  To enable feature please go to Fast Script Reload -> Start Screen -> New Fields -> Enable experimental added field support
 		 *  Then:
-		 *  1) hit play
+		 *  1) _hit play
 		 *  2) uncomment '_testUMove' variable
 		 *  3) uncomment usage of experimental variable in Update() method
 		 *
