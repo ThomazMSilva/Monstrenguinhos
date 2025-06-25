@@ -9,9 +9,8 @@ namespace Assets.Scripts.Interactibles
         Watered
     }
 
-    public class LandPlot : MonoBehaviour, IInteractible
+    public class LandPlot : Interactible
     {
-        [SerializeField] private GameObject selectionDisplay;
         public LandState currentLandState = LandState.Default;
 
         public void RowLand()
@@ -30,7 +29,7 @@ namespace Assets.Scripts.Interactibles
             }
         }
 
-        public void Interact(object sender = null)
+        public override void Interact(object sender = null)
         {
             Debug.Log("Interagiu com terreno");
             if (sender != null && sender is PlayerScripts.Item item)
@@ -38,17 +37,6 @@ namespace Assets.Scripts.Interactibles
 
             }
 
-        }
-
-        public void Select(object sender = null)
-        {
-            Debug.Log("Selecionou " + gameObject.name);
-            selectionDisplay.SetActive(true);
-        }
-
-        public void Deselect(object sender = null)
-        {
-            selectionDisplay.SetActive(false);
         }
     }
 }

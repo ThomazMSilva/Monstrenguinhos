@@ -41,9 +41,11 @@ namespace Assets.Scripts.GridScripts
 
         public bool CanBePlaced(PlaceableObject placeableObject)
         {
-            BoundsInt area = new BoundsInt();
-            area.position = gridLayout.WorldToCell(objectToPlace.GetStartPosition());
-            area.size = placeableObject.Size;
+            BoundsInt area = new()
+            {
+                position = gridLayout.WorldToCell(placeableObject.GetStartPosition()),
+                size = placeableObject.Size
+            };
 
             TileBase[] baseArray = mainTilemap.GetTilesBlock(area);
 
@@ -60,13 +62,19 @@ namespace Assets.Scripts.GridScripts
                                 start.x + size.x, start.y + size.y);
         }
 
-        public void PlaceObject()
+        public void PlaceObject(PlaceableObject placeableObject)
         {
-            if(!CanBePlaced(objectToPlace)) return;
+            if(!CanBePlaced(placeableObject)) return;
 
-            objectToPlace.Place();
-            Vector3Int start = gridLayout.WorldToCell(objectToPlace.GetStartPosition());
-            FillArea(occupiedTile, start, objectToPlace.Size);
+            //placeableObject.Place();
+            Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
+            FillArea(occupiedTile, start, placeableObject.Size);
+        }
+
+        public void PickObject(PlaceableObject placeableObject)
+        {
+            Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
+            FillArea(null, start, placeableObject.Size);
         }
     }
 }

@@ -4,8 +4,10 @@ namespace Assets.Scripts.PlayerScripts
 {
     public class PlayerController : MonoBehaviour
     {
+        #region ATTRIBUTES
         [SerializeField] private Animator playerAnim;
 
+        #region INPUT_ATTRIBUTES
         [Space(8f)]
         [Header("Input")]
         [Space(8f)]
@@ -15,40 +17,53 @@ namespace Assets.Scripts.PlayerScripts
         [SerializeField] private string emoteInput = "Fire1";
         [SerializeField] private string interactionInput = "Fire2";
         [SerializeField] private string sprintInput = "Fire3";
+        private bool m_interactionAxisDown;
+        private bool isRunning;
+        private Vector2 inputAxis;
+        #endregion
 
-
+        #region MOVEMENT_ATTRIBUTES
         [Space(8f)]
         [Header("Variáveis de Movimento")]
         [Space(8f)]
+
         [SerializeField] private Rigidbody playerRB;
         [SerializeField] private Transform forwardAnchor;
         [SerializeField] private float speed = 2f;
         [SerializeField, Range(1.1f, 3f)] private float sprintMultiplier = 1.5f;
         [SerializeField] private float rotationSpeed = 10;
-
-        [Space(8f)]
-        [Header("Variaveis de Interacao")]
-        [Space(8f)]
-        [SerializeField] Transform interactionOrigin;
-        [SerializeField] private float interactionHeight = 1f;
-        [SerializeField] private LayerMask layerMask;
-
-        private bool isInteracting;
-        private bool isRunning;
-        private bool m_interactionAxisDown;
-
         private float CurrentSpeedMultiplier => isRunning ? sprintMultiplier : 1;
-
-        private Vector2 inputAxis;
+        
         private Vector3 playerDirection;
         private Vector3 playerVelocity;
         private Vector3 isometricForward, isometricRight;
+        #endregion
+
+        #region INTERACTION_ATTRIBUTES
+        [Space(8f)]
+        [Header("Variaveis de Interacao")]
+        [Space(8f)]
+
+        [SerializeField] private Transform interactionOrigin;
+        [SerializeField] private float interactionHeight = 1f;
+        [SerializeField] private LayerMask layerMask;
+
+        [Space(8f)]
+        [SerializeField] private PlayerScripts.HeldItem currentHeldItem = new();
+        private bool isInteracting;
 
         private RaycastHit _hit;
 
-        private Assets.Scripts.Interactibles.IInteractible selectedInteractible = null;
+        private Interactibles.Interactible selectedInteractible = null;
+        #endregion
+        #endregion
 
-        private void Start() => CalculateIsometricAngle();
+        #region UNITY_METHODS
+        private void Start()
+        {
+            currentHeldItem = new();
+            CalculateIWorldAxis();
+        }
 
         private void Update() => HandleInput();
 
@@ -58,10 +73,12 @@ namespace Assets.Scripts.PlayerScripts
 
             playerAnim.SetFloat("velocityMagnitude", inputAxis.magnitude * CurrentSpeedMultiplier);
 
-            CheckForInteraction();
+            CheckForInteractible();
         }
+        #endregion
 
-        private void CalculateIsometricAngle()
+        #region PRIVATE_METHODS
+        private void CalculateIWorldAxis()
         {
             isometricForward = forwardAnchor.forward;
             isometricForward.Normalize();
@@ -80,8 +97,7 @@ namespace Assets.Scripts.PlayerScripts
                 if (!m_interactionAxisDown)
                 {
                     m_interactionAxisDown = true;
-                    playerAnim.SetTrigger("Action");
-                    selectedInteractible?.Interact();
+                    Interact();
                 }
             }
             if(Input.GetAxisRaw(interactionInput) == 0)
@@ -91,7 +107,7 @@ namespace Assets.Scripts.PlayerScripts
 
             playerAnim.SetBool("Emoting_0", Input.GetAxisRaw(emoteInput) != 0);
         }
-        
+
         private void HandleMovement()
         {
             if (isInteracting) return;
@@ -110,10 +126,11 @@ namespace Assets.Scripts.PlayerScripts
             );
         }
 
-        private void CheckForInteraction()
+        private void CheckForInteractible()
         {
             if(Physics.Raycast(interactionOrigin.position, Vector3.down, out _hit, interactionHeight, layerMask))
             {
+
                 TrySelectInteractible(_hit);
             }
             else
@@ -126,8 +143,10 @@ namespace Assets.Scripts.PlayerScripts
 
         private void TrySelectInteractible(RaycastHit hit)
         {
-            if (hit.transform.TryGetComponent<Assets.Scripts.Interactibles.IInteractible >(out var interactible))
+            if (hit.transform.TryGetComponent<Assets.Scripts.Interactibles.Interactible >(out var interactible))
             {
+                if (selectedInteractible == interactible) return;
+
                 if (selectedInteractible != null && selectedInteractible != interactible)
                 {
                     selectedInteractible.Deselect();
@@ -146,18 +165,28 @@ namespace Assets.Scripts.PlayerScripts
             selectedInteractible?.Deselect();
             selectedInteractible = null;
         }
+        
+        private void Interact()
+        {
+            playerAnim.SetTrigger("Action");
+            selectedInteractible?.Interact(this);
+        }
+        #endregion
 
+        #region PUBLIC_METHODS
         public void SetInteracting() => isInteracting = true;
         
         public void SetNotInteracting() => isInteracting = false;
+
+        public void SetHeldItem(HeldItem item) => currentHeldItem = item;
+
+        public HeldItem HeldItem => currentHeldItem;
+
+        public Transform InteractionOrigin => interactionOrigin;
+        #endregion
     }
 
-    [System.Serializable]
-    public class HeldItem
-    {
-
-    }
-
+    #region ITEM_SCRIPTS
     [System.Serializable]
     public abstract class Item
     {
@@ -169,7 +198,7 @@ namespace Assets.Scripts.PlayerScripts
     {
         public void Use(object sender)
         {
-            if (sender is Interactibles.IInteractible interactible)
+            if (sender is Interactibles.Interactible interactible)
             {
                 interactible.Interact(this);
             }
@@ -197,11 +226,12 @@ namespace Assets.Scripts.PlayerScripts
 
         public void Use(object sender)
         {
-            if (sender is Interactibles.IInteractible interactible)
+            if (sender is Interactibles.Interactible interactible)
             {
                 interactible.Interact(this);
             }
             else UpdateWaterLevel(-drainAmount);
         }
     }
+    #endregion
 }
