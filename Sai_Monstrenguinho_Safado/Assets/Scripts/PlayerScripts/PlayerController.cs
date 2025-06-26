@@ -49,7 +49,7 @@ namespace Assets.Scripts.PlayerScripts
         [SerializeField] private LayerMask layerMask;
 
         [Space(8f)]
-        [SerializeField] private PlayerScripts.HeldItem currentHeldItem = new();
+        [SerializeField] private HeldItem currentHeldItem;
         private bool isInteracting;
 
         private RaycastHit _hit;
@@ -205,33 +205,5 @@ namespace Assets.Scripts.PlayerScripts
         }
     }
 
-    [System.Serializable]
-    public class WateringCan : Item
-    {
-        [SerializeField] private float maximumWaterLevel;
-        [SerializeField] private float drainAmount;
-        private float currentWaterLevel;
-        public float CurrentWaterLevel => currentWaterLevel;
-
-        public void UpdateMaximumWaterLevel(float newMaximum)
-        {
-            maximumWaterLevel = newMaximum;
-            UpdateWaterLevel();
-        }
-
-        public void UpdateWaterLevel(float fillAmount = 0)
-        {
-            currentWaterLevel = Mathf.Clamp(currentWaterLevel + fillAmount, 0, maximumWaterLevel);
-        }
-
-        public void Use(object sender)
-        {
-            if (sender is Interactibles.Interactible interactible)
-            {
-                interactible.Interact(this);
-            }
-            else UpdateWaterLevel(-drainAmount);
-        }
-    }
     #endregion
 }

@@ -12,7 +12,8 @@ namespace Assets.Scripts.Interactibles
         [SerializeField] private Collider holdableCollider;
         [SerializeField] private HeldItem relatedItem;
         [SerializeField] private float placeRayDist = 2f;
-        [SerializeField] private LayerMask layerMask;
+        [SerializeField] private LayerMask groundLayer = 2;
+        [SerializeField] private LayerMask interactibleLayer = 5;
         [SerializeField] private GridScripts.PlaceableObject _placedObject;
 
         public virtual void Start()
@@ -53,9 +54,15 @@ namespace Assets.Scripts.Interactibles
         public virtual void DropItem()
         {
             Debug.DrawLine(transform.position, transform.position + (Vector3.down * placeRayDist), Color.cyan);
-           
-            if (Physics.Raycast(transform.position, Vector3.down, out var hit,placeRayDist, layerMask))
+
+            Ray ray = new(transform.position, Vector3.down);
+            bool freeDrop = !Physics.Raycast(ray, placeRayDist, interactibleLayer);
+
+            Debug.Log("is drop free: " + freeDrop);
+
+            if (freeDrop && Physics.Raycast(ray, out var hit, placeRayDist, groundLayer))
             {
+                Debug.Log("TRyroij");
                 var buildSis = GridScripts.BuildSystem.instance;
 
                 var pos = buildSis.SnappedPosition(hit.point);

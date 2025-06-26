@@ -8,8 +8,11 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender is PlayerController player && player.HeldItem.itemTag != ItemTag.None)
             {
-                if(player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
+                if (player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
                     held.ReturnToStartingPoint();
+                
+                else 
+                    player.SetHeldItem(new());
             }
         }
     }

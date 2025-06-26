@@ -68,13 +68,13 @@ namespace Assets.Scripts.GridScripts
 
             //placeableObject.Place();
             Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
-            FillArea(occupiedTile, start, placeableObject.Size);
+            //FillArea(occupiedTile, start, placeableObject.Size);
         }
 
         public void PickObject(PlaceableObject placeableObject)
         {
             Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
-            FillArea(null, start, placeableObject.Size);
+            //FillArea(null, start, placeableObject.Size);
         }
     }
 }
