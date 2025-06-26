@@ -49,7 +49,8 @@ namespace Assets.Scripts.PlayerScripts
         [SerializeField] private LayerMask layerMask;
 
         [Space(8f)]
-        [SerializeField] private HeldItem currentHeldItem;
+        [SerializeField] private HeldItem currentHeldTag;
+        private Interactibles.Holdable currentHeldInteractible;
         private bool isInteracting;
 
         private RaycastHit _hit;
@@ -61,7 +62,7 @@ namespace Assets.Scripts.PlayerScripts
         #region UNITY_METHODS
         private void Start()
         {
-            currentHeldItem = new();
+            currentHeldTag = new();
             CalculateIWorldAxis();
         }
 
@@ -169,6 +170,7 @@ namespace Assets.Scripts.PlayerScripts
         private void Interact()
         {
             playerAnim.SetTrigger("Action");
+            //currentHeldInteractible?.DropItem();
             selectedInteractible?.Interact(this);
         }
         #endregion
@@ -178,11 +180,52 @@ namespace Assets.Scripts.PlayerScripts
         
         public void SetNotInteracting() => isInteracting = false;
 
-        public void SetHeldItem(HeldItem item) => currentHeldItem = item;
+        public void SetHeldItem(HeldItem incomingTag)
+        {
+            //Isso aqui tá bizarro e triste, mudar depois
+            bool hasTransform = currentHeldTag.transform != null;
+            if (currentHeldTag.itemTag != ItemTag.None && hasTransform)
+            {
+                if (currentHeldTag.transform.TryGetComponent<Interactibles.Holdable>(out var held))
+                {
+                    held.ReturnToStartingPoint();
+                    SetHeldEmpty();
+                }
+            }
+            
+            if (incomingTag.transform != null
+                && incomingTag.transform.TryGetComponent<Interactibles.Holdable>(out var newHeld))
+            {
+                Debug.Log("Ablua");
+                currentHeldInteractible = newHeld;
+            }
+            else
+            {
+                Debug.Log("Ablure");
+                currentHeldInteractible = null;
+            }
+            currentHeldTag = incomingTag;
+        }
 
-        public HeldItem HeldItem => currentHeldItem;
+        public void SetHeldEmpty()
+        {
+            currentHeldTag = new();
+        }
+
+        public HeldItem HeldItem => currentHeldTag;
 
         public Transform InteractionOrigin => interactionOrigin;
+
+        public bool TryGetFromHeld<T>(out T component)
+        {
+            if (currentHeldTag.transform.TryGetComponent(out T t))
+            {
+                component = t;
+                return true;
+            }
+            component = default;
+            return false;
+        }
         #endregion
     }
 

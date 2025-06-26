@@ -31,7 +31,8 @@ namespace Assets.Scripts.PlayerScripts
         Broom,
         Bucket,
         Box,
-        Seed
+        Seed,
+        Crop
     }
 
 }

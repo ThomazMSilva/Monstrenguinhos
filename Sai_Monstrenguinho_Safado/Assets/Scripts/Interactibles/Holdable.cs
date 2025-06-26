@@ -5,6 +5,7 @@ namespace Assets.Scripts.Interactibles
 {
     public class Holdable : Interactible
     {
+        [SerializeField] private bool isPrefab;
         protected Vector3 originalPosition;
         protected Quaternion originalRotation;
         protected Transform originalParent;
@@ -18,7 +19,7 @@ namespace Assets.Scripts.Interactibles
 
         public virtual void Start()
         {
-            originalParent = transform.parent;
+            originalParent = isPrefab ? null : transform.parent ?? transform.root;
             originalPosition = transform.position;
             originalRotation = transform.rotation;
             relatedItem.transform ??= transform;
@@ -27,6 +28,8 @@ namespace Assets.Scripts.Interactibles
 
         public virtual void Update()
         {
+            if (!isHeld) return;
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 DropItem();
@@ -45,7 +48,7 @@ namespace Assets.Scripts.Interactibles
         {
             isHeld = true;
             holdableCollider.enabled = false;
-            GridScripts.BuildSystem.instance.PickObject(_placedObject);
+            //GridScripts.BuildSystem.instance.PickObject(_placedObject);
             transform.SetParent(player.InteractionOrigin, false);
             transform.localPosition = Vector3.zero;
             player.SetHeldItem(relatedItem);
@@ -75,6 +78,12 @@ namespace Assets.Scripts.Interactibles
         
         public virtual void ReturnToStartingPoint()
         {
+            if (originalParent == null)
+            {
+                Debug.Log(transform.name + "Era prefab ou nao tinha parent. Destruindo");
+                Destroy(gameObject, .5f);
+                return;
+            }
             PlaceItem(originalPosition, originalRotation);
         }
         
@@ -94,15 +103,17 @@ namespace Assets.Scripts.Interactibles
             }
         }
 
-        //Zerar o held item do player
+        //Zerar o held item do player não-manualmente depois
         private void PlaceItem(Vector3 position, Quaternion rotation)
         {
             isHeld = false;
             holdableCollider.enabled = true;
             transform.SetParent(originalParent, false);
             transform.SetPositionAndRotation(position, rotation);
-            GridScripts.BuildSystem.instance.PlaceObject(_placedObject);
-            FindAnyObjectByType<PlayerController>().SetHeldItem(new());
+            //GridScripts.BuildSystem.instance.PlaceObject(_placedObject);
+            
+            //Temporario
+            FindAnyObjectByType<PlayerController>().SetHeldEmpty();
         }
 
     }

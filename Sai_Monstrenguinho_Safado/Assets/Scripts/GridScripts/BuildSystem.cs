@@ -62,19 +62,19 @@ namespace Assets.Scripts.GridScripts
                                 start.x + size.x, start.y + size.y);
         }
 
-        public void PlaceObject(PlaceableObject placeableObject)
+        /*public void PlaceObject(PlaceableObject placeableObject)
         {
             if(!CanBePlaced(placeableObject)) return;
 
             //placeableObject.Place();
             Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
             //FillArea(occupiedTile, start, placeableObject.Size);
-        }
+        }*/
 
-        public void PickObject(PlaceableObject placeableObject)
+        /*public void PickObject(PlaceableObject placeableObject)
         {
-            Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
+            //Vector3Int start = gridLayout.WorldToCell(placeableObject.GetStartPosition());
             //FillArea(null, start, placeableObject.Size);
-        }
+        }*/
     }
 }

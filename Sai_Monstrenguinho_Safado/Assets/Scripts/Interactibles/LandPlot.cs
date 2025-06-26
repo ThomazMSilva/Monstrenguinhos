@@ -19,7 +19,7 @@ namespace Assets.Scripts.Interactibles
                 switch (player.HeldItem.itemTag)
                 {
                     case PlayerScripts.ItemTag.None:
-                        HarvestCrop();
+                        HarvestCrop(player);
                         break;
 
                     case PlayerScripts.ItemTag.Bucket:
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Interactibles
                         break;
 
                     case PlayerScripts.ItemTag.Box:
-                        HarvestCrop();
+                        HarvestCrop(player);
                         break;
 
                     case PlayerScripts.ItemTag.Seed:
@@ -36,16 +36,6 @@ namespace Assets.Scripts.Interactibles
                         break;
                     default: break;
                 }
-            }
-        }
-
-        private void HarvestCrop()
-        {
-            if (currentCrop == null) return;
-            if (currentCrop.isReady)
-            {
-                Debug.Log("Catou a crop");
-                currentCrop = null;
             }
         }
 
@@ -59,6 +49,7 @@ namespace Assets.Scripts.Interactibles
             {
                 Debug.Log("Plantou " + heldSeed.cropAttributes.CropName);
                 currentCrop = new(heldSeed.cropAttributes);
+                player.SetHeldItem(new());
             }
             else Debug.Log("nao tinha seedholdable");
 
@@ -68,6 +59,23 @@ namespace Assets.Scripts.Interactibles
         {
             if (currentCrop == null) return;
             growCropRoutine ??= StartCoroutine(GrowCrop());
+        }
+
+        private void HarvestCrop(PlayerScripts.PlayerController player)
+        {
+            if (currentCrop == null) return;
+            if (currentCrop.isReady)
+            {
+                var cropGO = Instantiate(currentCrop.CropPrefab);
+                if(cropGO.TryGetComponent<Holdable>(out var cropHoldable))
+                {
+                    Debug.Log("Catou a crop");
+                    //player.SetHeldItem(cropHoldable.rel);
+                    cropHoldable.Interact(player);
+                    currentCrop = null;
+
+                }
+            }
         }
 
         private System.Collections.IEnumerator GrowCrop()
@@ -94,6 +102,9 @@ namespace Assets.Scripts.Interactibles
     [System.Serializable]
     public class Crop
     {
+        [SerializeField] private GameObject cropPrefab;
+        public GameObject CropPrefab => cropPrefab;
+
         [SerializeField] private string cropName = "fruit";
         public string CropName => cropName;
 
@@ -116,6 +127,7 @@ namespace Assets.Scripts.Interactibles
 
         public Crop(Crop crop)
         {
+            cropPrefab = crop.CropPrefab;
             cropName = crop.CropName;
             growthMultiplier = crop.GrowthMultiplier;
             growthTime = crop.GrowthTime;
