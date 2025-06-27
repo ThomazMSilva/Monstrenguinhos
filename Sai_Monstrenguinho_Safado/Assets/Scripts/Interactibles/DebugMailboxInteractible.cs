@@ -23,8 +23,8 @@ namespace Assets.Scripts.Interactibles
                         {
                             UpdateTMP(box.storedCrops);
                             box.ClearCrops();
-                            player.SetHeldEmpty();
                             box.ReturnToStartingPoint();
+                            player.SetHeldEmpty();
                         }
                         break;
                     case PlayerScripts.ItemTag.Crop:

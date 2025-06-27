@@ -25,7 +25,7 @@ namespace Assets.Scripts.Interactibles
             //holdableCollider ??= GetComponent<Collider>();
         }
 
-        public virtual void Update()
+        /*public virtual void Update()
         {
             if (!isHeld) return;
 
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Interactibles
                 //FindObjectOfType<PlayerController>().HeldItem.SetNone();
             }
 
-        }
+        }*/
 
         public virtual void PickUpItem(PlayerController player)
         {
@@ -107,6 +107,7 @@ namespace Assets.Scripts.Interactibles
         {
             isHeld = false;
             holdableCollider.enabled = true;
+
             transform.SetParent(originalParent, false);
             transform.SetPositionAndRotation(position, rotation);
             //GridScripts.BuildSystem.instance.PlaceObject(_placedObject);

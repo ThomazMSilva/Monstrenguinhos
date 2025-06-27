@@ -170,7 +170,7 @@ namespace Assets.Scripts.PlayerScripts
         private void Interact()
         {
             playerAnim.SetTrigger("Action");
-            //currentHeldInteractible?.DropItem();
+            currentHeldInteractible?.DropItem();
             selectedInteractible?.Interact(this);
         }
         #endregion
@@ -210,6 +210,7 @@ namespace Assets.Scripts.PlayerScripts
         public void SetHeldEmpty()
         {
             currentHeldTag = new();
+            currentHeldInteractible = null;
         }
 
         public HeldItem HeldItem => currentHeldTag;

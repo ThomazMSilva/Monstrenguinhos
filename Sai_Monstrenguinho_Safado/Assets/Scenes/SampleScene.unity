@@ -887,6 +887,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 416439962}
   - {fileID: 771505420}
   - {fileID: 1208679307}
   - {fileID: 290824245}
@@ -894,6 +895,11 @@ Transform:
   - {fileID: 1595782902}
   m_Father: {fileID: 665655391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &416439962 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
+  m_PrefabInstance: {fileID: 700933370867079154}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &539884551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1070,9 +1076,9 @@ MonoBehaviour:
   playerAnim: {fileID: 539884553}
   verticalInput: Vertical
   horizontalInput: Horizontal
-  emoteInput: Fire1
-  interactionInput: Fire2
-  sprintInput: Fire3
+  emoteInput: Emote
+  interactionInput: Interact
+  sprintInput: Sprint
   playerRB: {fileID: 539884555}
   forwardAnchor: {fileID: 1723406130}
   speed: 2
@@ -3424,7 +3430,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 406848087}
     m_Modifications:
     - target: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
       propertyPath: m_LocalScale.y
@@ -3448,15 +3454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1755332230324385251, guid: 33c6e41919f5882499dee87f1af53fb5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3762,4 +3768,3 @@ SceneRoots:
   - {fileID: 1724697147}
   - {fileID: 866400298}
   - {fileID: 1467470546}
-  - {fileID: 700933370867079154}
