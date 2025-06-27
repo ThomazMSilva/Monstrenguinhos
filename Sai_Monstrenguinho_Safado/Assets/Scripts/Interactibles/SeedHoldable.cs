@@ -5,6 +5,6 @@ namespace Assets.Scripts.Interactibles
 {
     public class SeedHoldable : Holdable
     {
-        public Crop cropAttributes;
+        public CropAttributes cropAttributes;
     }
 }

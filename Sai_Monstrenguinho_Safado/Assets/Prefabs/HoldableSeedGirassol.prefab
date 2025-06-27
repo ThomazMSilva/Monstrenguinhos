@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 573076825627530636}
   - component: {fileID: 8848285926002471962}
   m_Layer: 3
-  m_Name: SeedA
+  m_Name: HoldableSeedGirassol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,12 +133,14 @@ MonoBehaviour:
   interactibleLayer:
     serializedVersion: 2
     m_Bits: 8
-  _placedObject: {fileID: 8848285926002471962}
   cropAttributes:
-    cropPrefab: {fileID: 3894122223799165937, guid: 06f606b699e11b64bafe6eb6a26200bb, type: 3}
-    cropName: Fruta
+    cropPrefab: {fileID: 3894122223799165937, guid: 02e68446e76a3f54ca34df94eb4ba043, type: 3}
+    cropStage1: {fileID: 21300000, guid: 7a90f8259ba397c45948115a493cb161, type: 3}
+    cropStage2: {fileID: 21300000, guid: 84bf54b4a49e64049a3e324f981ec957, type: 3}
+    cropStage3: {fileID: 21300000, guid: 40fd7b438a56c82448944a70dd06e371, type: 3}
+    cropName: Girassol
     growthMultiplier: 1
-    growthTime: 10
+    growthTime: 5
     currentTime: 0
     isWatered: 0
     isReady: 0

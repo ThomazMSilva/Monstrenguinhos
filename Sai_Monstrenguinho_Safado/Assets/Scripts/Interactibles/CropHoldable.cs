@@ -6,9 +6,9 @@ namespace Assets.Scripts.Interactibles
     {
         public CropHoldable() => cropAttributes = default;
         
-        public CropHoldable(Crop crop) => cropAttributes = crop;
+        public CropHoldable(CropAttributes crop) => cropAttributes = crop;
 
-        public Crop cropAttributes;
+        public CropAttributes cropAttributes;
 
         public override void Interact(object sender = null)
         {

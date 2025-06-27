@@ -5,9 +5,9 @@ namespace Assets.Scripts.Interactibles
 {
     public class BoxHoldable : Holdable
     {
-        public List<Crop> storedCrops = new();
-        public void AddCrop(Crop crop) => storedCrops.Add(crop);
-        public void ResetCrops() => storedCrops.Clear();
+        public List<CropAttributes> storedCrops = new();
+        public void AddCrop(CropAttributes crop) => storedCrops.Add(crop);
+        public void ClearCrops() => storedCrops.Clear();
 
         public override void Interact(object sender = null)
         {

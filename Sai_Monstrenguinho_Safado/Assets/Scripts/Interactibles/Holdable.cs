@@ -15,7 +15,6 @@ namespace Assets.Scripts.Interactibles
         [SerializeField] private float placeRayDist = 2f;
         [SerializeField] private LayerMask groundLayer = 2;
         [SerializeField] private LayerMask interactibleLayer = 5;
-        [SerializeField] private GridScripts.PlaceableObject _placedObject;
 
         public virtual void Start()
         {

@@ -2,10 +2,10 @@
 
 namespace Assets.Scripts.Interactibles
 {
-    public class LandPlot : Interactible
+    public class Plot : Interactible
     {
-        public LandState currentLandState = LandState.Default;
-        public Crop currentCrop;
+        [SerializeField] private SpriteRenderer cropSpriteRenderer;
+        public CropAttributes currentCrop;
         private Coroutine growCropRoutine;
 
         public override void Interact(object sender = null)
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Interactibles
                         break;
 
                     case PlayerScripts.ItemTag.Bucket:
-                        WaterSeed();
+                        WaterSeed(player);
                         break;
 
                     case PlayerScripts.ItemTag.Box:
@@ -49,16 +49,20 @@ namespace Assets.Scripts.Interactibles
             {
                 Debug.Log("Plantou " + heldSeed.cropAttributes.CropName);
                 currentCrop = new(heldSeed.cropAttributes);
+                cropSpriteRenderer.sprite = currentCrop.cropStage1;
                 player.SetHeldItem(new());
+                //player.SetHeldEmpty();
             }
-            else Debug.Log("nao tinha seedholdable");
-
+            else
+            {
+                Debug.Log("nao tinha seedholdable");
+            }
         }
 
-        private void WaterSeed()
+        private void WaterSeed(PlayerScripts.PlayerController player)
         {
             if (currentCrop == null) return;
-            growCropRoutine ??= StartCoroutine(GrowCrop());
+            growCropRoutine ??= StartCoroutine(GrowCrop(player));
         }
 
         private void HarvestCrop(PlayerScripts.PlayerController player)
@@ -66,29 +70,34 @@ namespace Assets.Scripts.Interactibles
             if (currentCrop == null) return;
             if (currentCrop.isReady)
             {
+                cropSpriteRenderer.sprite = null;
                 var cropGO = Instantiate(currentCrop.CropPrefab);
-                if(cropGO.TryGetComponent<Holdable>(out var cropHoldable))
+                if (cropGO.TryGetComponent<Holdable>(out var cropHoldable))
                 {
                     Debug.Log("Catou a crop");
-                    //player.SetHeldItem(cropHoldable.rel);
                     cropHoldable.Interact(player);
                     currentCrop = null;
-
                 }
             }
         }
 
-        private System.Collections.IEnumerator GrowCrop()
+        private System.Collections.IEnumerator GrowCrop(PlayerScripts.PlayerController player)
         {
             Debug.Log("Agüou a semente.");
-            currentCrop.isWatered = true;
 
-            while(currentCrop.isWatered && !currentCrop.isReady)
+            player.SetHeldItem(new());
+            currentCrop.isWatered = true;
+            cropSpriteRenderer.sprite = currentCrop.cropStage2
+                ;
+            while (currentCrop.isWatered && !currentCrop.isReady)
             {
                 currentCrop.currentTime += Time.deltaTime * currentCrop.GrowthMultiplier;
                 
-                if (currentCrop.currentTime >= currentCrop.GrowthTime) 
+                if (currentCrop.currentTime >= currentCrop.GrowthTime)
+                {
                     currentCrop.isReady = true;
+                    cropSpriteRenderer.sprite = currentCrop.cropStage3;
+                } 
 
                 if (currentCrop.isReady || !currentCrop.isWatered) break;
 
@@ -97,46 +106,5 @@ namespace Assets.Scripts.Interactibles
             growCropRoutine = null;
         }
         
-    }
-
-    [System.Serializable]
-    public class Crop
-    {
-        [SerializeField] private GameObject cropPrefab;
-        public GameObject CropPrefab => cropPrefab;
-
-        [SerializeField] private string cropName = "fruit";
-        public string CropName => cropName;
-
-        [SerializeField] private float growthMultiplier = 1f;
-        public float GrowthMultiplier => growthMultiplier;
-
-        [SerializeField] private float growthTime = 10f;
-        public float GrowthTime => growthTime;
-
-        public  float currentTime;
-        public  bool isWatered;
-        public bool isReady;
-            
-        public Crop(string name, float maxTime, float multiplier = 1f)
-        {
-            cropName = name;
-            growthMultiplier = multiplier;
-            growthTime = maxTime;
-        }
-
-        public Crop(Crop crop)
-        {
-            cropPrefab = crop.CropPrefab;
-            cropName = crop.CropName;
-            growthMultiplier = crop.GrowthMultiplier;
-            growthTime = crop.GrowthTime;
-        }
-    }
-
-    public enum LandState
-    {
-        Default,
-        Watered
     }
 }

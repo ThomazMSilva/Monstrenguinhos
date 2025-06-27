@@ -1,10 +1,8 @@
-﻿using Assets.Scripts.PlayerScripts;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Interactibles
 {
-    public class Well : Holdable
+    public class BucketHoldable : Holdable
     {
         [SerializeField] private float maximumWaterLevel;
         [SerializeField] private float drainAmount;

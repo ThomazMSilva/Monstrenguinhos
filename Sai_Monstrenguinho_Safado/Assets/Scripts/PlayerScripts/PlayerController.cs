@@ -229,24 +229,4 @@ namespace Assets.Scripts.PlayerScripts
         #endregion
     }
 
-    #region ITEM_SCRIPTS
-    [System.Serializable]
-    public abstract class Item
-    {
-        void Use(object sender) { Debug.Log("Usando item com metodo nao atribuido"); }
-    }
-
-    [System.Serializable]
-    public class Hoe : Item
-    {
-        public void Use(object sender)
-        {
-            if (sender is Interactibles.Interactible interactible)
-            {
-                interactible.Interact(this);
-            }
-        }
-    }
-
-    #endregion
 }

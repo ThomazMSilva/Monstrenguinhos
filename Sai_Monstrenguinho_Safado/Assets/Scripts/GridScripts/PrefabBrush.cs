@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -41,3 +43,4 @@ namespace Assets.Scripts.GridScripts
         }
     }
 }
+#endif
