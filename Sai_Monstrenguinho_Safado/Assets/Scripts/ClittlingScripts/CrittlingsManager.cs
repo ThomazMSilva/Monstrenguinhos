@@ -16,6 +16,8 @@ namespace Assets.Scripts.ClittlingScripts
 
         public bool isSpawning = true;
 
+        [SerializeField] private float plantedPlotCheckInterval = 1f;
+        private WaitForSeconds WaitForPlantedPlot;
         public float minTime = 15f;
         public float maxTime = 20f;
         
@@ -30,6 +32,7 @@ namespace Assets.Scripts.ClittlingScripts
         {
             /*SpawnCrittling();
             SpawnCrittling();*/
+            WaitForPlantedPlot = new(plantedPlotCheckInterval);
             spawnCrittlingRoutine = StartCoroutine(CrittlingSpawnHandler());
             updateCrittlingRoutine = StartCoroutine(UpdateCrittlingBehaviours());
         }
@@ -42,6 +45,9 @@ namespace Assets.Scripts.ClittlingScripts
 
                 var spawnTime = Random.Range(minTime, maxTime);
                 yield return new WaitForSeconds(spawnTime);
+
+                while (GetPlantedPlots() == null) 
+                    yield return WaitForPlantedPlot;
 
                 var spawnAmount = Random.Range(CurrentMinCrittling, CurrentMaxCrittling + 1);
 
