@@ -46,10 +46,11 @@ namespace Assets.Scripts.Interactibles
         {
             foreach (var crop in cropList)
             {
-                if (totalCropsDict.ContainsKey(crop.CropName))
-                    totalCropsDict[crop.CropName].Add(crop);
+                string name = crop.CropName.ToString();
+                if (totalCropsDict.ContainsKey(name))
+                    totalCropsDict[name].Add(crop);
 
-                else totalCropsDict.Add(crop.CropName, new() { crop });
+                else totalCropsDict.Add(name, new() { crop });
             }
             string debugString = "";
             foreach (var key in totalCropsDict.Keys)

@@ -38,7 +38,7 @@ namespace Assets.Scripts.Interactibles
 
         private void PlantSeed(PlayerScripts.PlayerController player)
         {
-            if (currentCrop != null && !string.IsNullOrEmpty(currentCrop.CropName)) return;
+            if (currentCrop != null && currentCrop.IsPlanted) return;
 
             if (player.HeldItem.transform.TryGetComponent<SeedHoldable>(out var heldSeed))
             {

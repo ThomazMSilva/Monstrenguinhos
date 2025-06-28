@@ -26,7 +26,7 @@ namespace Assets.Scripts.ClittlingScripts
         [Header("Movement")]
         [Space(8f)]
         [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private string cropPreferenceName = "Berinjela";
+        [SerializeField] private Interactibles.CropType cropPreferenceName = (Interactibles.CropType) 1;
         [SerializeField] private float destinationThreshold = .1f;
         [SerializeField] private float chasingSpeed = 3f;
         [SerializeField] private float fleeingSpeed = 7f;
@@ -48,17 +48,25 @@ namespace Assets.Scripts.ClittlingScripts
         private Coroutine roamingRoutine;
         private Vector3 originalPosition;
         private Tween punchScaleTween;
+
+        private bool InPlotRange()
+        {
+            //Debug.Log($"Distancia {gameObject.name}: "+(currentTargetedPlot.transform.position - transform.position).sqrMagnitude);
+            return (currentTargetedPlot.transform.position - transform.position).sqrMagnitude < destinationThreshold;
+        }
+
+        private bool IsPlotPlanted()
+        {
+            return currentTargetedPlot.currentCrop != null 
+                && (currentTargetedPlot.currentCrop.IsPlanted);
+        }
         #endregion
 
         #region UNITY_METHODS
         private void Start() => originalPosition = transform.position;
         private void OnDestroy() => Manager.RemoveCritterFromList(this);
-        private void LateUpdate()
-        {
-            transform.forward = Camera.main.transform.forward;
-        }
         #endregion
-
+        
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
@@ -135,6 +143,17 @@ namespace Assets.Scripts.ClittlingScripts
             }
         }
 
+        public void ScareAway()
+        {
+            if(eatRoutine != null) StopCoroutine(eatRoutine);
+            if (digestRoutine != null) StopCoroutine(digestRoutine);
+            GetComponent<Collider>().enabled = false;
+            agent.speed = chasingSpeed;
+            CurrentState = BehaviourState.fleeing;
+            spriteRenderer.DOFade(0, fadeOutTime).OnComplete(() => Destroy(gameObject, 1f));
+        }
+
+        #region ROUTINES
         private System.Collections.IEnumerator EatCrop()
         {
             agent.speed = eatingSpeed;
@@ -174,32 +193,6 @@ namespace Assets.Scripts.ClittlingScripts
             CurrentState = BehaviourState.chasing;
             digestRoutine = null;
         }
-
-        /*private System.Collections.IEnumerator Roam()
-        {
-
-        }*/
-
-        public void ScareAway()
-        {
-            if(eatRoutine != null) StopCoroutine(eatRoutine);
-            if (digestRoutine != null) StopCoroutine(digestRoutine);
-            GetComponent<Collider>().enabled = false;
-            agent.speed = chasingSpeed;
-            CurrentState = BehaviourState.fleeing;
-            spriteRenderer.DOFade(0, fadeOutTime).OnComplete(() => Destroy(gameObject, 1f));
-        }
-
-        private bool InPlotRange()
-        {
-            //Debug.Log($"Distancia {gameObject.name}: "+(currentTargetedPlot.transform.position - transform.position).sqrMagnitude);
-            return (currentTargetedPlot.transform.position - transform.position).sqrMagnitude < destinationThreshold;
-        }
-
-        private bool IsPlotPlanted()
-        {
-            return currentTargetedPlot.currentCrop != null 
-                && !string.IsNullOrEmpty(currentTargetedPlot.currentCrop.CropName);
-        }
+        #endregion
     }
 }

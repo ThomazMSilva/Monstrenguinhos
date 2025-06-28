@@ -90,7 +90,7 @@ namespace Assets.Scripts.ClittlingScripts
 
         public List<Plot> GetPlantedPlots()
         {
-            var plantedPlots = landPlots.Where(p => p.currentCrop != null && !string.IsNullOrEmpty(p.currentCrop.CropName)).ToList();
+            var plantedPlots = landPlots.Where(p => p.currentCrop != null && p.currentCrop.IsPlanted).ToList();
             return plantedPlots.Count > 0 ? plantedPlots : null;
         }
 
@@ -100,20 +100,20 @@ namespace Assets.Scripts.ClittlingScripts
         /// </summary>
         /// <param name="cropName"></param>
         /// <returns></returns>
-        public List<Plot> GetPlotsWithSpecificCrop(string cropName = "")
+        public List<Plot> GetPlotsWithSpecificCrop(CropType cropName = CropType.None)
         {
             var allPlantedPlots = GetPlantedPlots();
             if (allPlantedPlots == null || allPlantedPlots.Count < 1) return null;
 
             var plotsWithDesiredCrop = allPlantedPlots.Where(p => p.currentCrop.CropName == cropName).ToList();
 
-            return string.IsNullOrEmpty(cropName) || plotsWithDesiredCrop.Count < 1
+            return cropName == CropType.None || plotsWithDesiredCrop.Count < 1
                 ? (allPlantedPlots ?? new())
                 : plotsWithDesiredCrop;
                 
         }
 
-        public Plot GetClosestPlot(Vector3 position, string cropName = "")
+        public Plot GetClosestPlot(Vector3 position, CropType cropName = CropType.None)
         {
             var desirablePlots = GetPlotsWithSpecificCrop(cropName);
 
