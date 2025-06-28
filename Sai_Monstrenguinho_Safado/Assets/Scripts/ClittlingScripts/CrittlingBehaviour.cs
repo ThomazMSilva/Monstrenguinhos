@@ -10,6 +10,7 @@ namespace Assets.Scripts.ClittlingScripts
         [System.Serializable]
         public enum BehaviourState
         {
+            roaming,
             chasing,
             eating,
             digesting,
@@ -43,7 +44,10 @@ namespace Assets.Scripts.ClittlingScripts
 
         private Coroutine digestRoutine;
         private Coroutine eatRoutine;
+        private bool debugIsEating;
+        private Coroutine roamingRoutine;
         private Vector3 originalPosition;
+        private Tween punchScaleTween;
         #endregion
 
         #region UNITY_METHODS
@@ -73,18 +77,41 @@ namespace Assets.Scripts.ClittlingScripts
         {
             switch (CurrentState)
             {
+                case BehaviourState.roaming:
+                    Debug.Log($"{gameObject.name} call: roaming;");
+                    agent.speed = digestingSpeed;
+                    var closestPlotRoaming = Manager.GetClosestPlot(transform.position, cropPreferenceName);
+
+                    if (closestPlotRoaming == null)
+                    {
+                        Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
+                        punchScaleTween ??= spriteRenderer.DOBlendableColor(Color.magenta, .04f)
+                            .OnComplete
+                            (() => 
+                                { 
+                                    spriteRenderer.
+                                    DOBlendableColor(Color.white, .04f)
+                                    .OnComplete(() => punchScaleTween = null); 
+                                }
+                            );
+                        break;
+                    }
+                    currentTargetedPlot = closestPlotRoaming;
+                    CurrentState = BehaviourState.chasing;
+                    break;
+
                 case BehaviourState.chasing:
                     Debug.Log($"{gameObject.name} call: chasing;");
                     agent.speed = chasingSpeed;
-                    var closestPlot = Manager.GetClosestPlot(transform.position, cropPreferenceName);
 
-                    if (closestPlot == null)
+                    var closestPlotChasing = Manager.GetClosestPlot(transform.position, cropPreferenceName);
+                    if (closestPlotChasing == null)
                     {
                         Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
+                        CurrentState = BehaviourState.roaming;
                         break;
                     }
-                    currentTargetedPlot = closestPlot;
-
+                    currentTargetedPlot = closestPlotChasing;
                     agent.SetDestination(currentTargetedPlot.transform.position);
 
                     if (InPlotRange()) CurrentState = BehaviourState.eating;
@@ -112,6 +139,7 @@ namespace Assets.Scripts.ClittlingScripts
         {
             agent.speed = eatingSpeed;
             eatingTimeElapsed = 0;
+            debugIsEating = true;
             while (IsPlotPlanted())
             {
                 eatingTimeElapsed += Time.deltaTime;
@@ -119,6 +147,8 @@ namespace Assets.Scripts.ClittlingScripts
                 if(eatingTimeElapsed > eatingTime)
                 {
                     currentTargetedPlot.EmptyPlot();
+                    eatRoutine = null;
+                    debugIsEating = false;
                     CurrentState = BehaviourState.digesting;
                     yield break;
                 }
@@ -128,6 +158,8 @@ namespace Assets.Scripts.ClittlingScripts
             if (CurrentState != BehaviourState.digesting)
             {
                 Debug.Log($"{gameObject.name} teve refeicao interrompida");
+                debugIsEating = false;
+                eatRoutine = null;
                 CurrentState = BehaviourState.chasing;
             }
 
@@ -143,9 +175,16 @@ namespace Assets.Scripts.ClittlingScripts
             digestRoutine = null;
         }
 
+        /*private System.Collections.IEnumerator Roam()
+        {
+
+        }*/
+
         public void ScareAway()
         {
-            StopAllCoroutines();
+            if(eatRoutine != null) StopCoroutine(eatRoutine);
+            if (digestRoutine != null) StopCoroutine(digestRoutine);
+            GetComponent<Collider>().enabled = false;
             agent.speed = chasingSpeed;
             CurrentState = BehaviourState.fleeing;
             spriteRenderer.DOFade(0, fadeOutTime).OnComplete(() => Destroy(gameObject, 1f));

@@ -21,8 +21,9 @@ namespace Assets.Scripts.ClittlingScripts
         public float minTime = 15f;
         public float maxTime = 20f;
         
-        public int CurrentMinCrittling = 1;
-        public int CurrentMaxCrittling = 3;
+        public int CurrentMinHorde = 1;
+        public int CurrentMaxHorde = 3;
+        public int CrittlingCap = 6;
 
         [SerializeField] private float updateTime = .2f;
         private Coroutine spawnCrittlingRoutine;
@@ -46,10 +47,10 @@ namespace Assets.Scripts.ClittlingScripts
                 var spawnTime = Random.Range(minTime, maxTime);
                 yield return new WaitForSeconds(spawnTime);
 
-                while (GetPlantedPlots() == null) 
+                while (GetPlantedPlots() == null || spawnedCrittlings.Count > CrittlingCap) 
                     yield return WaitForPlantedPlot;
 
-                var spawnAmount = Random.Range(CurrentMinCrittling, CurrentMaxCrittling + 1);
+                var spawnAmount = Random.Range(CurrentMinHorde, CurrentMaxHorde + 1);
 
                 for (int i = 0; i < spawnAmount; i++)
                 {
@@ -90,7 +91,7 @@ namespace Assets.Scripts.ClittlingScripts
         public List<Plot> GetPlantedPlots()
         {
             var plantedPlots = landPlots.Where(p => p.currentCrop != null && !string.IsNullOrEmpty(p.currentCrop.CropName)).ToList();
-            return plantedPlots.Count > 1 ? plantedPlots : null;
+            return plantedPlots.Count > 0 ? plantedPlots : null;
         }
 
         /// <summary>

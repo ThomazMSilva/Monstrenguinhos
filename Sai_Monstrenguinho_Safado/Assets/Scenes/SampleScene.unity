@@ -3422,10 +3422,12 @@ MonoBehaviour:
   - {fileID: 1414782728}
   - {fileID: 2066110785}
   isSpawning: 1
-  minTime: 1
-  maxTime: 3
-  CurrentMinCrittling: 1
-  CurrentMaxCrittling: 3
+  plantedPlotCheckInterval: 1
+  minTime: 10
+  maxTime: 13
+  CurrentMinHorde: 1
+  CurrentMaxHorde: 3
+  CrittlingCap: 6
   updateTime: 0.2
 --- !u!1 &1237113306
 GameObject:
