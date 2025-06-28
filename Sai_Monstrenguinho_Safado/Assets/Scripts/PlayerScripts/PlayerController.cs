@@ -1,3 +1,4 @@
+using Assets.Scripts.GridScripts;
 using UnityEngine;
 
 namespace Assets.Scripts.PlayerScripts
@@ -45,15 +46,17 @@ namespace Assets.Scripts.PlayerScripts
         [Space(8f)]
 
         [SerializeField] private Transform interactionOrigin;
+        [SerializeField] private Transform interactionShadow;
         [SerializeField] private float interactionHeight = 1f;
-        [SerializeField] private LayerMask layerMask;
+        [SerializeField] private LayerMask groundLayerMask;
+        [SerializeField] private LayerMask interactibleLayerMask;
 
         [Space(8f)]
         [SerializeField] private HeldItem currentHeldTag;
         private Interactibles.Holdable currentHeldInteractible;
         private bool isInteracting;
 
-        private RaycastHit _hit;
+        private RaycastHit interactibleHit;
 
         private Interactibles.Interactible selectedInteractible = null;
         #endregion
@@ -75,6 +78,11 @@ namespace Assets.Scripts.PlayerScripts
             playerAnim.SetFloat("velocityMagnitude", inputAxis.magnitude * CurrentSpeedMultiplier);
 
             CheckForInteractible();
+
+            if(currentHeldInteractible != null)
+            {
+                DisplayShadow();
+            }
         }
         #endregion
 
@@ -127,12 +135,22 @@ namespace Assets.Scripts.PlayerScripts
             );
         }
 
+        private void DisplayShadow()
+        {
+            if (Physics.Raycast(interactionOrigin.position, Vector3.down, out var groundHit, interactionHeight, groundLayerMask))
+            {
+                interactionShadow.position = BuildSystem.instance.SnappedPosition(groundHit.point);
+                interactionShadow.gameObject.SetActive(true);
+            }
+            else interactionShadow.gameObject.SetActive(false);
+        }
+
         private void CheckForInteractible()
         {
-            if(Physics.Raycast(interactionOrigin.position, Vector3.down, out _hit, interactionHeight, layerMask))
+            if(Physics.Raycast(interactionOrigin.position, Vector3.down, out interactibleHit, interactionHeight, interactibleLayerMask))
             {
 
-                TrySelectInteractible(_hit);
+                TrySelectInteractible(interactibleHit);
             }
             else
             {
@@ -196,12 +214,11 @@ namespace Assets.Scripts.PlayerScripts
             if (incomingTag.transform != null
                 && incomingTag.transform.TryGetComponent<Interactibles.Holdable>(out var newHeld))
             {
-                Debug.Log("Ablua");
                 currentHeldInteractible = newHeld;
             }
             else
             {
-                Debug.Log("Ablure");
+                interactionShadow.gameObject.SetActive(false);
                 currentHeldInteractible = null;
             }
             currentHeldTag = incomingTag;
@@ -211,6 +228,7 @@ namespace Assets.Scripts.PlayerScripts
         {
             currentHeldTag = new();
             currentHeldInteractible = null;
+            interactionShadow.gameObject.SetActive(false);
         }
 
         public HeldItem HeldItem => currentHeldTag;

@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 475712362694845082}
   - component: {fileID: 573076825627530636}
   - component: {fileID: 8848285926002471962}
+  - component: {fileID: 1055719456359079202}
   m_Layer: 3
-  m_Name: HoldableSeedGirassol
+  m_Name: HoldableSeedBerinjela
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,13 +135,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   cropAttributes:
-    cropPrefab: {fileID: 3894122223799165937, guid: 02e68446e76a3f54ca34df94eb4ba043, type: 3}
-    cropStage1: {fileID: 21300000, guid: 7a90f8259ba397c45948115a493cb161, type: 3}
-    cropStage2: {fileID: 21300000, guid: 84bf54b4a49e64049a3e324f981ec957, type: 3}
-    cropStage3: {fileID: 21300000, guid: 40fd7b438a56c82448944a70dd06e371, type: 3}
-    cropName: Girassol
+    cropPrefab: {fileID: 3894122223799165937, guid: 06f606b699e11b64bafe6eb6a26200bb, type: 3}
+    cropStage1: {fileID: 21300000, guid: 49a70a0a025154f42a5962a525d3a58e, type: 3}
+    cropStage2: {fileID: 21300000, guid: b80ac37d3ba02fc4cb218b09b4df7b93, type: 3}
+    cropStage3: {fileID: 21300000, guid: c44d8fac29a9e704284af6eb59795339, type: 3}
+    cropName: Berinjela
     growthMultiplier: 1
-    growthTime: 5
+    growthTime: 10
     currentTime: 0
     isWatered: 0
     isReady: 0
@@ -156,6 +157,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c65a5e9dd6af014a95bca61fdd7c0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &1055719456359079202
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3894122223799165937}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8849101889125194856
 GameObject:
   m_ObjectHideFlags: 0

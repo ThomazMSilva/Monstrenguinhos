@@ -10,11 +10,9 @@ namespace Assets.Scripts.Interactibles
 
         public override void Interact(object sender = null)
         {
-            Debug.Log("Interagiu com terreno");
             if (sender != null && sender is PlayerScripts.PlayerController player)
             {
                 if (player.HeldItem == null) return;
-                Debug.Log($"objeto na mao: {player.HeldItem.itemTag}");
 
                 switch (player.HeldItem.itemTag)
                 {
@@ -31,7 +29,6 @@ namespace Assets.Scripts.Interactibles
                         break;
 
                     case PlayerScripts.ItemTag.Seed:
-                        Debug.Log("Tentando plantar 2");
                         PlantSeed(player);
                         break;
                     default: break;
@@ -43,11 +40,8 @@ namespace Assets.Scripts.Interactibles
         {
             if (currentCrop != null && !string.IsNullOrEmpty(currentCrop.CropName)) return;
 
-            Debug.Log("Tentando plantar algo");
-
             if (player.HeldItem.transform.TryGetComponent<SeedHoldable>(out var heldSeed))
             {
-                Debug.Log("Plantou " + heldSeed.cropAttributes.CropName);
                 currentCrop = new(heldSeed.cropAttributes);
                 cropSpriteRenderer.sprite = currentCrop.cropStage1;
                 player.SetHeldItem(new());
@@ -70,15 +64,20 @@ namespace Assets.Scripts.Interactibles
             if (currentCrop == null) return;
             if (currentCrop.isReady)
             {
-                cropSpriteRenderer.sprite = null;
                 var cropGO = Instantiate(currentCrop.CropPrefab);
                 if (cropGO.TryGetComponent<Holdable>(out var cropHoldable))
                 {
                     Debug.Log("Catou a crop");
                     cropHoldable.Interact(player);
-                    currentCrop = null;
+                    EmptyPlot();
                 }
             }
+        }
+
+        public void EmptyPlot()
+        {
+            cropSpriteRenderer.sprite = null;
+            currentCrop = null;
         }
 
         private System.Collections.IEnumerator GrowCrop(PlayerScripts.PlayerController player)

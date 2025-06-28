@@ -10,6 +10,7 @@ namespace Assets.Scripts.Interactibles
         protected Quaternion originalRotation;
         protected Transform originalParent;
         protected bool isHeld;
+        protected UnityEngine.AI.NavMeshObstacle navigationObstacle;
         [SerializeField] private Collider holdableCollider;
         [SerializeField] private HeldItem relatedItem;
         [SerializeField] private float placeRayDist = 2f;
@@ -18,7 +19,16 @@ namespace Assets.Scripts.Interactibles
 
         public virtual void Start()
         {
+            navigationObstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>();
             originalParent = isPrefab ? null : transform.parent ?? transform.root;
+            if (originalParent == transform) //Se o objeto nao tiver pai na hierarquia, seu root seria ele mesmo?
+            {
+                GameObject parentGO = new($"Parent_{transform.name}");
+                parentGO.transform.SetPositionAndRotation(transform.position, transform.rotation);
+                transform.SetParent(parentGO.transform);
+                originalParent = parentGO.transform;
+            }
+
             originalPosition = transform.position;
             originalRotation = transform.rotation;
             relatedItem.transform ??= transform;
@@ -47,6 +57,7 @@ namespace Assets.Scripts.Interactibles
         {
             isHeld = true;
             holdableCollider.enabled = false;
+            if(navigationObstacle != null) navigationObstacle.enabled = false;
             //GridScripts.BuildSystem.instance.PickObject(_placedObject);
             transform.SetParent(player.InteractionOrigin, false);
             transform.localPosition = Vector3.zero;
@@ -60,15 +71,13 @@ namespace Assets.Scripts.Interactibles
             Ray ray = new(transform.position, Vector3.down);
             bool freeDrop = !Physics.Raycast(ray, placeRayDist, interactibleLayer);
 
-            Debug.Log("is drop free: " + freeDrop);
-
             if (freeDrop && Physics.Raycast(ray, out var hit, placeRayDist, groundLayer))
             {
                 Debug.Log("TRyroij");
                 var buildSis = GridScripts.BuildSystem.instance;
 
                 var pos = buildSis.SnappedPosition(hit.point);
-                pos.y -= transform.localScale.y * .5f;
+                pos.y += transform.localScale.y * .5f;
                 transform.position = pos;
 
                 PlaceItem(pos, originalRotation);
@@ -79,7 +88,7 @@ namespace Assets.Scripts.Interactibles
         {
             if (originalParent == null)
             {
-                Debug.Log(transform.name + "Era prefab ou nao tinha parent. Destruindo");
+                //Debug.Log(transform.name + "Era prefab ou nao tinha parent. Destruindo");
                 Destroy(gameObject, .5f);
                 return;
             }
@@ -107,9 +116,10 @@ namespace Assets.Scripts.Interactibles
         {
             isHeld = false;
             holdableCollider.enabled = true;
+            if (navigationObstacle != null) navigationObstacle.enabled = true;
 
             transform.SetParent(originalParent, false);
-            transform.SetPositionAndRotation(position, rotation);
+            transform.SetPositionAndRotation(position, !isPrefab ? rotation : Quaternion.identity);
             //GridScripts.BuildSystem.instance.PlaceObject(_placedObject);
             
             //Temporario
