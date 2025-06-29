@@ -82,7 +82,7 @@ namespace Assets.Scripts.Interactibles
 
         private System.Collections.IEnumerator GrowCrop(PlayerScripts.PlayerController player)
         {
-            Debug.Log("Agüou a semente.");
+            //Debug.Log("Agüou a semente.");
 
             player.SetHeldItem(new());
             currentCrop.isWatered = true;

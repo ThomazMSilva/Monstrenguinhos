@@ -187,6 +187,8 @@ namespace Assets.Scripts.PlayerScripts
         
         private void Interact()
         {
+            if (currentHeldInteractible == null && selectedInteractible == null) return;
+            
             playerAnim.SetTrigger("Action");
             currentHeldInteractible?.DropItem();
             selectedInteractible?.Interact(this);

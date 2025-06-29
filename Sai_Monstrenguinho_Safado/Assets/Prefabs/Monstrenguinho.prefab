@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9087911344449678570}
   - component: {fileID: 1519275203467426500}
   - component: {fileID: 5556084044774296653}
+  - component: {fileID: 4093559623287028464}
   m_Layer: 3
   m_Name: Monstrenguinho
   m_TagString: Untagged
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 9130691724831183256}
   Manager: {fileID: 0}
+  crittlingAnim: {fileID: 4093559623287028464}
   spriteRenderer: {fileID: 8530197307919828591}
   CurrentState: 0
   agent: {fileID: 9087911344449678570}
@@ -170,6 +172,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &4093559623287028464
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164327085067446792}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a185acf512fb74f4c98a114b9b00b4d0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9130691724831183256
 GameObject:
   m_ObjectHideFlags: 0

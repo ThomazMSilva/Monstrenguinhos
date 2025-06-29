@@ -106,7 +106,13 @@ namespace Assets.Scripts.Interactibles
                         
                         break;
                     
-                    default: break;
+                    default:
+                        if (player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
+                        {
+                            held.ReturnToStartingPoint();
+                            PickUpItem(player);
+                        }
+                        break;
                 }
             }
         }

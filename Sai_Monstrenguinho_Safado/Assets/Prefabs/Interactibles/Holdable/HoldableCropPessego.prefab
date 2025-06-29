@@ -152,7 +152,7 @@ MonoBehaviour:
     cropStage1: {fileID: 21300000, guid: 3b9a8417c991f2b469306389269ba61c, type: 3}
     cropStage2: {fileID: 21300000, guid: f4d90a1ca18c4264a8ef2353a3c28f01, type: 3}
     cropStage3: {fileID: 21300000, guid: 4ce00bd3de3a05c48b51b1bc69b8580b, type: 3}
-    cropName: 0
+    cropName: 1
     growthMultiplier: 0
     growthTime: 0
     currentTime: 0

@@ -1000,6 +1000,8 @@ GameObject:
   - component: {fileID: 3238827385737408526}
   - component: {fileID: 6050987932837053476}
   - component: {fileID: 2099821474672491563}
+  - component: {fileID: 9185091561042013764}
+  - component: {fileID: 9127606391791051961}
   m_Layer: 5
   m_Name: WorldSpace Canvas
   m_TagString: Untagged
@@ -1091,6 +1093,30 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &9185091561042013764
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610970318792166171}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &9127606391791051961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610970318792166171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1649425577254480582
 GameObject:
   m_ObjectHideFlags: 0
@@ -4044,11 +4070,18 @@ MonoBehaviour:
   selectionDisplay: {fileID: 2782149189306596163}
   npcAnim: {fileID: 5041259770488920578}
   attributes: {fileID: 0}
+  virtualCamera: {fileID: 0}
   orderDisplay: {fileID: 1610970318792166171}
-  orderBgIMG: {fileID: 0}
+  canvasGroup: {fileID: 9185091561042013764}
   orderTMP: {fileID: 6158295776584438315}
-  orderFadeDuration: 0.7
-  deliveredCrops: []
+  orderFadeDuration: 1.5
+  deliveredCrops: 
+  OnSucceeded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFailed:
+    m_PersistentCalls:
+      m_Calls: []
   npcNavigationAgent: {fileID: 8190299384572868696}
   distanceThreshold: 0.05
   navigationSpeed: 1

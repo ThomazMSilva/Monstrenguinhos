@@ -19,6 +19,7 @@ namespace Assets.Scripts.ClittlingScripts
 
 
         public CrittlingsManager Manager;
+        [SerializeField] private Animator crittlingAnim;
         [SerializeField] private SpriteRenderer spriteRenderer;
         public BehaviourState CurrentState;
 
@@ -42,12 +43,13 @@ namespace Assets.Scripts.ClittlingScripts
         [SerializeField] private float fadeOutTime = 2f;
         private Interactibles.Plot currentTargetedPlot;
 
+        private bool debugIsEating;
+        private Vector3 originalPosition;
+        private Color spawnColor = Color.white;
         private Coroutine digestRoutine;
         private Coroutine eatRoutine;
-        private bool debugIsEating;
-        private Coroutine roamingRoutine;
-        private Vector3 originalPosition;
         private Tween punchScaleTween;
+
 
         private bool InPlotRange()
         {
@@ -63,7 +65,27 @@ namespace Assets.Scripts.ClittlingScripts
         #endregion
 
         #region UNITY_METHODS
-        private void Start() => originalPosition = transform.position;
+        private void Start()
+        {
+            originalPosition = transform.position;
+            spawnColor = Random.ColorHSV(0, 1, 0, 1, .7f, 1, 1, 1);
+            spriteRenderer.material.color = spawnColor;
+        }
+
+        private bool isFacingRight = false;
+        private bool IsFacingRight 
+        {
+            get
+            {
+                float currentVelocity = agent.velocity.x;
+                
+                if (currentVelocity == 0) return isFacingRight;
+
+                isFacingRight = currentVelocity > 0;
+                return isFacingRight;
+            }
+        }
+
         private void OnDestroy() => Manager.RemoveCritterFromList(this);
         #endregion
         
@@ -83,10 +105,12 @@ namespace Assets.Scripts.ClittlingScripts
 
         public void UpdateBehaviour()
         {
+            spriteRenderer.flipX = !IsFacingRight;
             switch (CurrentState)
             {
                 case BehaviourState.roaming:
                     Debug.Log($"{gameObject.name} call: roaming;");
+                    crittlingAnim.SetFloat("velocity", 0);
                     agent.speed = digestingSpeed;
                     var closestPlotRoaming = Manager.GetClosestPlot(transform.position, cropPreferenceName);
 
@@ -98,7 +122,7 @@ namespace Assets.Scripts.ClittlingScripts
                             (() => 
                                 { 
                                     spriteRenderer.
-                                    DOBlendableColor(Color.white, .04f)
+                                    DOBlendableColor(spawnColor, .04f)
                                     .OnComplete(() => punchScaleTween = null); 
                                 }
                             );
@@ -110,6 +134,9 @@ namespace Assets.Scripts.ClittlingScripts
 
                 case BehaviourState.chasing:
                     Debug.Log($"{gameObject.name} call: chasing;");
+
+                    crittlingAnim.SetFloat("velocity", 1);
+
                     agent.speed = chasingSpeed;
 
                     var closestPlotChasing = Manager.GetClosestPlot(transform.position, cropPreferenceName);
@@ -145,8 +172,21 @@ namespace Assets.Scripts.ClittlingScripts
 
         public void ScareAway()
         {
-            if(eatRoutine != null) StopCoroutine(eatRoutine);
-            if (digestRoutine != null) StopCoroutine(digestRoutine);
+            if (eatRoutine != null)
+            {
+                StopCoroutine(eatRoutine);
+                crittlingAnim.SetBool("eating", false);
+            }
+
+            if (digestRoutine != null)
+            {
+                crittlingAnim.SetBool("digesting", false);
+                StopCoroutine(digestRoutine);
+            }
+
+            crittlingAnim.SetTrigger("hit");
+            crittlingAnim.SetBool("fleeing", true);
+
             GetComponent<Collider>().enabled = false;
             agent.speed = chasingSpeed;
             CurrentState = BehaviourState.fleeing;
@@ -159,6 +199,9 @@ namespace Assets.Scripts.ClittlingScripts
             agent.speed = eatingSpeed;
             eatingTimeElapsed = 0;
             debugIsEating = true;
+
+            crittlingAnim.SetBool("eating", true);
+
             while (IsPlotPlanted())
             {
                 eatingTimeElapsed += Time.deltaTime;
@@ -168,6 +211,7 @@ namespace Assets.Scripts.ClittlingScripts
                     currentTargetedPlot.EmptyPlot();
                     eatRoutine = null;
                     debugIsEating = false;
+                    crittlingAnim.SetBool("eating", false);
                     CurrentState = BehaviourState.digesting;
                     yield break;
                 }
@@ -178,6 +222,7 @@ namespace Assets.Scripts.ClittlingScripts
             {
                 Debug.Log($"{gameObject.name} teve refeicao interrompida");
                 debugIsEating = false;
+                crittlingAnim.SetBool("eating", false);
                 eatRoutine = null;
                 CurrentState = BehaviourState.chasing;
             }
@@ -189,7 +234,11 @@ namespace Assets.Scripts.ClittlingScripts
         private System.Collections.IEnumerator Digest()
         {
             agent.speed = digestingSpeed;
+            crittlingAnim.SetBool("digesting", true);
+
             yield return new WaitForSeconds(digestingTime);
+
+            crittlingAnim.SetBool("digesting", false);
             CurrentState = BehaviourState.chasing;
             digestRoutine = null;
         }

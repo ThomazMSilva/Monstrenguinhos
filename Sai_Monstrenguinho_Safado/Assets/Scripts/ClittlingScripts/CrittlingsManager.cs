@@ -47,13 +47,20 @@ namespace Assets.Scripts.ClittlingScripts
                 var spawnTime = Random.Range(minTime, maxTime);
                 yield return new WaitForSeconds(spawnTime);
 
-                while (GetPlantedPlots() == null || spawnedCrittlings.Count > CrittlingCap) 
+                Debug.Log("Terminou intervalo de spawn");
+                var plantedPlots = GetPlantedPlots();
+                while (plantedPlots == null || spawnedCrittlings.Count > CrittlingCap)
+                {
+                    Debug.Log("Aguardando condições...");
+                    plantedPlots = GetPlantedPlots();
                     yield return WaitForPlantedPlot;
+                }
 
                 var spawnAmount = Random.Range(CurrentMinHorde, CurrentMaxHorde + 1);
 
                 for (int i = 0; i < spawnAmount; i++)
                 {
+                    //Debug.Log("Spawnando bicho");
                     SpawnCrittling();
                 }
             }

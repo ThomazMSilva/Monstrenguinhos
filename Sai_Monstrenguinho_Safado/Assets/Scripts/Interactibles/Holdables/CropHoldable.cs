@@ -14,14 +14,14 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender != null && sender is PlayerController player)
             {
-                UnityEngine.Debug.Log("CropHoldable interact call");
+                //UnityEngine.Debug.Log("CropHoldable interact call");
                 switch (player.HeldItem.itemTag)
                 {
                     case ItemTag.Box:
-                        UnityEngine.Debug.Log("box tag");
+                        //UnityEngine.Debug.Log("box tag");
                         if (player.TryGetFromHeld<BoxHoldable>(out var box))
                         {
-                            UnityEngine.Debug.Log("box component");
+                            //UnityEngine.Debug.Log("box component");
                             box.AddCrop(new(cropAttributes));
                             //player.SetHeldItem(new());
                             Destroy(gameObject, 1);

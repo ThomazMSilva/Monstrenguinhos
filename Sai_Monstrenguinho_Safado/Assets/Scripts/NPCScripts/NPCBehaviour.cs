@@ -3,6 +3,7 @@ using UnityEngine;
 namespace Assets.Scripts.NPCScripts
 {
     using DG.Tweening;
+    using System.Linq;
 
     public class NPCBehaviour : Interactibles.Interactible
     {
@@ -11,15 +12,20 @@ namespace Assets.Scripts.NPCScripts
 
         [Space(8f), Header("Pedidos"), Space(8f)]
         [SerializeField] private ClientAttributes attributes;
+        [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCamera;
         [SerializeField] private GameObject orderDisplay;
-        [SerializeField] private UnityEngine.UI.Image orderBgIMG;
+        [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMPro.TextMeshProUGUI orderTMP;
         [SerializeField] private float orderFadeDuration = .7f;
-        [SerializeField] private System.Collections.Generic.List<Interactibles.CropAttributes> deliveredCrops = new();
+        [SerializeField] private System.Collections.Generic.List<Interactibles.CropType> deliveredCrops = new();
         private System.Collections.Generic.List<Interactibles.CropType> desiredCrops = new();
         private int orderAmount;
         private float tolerance;
         private float elapsedTolerance;
+        public string Name => attributes.ClientName;
+        public UnityEngine.Events.UnityEvent OnSucceeded;
+        public UnityEngine.Events.UnityEvent OnFailed;
+
 
         [Space(8f), Header("Navegação"), Space(8f)]
         [SerializeField] private UnityEngine.AI.NavMeshAgent npcNavigationAgent;
@@ -61,6 +67,7 @@ namespace Assets.Scripts.NPCScripts
 
         private void StartMovingToTarget(System.Action onFinish)
         {
+            npcNavigationAgent.isStopped = false;
             npcNavigationAgent.SetDestination(targetDestination);
             npcAnim.SetFloat("velocityMagnitude", .12f);
             StartCoroutine(CheckPosition(onFinish));
@@ -69,11 +76,12 @@ namespace Assets.Scripts.NPCScripts
         private void FinishMovingToTarget(System.Action onFinish)
         {
             npcAnim.SetFloat("velocityMagnitude", 0f);
-            npcNavigationAgent.Warp(targetDestination);
             npcNavigationAgent.isStopped = true;
-            transform.DORotate(targetRotation.eulerAngles, rotationDuration);
+            npcNavigationAgent.Warp(targetDestination);
+            transform.DORotate(targetRotation.eulerAngles, rotationDuration)
+                     .OnComplete(() => onFinish?.Invoke());
 
-            onFinish?.Invoke();
+            //onFinish?.Invoke();
         }
 
         private System.Collections.IEnumerator CheckPosition(System.Action onFinish)
@@ -98,16 +106,19 @@ namespace Assets.Scripts.NPCScripts
                 elapsedTolerance += Time.deltaTime;
                 yield return null;
             }
+            OnFailed?.Invoke();
             ReturnHome();
             toleranceRoutine = null;
         }
 
         public void OrderCrops()
         {
-            orderDisplay.SetActive(true);
-            orderBgIMG.DOFade(0, 0).OnComplete(() => orderBgIMG.DOFade(1, orderFadeDuration));
-            orderTMP.DOFade(0, 0).OnComplete(() => orderTMP.DOFade(1, orderFadeDuration));
+            canvasGroup.alpha = 0f;
 
+            orderTMP.text = TempDesiredAmountDebug();
+
+            orderDisplay.SetActive(true);
+            canvasGroup.DOFade(1, orderFadeDuration);
 
             for (int i = 0; i <= orderAmount; i++)
             {
@@ -126,29 +137,102 @@ namespace Assets.Scripts.NPCScripts
 
         public void DeliverCrops(System.Collections.Generic.List<Interactibles.CropAttributes> crops)
         {
-            deliveredCrops.AddRange(crops);
+            if (toleranceRoutine == null) return;
 
-            if(deliveredCrops.Count >= desiredCrops.Count)
+            System.Collections.Generic.List<Interactibles.CropType> cropTypes =
+                crops.Select(c => c.CropName).ToList();
+
+            deliveredCrops.AddRange(cropTypes);
+
+            if (deliveredCrops.Count >= desiredCrops.Count)
             {
+                if (IsDeliveryCorrect(deliveredCrops))
+                {
+                    Debug.Log($"{gameObject.name}: Eba entregou certo");
+                    OnSucceeded?.Invoke();
+                }
+
+                else
+                {
+                    Debug.Log($"{gameObject.name}: Seu bosta entregou tudo errado");
+                    OnFailed?.Invoke();
+                }
+
                 ReturnHome();
             }
+            else Debug.Log($"{gameObject.name}: Ta faltando coisa, filho. Pedi mais, cade");
+        }
+
+        private string TempDesiredAmountDebug()
+        {
+            var groupedDesiredList = desiredCrops.GroupBy(d => d.ToString()).ToList();
+
+            string desiredAmounts = "- Pedido -";
+            for (int i = 0; i < groupedDesiredList.Count; i++)
+            {
+                string desiredAmount = $"{groupedDesiredList[i].Key}: {groupedDesiredList[i].Count()}";
+
+                desiredAmounts += $"\n{desiredAmount}";
+            }
+            return desiredAmounts;
+        }
+
+        private bool IsDeliveryCorrect(System.Collections.Generic.List<Interactibles.CropType> delivered)
+        {
+            var desired = desiredCrops;
+
+            if (desired.Count != delivered.Count)
+            {
+                Debug.Log("Lista base tem tamanho diferente, nem calcula");
+                return false; 
+            }
+
+            var groupedDesiredList = desired.GroupBy(d => d.ToString()).ToList();
+            var groupedDeliveredList = delivered.GroupBy(d => d.ToString()).ToList();
+
+            if (groupedDeliveredList.Count != groupedDesiredList.Count)
+            {
+                Debug.Log("Lista agrupada tem tamanho diferente, nem calcula");
+                return false;
+            }
+
+            string desiredAmounts = "- Desired Amounts -";
+            string deliveredAmounts = "- Delivered Amounts -";
+
+            for (int i = 0; i < groupedDesiredList.Count; i++)
+            {
+                string desiredAmount = $"{groupedDesiredList[i].Key}: {groupedDesiredList[i].Count()}";
+                string deliveredAmount = $"{groupedDeliveredList[i].Key}: {groupedDeliveredList[i].Count()}";
+                
+                if(desiredAmount != deliveredAmount)
+                {
+                    Debug.Log($"Encontrou incongruencia na iteração {i} " +
+                        $"(Desejado: {desiredAmount}; Recebido: {deliveredAmount})." +
+                        $" Retornando falso");
+                    return false;
+                }
+                desiredAmounts += $"\n{desiredAmount}";
+                deliveredAmounts += $"\n{deliveredAmount}";
+            }
+
+            Debug.Log($"{gameObject.name} checando se ta certo:\n {desiredAmounts}\n\n{deliveredAmounts}");
+
+            return true;
         }
 
         private void ReturnHome()
         {
             if(toleranceRoutine != null) StopCoroutine(toleranceRoutine);
 
-            orderBgIMG.DOFade(0, orderFadeDuration);
-            orderTMP.DOFade(0, orderFadeDuration).OnComplete(() => orderDisplay.SetActive(false));
+            canvasGroup.DOFade(0, orderFadeDuration).OnComplete(() => orderDisplay.SetActive(false));
+
             var rends = GetComponentsInChildren<Renderer>();
 
-            Debug.Log("rends: "+ rends.Length);
             for (int i = 0; i < rends.Length; i++)
             {
                 Renderer rend = rends[i];
                 if (i == rends.Length - 1)
                 {
-                    
                     rend.material.DOFade(0, orderFadeDuration).OnComplete(() => Destroy(gameObject, 2f));
                     break;
                 }

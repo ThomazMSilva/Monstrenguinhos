@@ -23,6 +23,7 @@ namespace Assets.Scripts.NPCScripts
         [SerializeField] private Vector3 defaultOffset = Vector3.forward;
         private WaitForSeconds waitForCapCheck;
         private List<NPCBehaviour> spawnedNPCs = new();
+        private Dictionary<Transform, NPCBehaviour> positionsOccupationDict = new();
         #endregion
 
         private void Start()
@@ -71,13 +72,22 @@ namespace Assets.Scripts.NPCScripts
                     newPosition.SetPositionAndRotation
                     (
                         targetPositions[^1].position + spawnOffsetDirection * (i - targetPositions.Count),
-                        newPosition.rotation= targetPositions[^1].rotation
+                        newPosition.rotation = targetPositions[^1].rotation
                     );
 
                     copyTargetPositions.Add(newPosition);
                 }
                 targetPositions = copyTargetPositions;
             }
+
+            foreach (var position in targetPositions)
+            {
+                if (!positionsOccupationDict.ContainsKey(position))
+                {
+                    positionsOccupationDict.Add(position, null);
+                }
+            }
+
             return true;
         }
 
@@ -85,15 +95,39 @@ namespace Assets.Scripts.NPCScripts
         {
             var client = Instantiate(npcPrefab, transform.position, transform.rotation, npcParent).GetComponent<NPCBehaviour>();
             spawnedNPCs.Add(client);
-            client.gameObject.name = $"Cliente_{spawnedNPCs.Count - 1}";
-            client.onDestroy.AddListener(RemoveClientFromList);
             client.SetAttributes(possibleClients[Random.Range(0, possibleClients.Count)]);
-            client.SetTarget(targetPositions[spawnedNPCs.Count - 1], client.OrderCrops);
+            client.gameObject.name = $"Cliente ({spawnedNPCs.Count - 1}) - {client.Name}";
+
+            Transform furthestAvailablePosition = targetPositions[0];
+
+            for (int i = 0; i < targetPositions.Count; i++)
+            {
+                var position = targetPositions[i];
+                if (positionsOccupationDict.ContainsKey(position) && positionsOccupationDict[position] == null)
+                {
+                    furthestAvailablePosition = position;
+                    break;
+                }
+            }
+
+            positionsOccupationDict[furthestAvailablePosition] = client;
+            client.SetTarget(furthestAvailablePosition, client.OrderCrops);
             
+            client.onDestroy.AddListener(RemoveClientFromList);
 
         }
-        
-        private void RemoveClientFromList(NPCBehaviour client) => spawnedNPCs.Remove(client);
+
+        private void RemoveClientFromList(NPCBehaviour client)
+        {
+            spawnedNPCs.Remove(client);
+            foreach(var kvp in positionsOccupationDict)
+            {
+                if (kvp.Value != client) continue;
+                
+                positionsOccupationDict[kvp.Key] = null;
+                break;
+            }
+        }
 
         private IEnumerator SpawnRoutine()
         {

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_A
   m_EditorClassIdentifier: 
   clientName: Gerson
-  baseToleranceTimeMin: 30
-  baseToleranceTimeMax: 45
+  baseToleranceTimeMin: 45
+  baseToleranceTimeMax: 60
   cropsOrderedMin: 1
   cropsOrderedMax: 2
   cropPreference: 0
