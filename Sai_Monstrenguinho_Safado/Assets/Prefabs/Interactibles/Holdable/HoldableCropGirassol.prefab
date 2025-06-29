@@ -152,7 +152,7 @@ MonoBehaviour:
     cropStage1: {fileID: 21300000, guid: 7a90f8259ba397c45948115a493cb161, type: 3}
     cropStage2: {fileID: 21300000, guid: 84bf54b4a49e64049a3e324f981ec957, type: 3}
     cropStage3: {fileID: 21300000, guid: 40fd7b438a56c82448944a70dd06e371, type: 3}
-    cropName: Girassol
+    cropName: 0
     growthMultiplier: 0
     growthTime: 0
     currentTime: 0
@@ -184,6 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7295953849020711025}
   - component: {fileID: 6516992616308221002}
+  - component: {fileID: 7645086528116034813}
   m_Layer: 0
   m_Name: img-Girassol2
   m_TagString: Untagged
@@ -258,6 +259,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7645086528116034813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7183421880584968636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849101889125194856
 GameObject:
   m_ObjectHideFlags: 0

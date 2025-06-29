@@ -152,7 +152,7 @@ MonoBehaviour:
     cropStage1: {fileID: 21300000, guid: 49a70a0a025154f42a5962a525d3a58e, type: 3}
     cropStage2: {fileID: 21300000, guid: b80ac37d3ba02fc4cb218b09b4df7b93, type: 3}
     cropStage3: {fileID: 21300000, guid: c44d8fac29a9e704284af6eb59795339, type: 3}
-    cropName: Berinjela
+    cropName: 0
     growthMultiplier: 0
     growthTime: 0
     currentTime: 0
@@ -184,6 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3165962969372318194}
   - component: {fileID: 3067499863712928058}
+  - component: {fileID: 6454686119062602611}
   m_Layer: 0
   m_Name: img-berinjela2
   m_TagString: Untagged
@@ -258,6 +259,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6454686119062602611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529703715747576684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849101889125194856
 GameObject:
   m_ObjectHideFlags: 0

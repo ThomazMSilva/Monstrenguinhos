@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7915211971689058817}
   - component: {fileID: 9087911344449678570}
   - component: {fileID: 1519275203467426500}
+  - component: {fileID: 5556084044774296653}
   m_Layer: 3
   m_Name: Monstrenguinho
   m_TagString: Untagged
@@ -105,7 +106,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 8530197307919828591}
   CurrentState: 0
   agent: {fileID: 9087911344449678570}
-  cropPreferenceName: Berinjela
+  cropPreferenceName: 0
   destinationThreshold: 1.5
   chasingSpeed: 1
   fleeingSpeed: 5
@@ -157,6 +158,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.9, z: 0.9}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5556084044774296653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164327085067446792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9130691724831183256
 GameObject:
   m_ObjectHideFlags: 0
