@@ -108,7 +108,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 8530197307919828591}
   CurrentState: 0
   agent: {fileID: 9087911344449678570}
-  cropPreferenceName: 0
+  cropPreferenceName: 3
   destinationThreshold: 1.5
   chasingSpeed: 1
   fleeingSpeed: 5

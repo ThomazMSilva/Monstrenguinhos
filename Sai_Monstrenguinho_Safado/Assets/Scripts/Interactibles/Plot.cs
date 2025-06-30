@@ -55,8 +55,8 @@ namespace Assets.Scripts.Interactibles
 
         private void WaterSeed(PlayerScripts.PlayerController player)
         {
-            if (currentCrop == null) return;
-            growCropRoutine ??= StartCoroutine(GrowCrop(player));
+            if (currentCrop == null || growCropRoutine != null) return;
+            growCropRoutine = StartCoroutine(GrowCrop(player));
         }
 
         private void HarvestCrop(PlayerScripts.PlayerController player)

@@ -5,6 +5,15 @@ namespace Assets.Scripts.NPCScripts
     using DG.Tweening;
     using System.Linq;
 
+    [System.Serializable]
+    public class CropyTypeSprites
+    {
+        public Interactibles.CropType cropType;
+        public Sprite sprite;
+        public CropyTypeSprites(Interactibles.CropType type) => cropType = type;
+        public CropyTypeSprites() { }
+    }
+
     public class NPCBehaviour : Interactibles.Interactible
     {
         #region ATTRIBUTES
@@ -13,9 +22,25 @@ namespace Assets.Scripts.NPCScripts
         [Space(8f), Header("Pedidos"), Space(8f)]
         [SerializeField] private ClientAttributes attributes;
         [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCamera;
+        [Space(8f)]
         [SerializeField] private GameObject orderDisplay;
         [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private RectTransform orderBackgroundPanel;
+        [SerializeField] private UnityEngine.UI.LayoutGroup orderLayoutGroup;
         [SerializeField] private TMPro.TextMeshProUGUI orderTMP;
+        
+        [SerializeField] 
+        private System.Collections.Generic.List<CropyTypeSprites> sprites = 
+            new(System.Enum.GetNames(typeof(Interactibles.CropType)).Length) 
+            { 
+                new((Interactibles.CropType)1),
+                new((Interactibles.CropType)2),
+                new((Interactibles.CropType)3)
+            };
+        [SerializeField] private UnityEngine.UI.Image orderImagePrefab;
+
+
+        [Space(8f)]
         [SerializeField] private float orderFadeDuration = .7f;
         [SerializeField] private System.Collections.Generic.List<Interactibles.CropType> deliveredCrops = new();
         private System.Collections.Generic.List<Interactibles.CropType> desiredCrops = new();
@@ -115,7 +140,6 @@ namespace Assets.Scripts.NPCScripts
         {
             canvasGroup.alpha = 0f;
 
-            orderTMP.text = TempDesiredAmountDebug();
 
             orderDisplay.SetActive(true);
             canvasGroup.DOFade(1, orderFadeDuration);
@@ -130,8 +154,15 @@ namespace Assets.Scripts.NPCScripts
                         (int) attributes.Preference,
                         75
                     );
+
+                Sprite desiredCropSprite = sprites.FirstOrDefault(s => s.cropType == desiredCrop).sprite;
+                var order = Instantiate(orderImagePrefab, orderLayoutGroup.transform);
+                order.sprite = desiredCropSprite;
+
                 desiredCrops.Add(desiredCrop);
             }
+            orderBackgroundPanel.sizeDelta = new(orderBackgroundPanel.sizeDelta.x, desiredCrops.Count);
+            orderTMP.text = TempDesiredAmountDebug();
             toleranceRoutine = StartCoroutine(CountTolerance());
         }
 
