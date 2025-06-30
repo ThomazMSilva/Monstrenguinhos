@@ -11,7 +11,7 @@ namespace Assets.Scripts.Interactibles
 
         public override void Interact(object sender = null)
         {
-            UnityEngine.Debug.Log("BoxHoldable interact call");
+            //UnityEngine.Debug.Log("BoxHoldable interact call");
             if (sender is PlayerController player)
             {
                 switch (player.HeldItem.itemTag)
@@ -20,10 +20,10 @@ namespace Assets.Scripts.Interactibles
                         PickUpItem(player);
                         break;
                     case ItemTag.Crop:
-                        UnityEngine.Debug.Log("crop tag");
+                        //UnityEngine.Debug.Log("crop tag");
                         if (player.HeldItem.transform.TryGetComponent<CropHoldable>(out  var cropHoldable))
                         {
-                            UnityEngine.Debug.Log("crop component in hand. Catando e deletando");
+                            //UnityEngine.Debug.Log("crop component in hand. Catando e deletando");
                             AddCrop(new(cropHoldable.cropAttributes));
                             player.SetHeldItem(new());
                             Destroy(cropHoldable.transform.gameObject);
