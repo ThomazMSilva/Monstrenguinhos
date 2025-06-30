@@ -27,8 +27,19 @@ namespace Assets.Scripts.Interactibles
                             Destroy(gameObject, 1);
                         }
                         break;
-                    default: 
-                        PickUpItem(player); 
+
+                    case ItemTag.None:
+                        PickUpItem(player);
+                        break;
+                    
+                    default:
+                        /*if (player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
+                        {
+                            held.ReturnToStartingPoint();
+                            PickUpItem(player);
+                            break;
+                        }*/
+                        PickUpItem(player);
                         break;
                 }
             }

@@ -86,8 +86,8 @@ namespace Assets.Scripts.Interactibles
 
             player.SetHeldItem(new());
             currentCrop.isWatered = true;
-            cropSpriteRenderer.sprite = currentCrop.cropStage2
-                ;
+            cropSpriteRenderer.sprite = currentCrop.cropStage2;
+
             while (currentCrop.isWatered && !currentCrop.isReady)
             {
                 currentCrop.currentTime += Time.deltaTime * currentCrop.GrowthMultiplier;

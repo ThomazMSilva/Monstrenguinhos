@@ -73,7 +73,6 @@ namespace Assets.Scripts.Interactibles
 
             if (freeDrop && Physics.Raycast(ray, out var hit, placeRayDist, groundLayer))
             {
-                Debug.Log("TRyroij");
                 var buildSis = GridScripts.BuildSystem.instance;
 
                 var pos = buildSis.SnappedPosition(hit.point);
@@ -90,6 +89,8 @@ namespace Assets.Scripts.Interactibles
             {
                 //Debug.Log(transform.name + "Era prefab ou nao tinha parent. Destruindo");
                 Destroy(gameObject, .5f);
+                //Temporario
+                FindAnyObjectByType<PlayerController>().SetHeldEmpty();
                 return;
             }
             PlaceItem(originalPosition, originalRotation);

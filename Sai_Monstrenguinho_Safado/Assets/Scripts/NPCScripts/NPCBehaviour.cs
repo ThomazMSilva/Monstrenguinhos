@@ -43,6 +43,7 @@ namespace Assets.Scripts.NPCScripts
         [Space(8f)]
         [SerializeField] private float orderFadeDuration = .7f;
         [SerializeField] private System.Collections.Generic.List<Interactibles.CropType> deliveredCrops = new();
+        private System.Collections.Generic.List<UnityEngine.UI.Image> desiredCropImages = new();
         private System.Collections.Generic.List<Interactibles.CropType> desiredCrops = new();
         private int orderAmount;
         private float tolerance;
@@ -155,14 +156,15 @@ namespace Assets.Scripts.NPCScripts
                         75
                     );
 
-                Sprite desiredCropSprite = sprites.FirstOrDefault(s => s.cropType == desiredCrop).sprite;
                 var order = Instantiate(orderImagePrefab, orderLayoutGroup.transform);
+                Sprite desiredCropSprite = sprites.FirstOrDefault(s => s.cropType == desiredCrop).sprite;
                 order.sprite = desiredCropSprite;
-
+                
+                desiredCropImages.Add(order);
                 desiredCrops.Add(desiredCrop);
             }
             orderBackgroundPanel.sizeDelta = new(orderBackgroundPanel.sizeDelta.x, desiredCrops.Count);
-            orderTMP.text = TempDesiredAmountDebug();
+            //orderTMP.text = TempDesiredAmountDebug();
             toleranceRoutine = StartCoroutine(CountTolerance());
         }
 
@@ -175,9 +177,11 @@ namespace Assets.Scripts.NPCScripts
 
             deliveredCrops.AddRange(cropTypes);
 
+            bool isCorrect = IsDeliveryCorrect();
+
             if (deliveredCrops.Count >= desiredCrops.Count)
             {
-                if (IsDeliveryCorrect(deliveredCrops))
+                if (isCorrect)
                 {
                     Debug.Log($"{gameObject.name}: Eba entregou certo");
                     OnSucceeded?.Invoke();
@@ -208,46 +212,44 @@ namespace Assets.Scripts.NPCScripts
             return desiredAmounts;
         }
 
-        private bool IsDeliveryCorrect(System.Collections.Generic.List<Interactibles.CropType> delivered)
+        private bool IsDeliveryCorrect()
         {
             var desired = desiredCrops;
+            var delivered = deliveredCrops;
 
-            if (desired.Count != delivered.Count)
+            /*if (desired.Count != delivered.Count)
             {
                 Debug.Log("Lista base tem tamanho diferente, nem calcula");
                 return false; 
-            }
+            }*/
 
             var groupedDesiredList = desired.GroupBy(d => d.ToString()).ToList();
             var groupedDeliveredList = delivered.GroupBy(d => d.ToString()).ToList();
+
+            foreach(var group in groupedDesiredList)
+            {
+                Interactibles.CropType cropType = (Interactibles.CropType)System.Enum.Parse(typeof(Interactibles.CropType), group.Key);
+
+                var groupDesiredImages = desiredCropImages
+                    .Where(img => img.sprite == sprites.FirstOrDefault(s => s.cropType == cropType).sprite).ToList();
+                    //.FirstOrDefault();
+
+                var deliveredInGroup = deliveredCrops.Where(c => c == cropType).ToList();
+
+                Debug.Log($"Checando {cropType.ToString()} - desejadas: {group.Count()}; imagens achadas: {groupDesiredImages.Count}; entregues: {deliveredInGroup.Count}");
+
+                for (int i = 0; i < deliveredInGroup.Count && i < groupDesiredImages.Count; i++)
+                {
+                    groupDesiredImages[i].color = Color.green;
+                }
+
+            }
 
             if (groupedDeliveredList.Count != groupedDesiredList.Count)
             {
                 Debug.Log("Lista agrupada tem tamanho diferente, nem calcula");
                 return false;
             }
-
-            string desiredAmounts = "- Desired Amounts -";
-            string deliveredAmounts = "- Delivered Amounts -";
-
-            for (int i = 0; i < groupedDesiredList.Count; i++)
-            {
-                string desiredAmount = $"{groupedDesiredList[i].Key}: {groupedDesiredList[i].Count()}";
-                string deliveredAmount = $"{groupedDeliveredList[i].Key}: {groupedDeliveredList[i].Count()}";
-                
-                if(desiredAmount != deliveredAmount)
-                {
-                    Debug.Log($"Encontrou incongruencia na iteração {i} " +
-                        $"(Desejado: {desiredAmount}; Recebido: {deliveredAmount})." +
-                        $" Retornando falso");
-                    return false;
-                }
-                desiredAmounts += $"\n{desiredAmount}";
-                deliveredAmounts += $"\n{deliveredAmount}";
-            }
-
-            Debug.Log($"{gameObject.name} checando se ta certo:\n {desiredAmounts}\n\n{deliveredAmounts}");
-
             return true;
         }
 
