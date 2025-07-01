@@ -5,14 +5,6 @@ namespace Assets.Scripts.NPCScripts
     using DG.Tweening;
     using System.Linq;
 
-    [System.Serializable]
-    public class CropyTypeSprites
-    {
-        public Interactibles.CropType cropType;
-        public Sprite sprite;
-        public CropyTypeSprites(Interactibles.CropType type) => cropType = type;
-        public CropyTypeSprites() { }
-    }
 
     public class NPCBehaviour : Interactibles.Interactible
     {
@@ -37,12 +29,8 @@ namespace Assets.Scripts.NPCScripts
         [Space(8f)]
         
         [SerializeField] private UnityEngine.UI.Image orderImagePrefab;
-        [SerializeField] private System.Collections.Generic.List<CropyTypeSprites> sprites = new(System.Enum.GetNames(typeof(Interactibles.CropType)).Length) 
-        { 
-            new((Interactibles.CropType)1),
-            new((Interactibles.CropType)2),
-            new((Interactibles.CropType)3)
-        };
+
+        [SerializeField] CropSpritesReference cropSpritesReference;
 
         private System.Collections.Generic.List<UnityEngine.UI.Image> desiredCropImages = new();
         private System.Collections.Generic.List<Interactibles.CropType> desiredCrops = new();
@@ -145,7 +133,7 @@ namespace Assets.Scripts.NPCScripts
                 Interactibles.CropType cropType = (Interactibles.CropType)System.Enum.Parse(typeof(Interactibles.CropType), group.Key);
 
                 var groupDesiredImages = desiredCropImages
-                    .Where(img => img.sprite == sprites.FirstOrDefault(s => s.cropType == cropType).sprite).ToList();
+                    .Where(img => img.sprite == cropSpritesReference.sprites.FirstOrDefault(s => s.cropType == cropType).sprite).ToList();
                     //.FirstOrDefault();
 
                 var deliveredInGroup = deliveredCrops.Where(c => c == cropType).ToList();
@@ -234,7 +222,7 @@ namespace Assets.Scripts.NPCScripts
                     );
 
                 var order = Instantiate(orderImagePrefab, orderLayoutGroup.transform);
-                Sprite desiredCropSprite = sprites.FirstOrDefault(s => s.cropType == desiredCrop).sprite;
+                Sprite desiredCropSprite = cropSpritesReference.sprites.FirstOrDefault(s => s.cropType == desiredCrop).sprite;
                 order.sprite = desiredCropSprite;
                 
                 desiredCropImages.Add(order);
