@@ -2999,16 +2999,67 @@ MonoBehaviour:
   npcPrefab: {fileID: 7470427458822325090, guid: 109cce42190883e46af436392792e448, type: 3}
   npcParent: {fileID: 1765866431}
   targetPositionParent: {fileID: 1975408332}
-  possibleClients:
-  - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
-  - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
-  - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+  stageAttributes:
+  - stageName: Tutorial
+    stageID: 0
+    isTutorial: 1
+    spawnableClients:
+    - {fileID: 11400000, guid: cc7965ad8de51bd4594c808238b881b1, type: 2}
+    minSpawnInterval: 0.3
+    maxSpawnInterval: 4
+    spawnCap: 1
+    timeBased: 1
+    timeToPass: 300
+    successBased: 0
+    successfulClientsToPass: 1
+    nextStageID: 1
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: "Est\xE1gio 1"
+    stageID: 1
+    isTutorial: 0
+    spawnableClients:
+    - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
+    - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
+    - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+    minSpawnInterval: 50
+    maxSpawnInterval: 60
+    spawnCap: 4
+    timeBased: 1
+    timeToPass: 300
+    successBased: 1
+    successfulClientsToPass: 5
+    nextStageID: 2
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: "Est\xE1gio 2"
+    stageID: 1
+    isTutorial: 0
+    spawnableClients:
+    - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
+    - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
+    - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+    minSpawnInterval: 50
+    maxSpawnInterval: 60
+    spawnCap: 4
+    timeBased: 1
+    timeToPass: 300
+    successBased: 1
+    successfulClientsToPass: 4
+    nextStageID: 0
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
   targetPositions:
   - {fileID: 70348781}
-  maxClients: 5
-  spawnInterval: 15
   capCheckInterval: 0.5
-  defaultOffset: {x: 0, y: 0, z: 1}
+  defaultOffset: {x: 0, y: 0, z: 2}
+  maximumFailedClients: 4
+  OnLost:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &861219394
 GameObject:
   m_ObjectHideFlags: 0

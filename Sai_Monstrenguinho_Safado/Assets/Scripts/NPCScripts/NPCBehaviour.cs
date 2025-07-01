@@ -230,7 +230,7 @@ namespace Assets.Scripts.NPCScripts
                         1,
                         System.Enum.GetNames(typeof(Interactibles.CropType)).Length - 1,
                         (int) attributes.Preference,
-                        75
+                        attributes.PreferencePercentage
                     );
 
                 var order = Instantiate(orderImagePrefab, orderLayoutGroup.transform);

@@ -21,5 +21,8 @@ namespace Assets.Scripts.NPCScripts
 
         [SerializeField] private Interactibles.CropType cropPreference;
         public Interactibles.CropType Preference => cropPreference;
+
+        [SerializeField, Range(0, 100)] private float preferencePercentage = 75f;
+        public float PreferencePercentage => preferencePercentage;
     }
 }
