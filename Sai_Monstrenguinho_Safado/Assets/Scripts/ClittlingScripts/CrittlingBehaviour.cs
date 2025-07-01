@@ -44,11 +44,27 @@ namespace Assets.Scripts.ClittlingScripts
         private Interactibles.Plot currentTargetedPlot;
 
         private bool debugIsEating;
+        private bool isFacingRight = false;
+        private bool IsFacingRight 
+        {
+            get
+            {
+                float currentVelocity = agent.velocity.x;
+                
+                if (currentVelocity == 0) return isFacingRight;
+
+                isFacingRight = currentVelocity > 0;
+                return isFacingRight;
+            }
+        }
         private Vector3 originalPosition;
         private Color spawnColor = Color.white;
         private Coroutine digestRoutine;
         private Coroutine eatRoutine;
         private Tween punchScaleTween;
+
+        private bool isGamePaused;
+        private WaitUntil waitUntilHameUnpauses;
 
 
         private bool InPlotRange()
@@ -67,28 +83,48 @@ namespace Assets.Scripts.ClittlingScripts
         #region UNITY_METHODS
         private void Start()
         {
+            GameManager.Instance.OnPause += PauseBehaviour;
             originalPosition = transform.position;
             spawnColor = Random.ColorHSV(0, 1, 0, 1, .7f, 1, 1, 1);
             spriteRenderer.material.color = spawnColor;
         }
 
-        private bool isFacingRight = false;
-        private bool IsFacingRight 
+        private void OnDestroy()
         {
-            get
-            {
-                float currentVelocity = agent.velocity.x;
-                
-                if (currentVelocity == 0) return isFacingRight;
-
-                isFacingRight = currentVelocity > 0;
-                return isFacingRight;
-            }
+            GameManager.Instance.OnPause -= PauseBehaviour;
+            Manager.RemoveCritterFromList(this);
         }
 
-        private void OnDestroy() => Manager.RemoveCritterFromList(this);
+        private void PauseBehaviour(bool isPaused)
+        {
+            isGamePaused = isPaused;
+            if (isPaused)
+            {
+                agent.isStopped = true;
+                waitUntilHameUnpauses = new(() => !isGamePaused);
+            }
+            else
+            {
+                agent.isStopped = false;
+                switch (CurrentState)
+                {
+                    case BehaviourState.chasing:
+                        agent.speed = chasingSpeed;
+                        break;
+                    case BehaviourState.fleeing:
+                        agent.speed = fleeingSpeed;
+                        break;
+                    case BehaviourState.digesting:
+                        agent.speed = digestingSpeed;
+                        break;
+                    default:
+                        agent.speed = 0;
+                        break;
+                }
+            }
+        }
         #endregion
-        
+
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
@@ -204,6 +240,13 @@ namespace Assets.Scripts.ClittlingScripts
 
             while (IsPlotPlanted())
             {
+                if (isGamePaused)
+                {
+                    crittlingAnim.SetBool("eating", false);
+                    yield return waitUntilHameUnpauses;
+                    crittlingAnim.SetBool("eating", true);
+                }
+
                 eatingTimeElapsed += Time.deltaTime;
                 
                 if(eatingTimeElapsed > eatingTime)
@@ -217,7 +260,9 @@ namespace Assets.Scripts.ClittlingScripts
                 }
                 yield return null;
             }
-            
+
+            if (isGamePaused) yield return waitUntilHameUnpauses;
+
             if (CurrentState != BehaviourState.digesting)
             {
                 Debug.Log($"{gameObject.name} teve refeicao interrompida");
@@ -236,7 +281,23 @@ namespace Assets.Scripts.ClittlingScripts
             agent.speed = digestingSpeed;
             crittlingAnim.SetBool("digesting", true);
 
-            yield return new WaitForSeconds(digestingTime);
+            float digestTimeRemaining = digestingTime;
+
+            while (digestTimeRemaining > 0)
+            {
+                if (isGamePaused)
+                {
+                    crittlingAnim.SetBool("digesting", false);
+                    yield return waitUntilHameUnpauses;
+                    crittlingAnim.SetBool("digesting", true);
+                }
+                else
+                {
+                    digestTimeRemaining -= Time.deltaTime;
+                }
+                yield return null;
+            }
+
 
             crittlingAnim.SetBool("digesting", false);
             CurrentState = BehaviourState.chasing;

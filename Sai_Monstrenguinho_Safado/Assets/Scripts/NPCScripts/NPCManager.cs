@@ -15,6 +15,7 @@ namespace Assets.Scripts.NPCScripts
         [SerializeField] private List<Transform> targetPositions = new();
         [SerializeField] private int maxClients = 5;
         public float spawnInterval = 15f;
+        private float currentInterval;
         [Tooltip("Se chega no número máximo de npcs permitidos, vai checar a cada [esse tanto] de segundos se liberou. Depois de terminar todos os eventos, dá pra tirar isso aqui.")]
         [SerializeField] private float capCheckInterval = .5f;
 
@@ -24,17 +25,10 @@ namespace Assets.Scripts.NPCScripts
         private WaitForSeconds waitForCapCheck;
         private List<NPCBehaviour> spawnedNPCs = new();
         private Dictionary<Transform, NPCBehaviour> positionsOccupationDict = new();
+
+        private bool isGamePaused;
+        private WaitUntil waitUntilGameUnpauses;
         #endregion
-
-        private void Start()
-        {
-            if (!TryInitializeTargetPositions()) return;
-
-
-            waitForCapCheck = new(capCheckInterval);
-
-            StartCoroutine(SpawnRoutine());
-        }
 
         private bool TryInitializeTargetPositions()
         {
@@ -133,12 +127,46 @@ namespace Assets.Scripts.NPCScripts
         {
             while (true)
             {
-                while (spawnedNPCs.Count >= maxClients) yield return waitForCapCheck;
+                if(isGamePaused) yield return waitUntilGameUnpauses;
 
-                yield return new WaitForSeconds(spawnInterval);
+                while (spawnedNPCs.Count >= maxClients)
+                {
+                    if (isGamePaused) yield return waitUntilGameUnpauses;
+                    yield return waitForCapCheck;
+                }
+
+                currentInterval = spawnInterval;
+
+                while (currentInterval > 0)
+                {
+                    if (isGamePaused) yield return waitUntilGameUnpauses;
+                    currentInterval -= Time.deltaTime;
+                    yield return null;
+                }
 
                 SpawnClient();
             }
         }
+    
+        private void PauseBehaviour(bool isPaused)
+        {
+            isGamePaused = isPaused;
+            if(isPaused)
+                waitUntilGameUnpauses = new(() => !isGamePaused);
+        }
+        
+        private void Start()
+        {
+            if (!TryInitializeTargetPositions()) return;
+            
+            GameManager.Instance.OnPause += PauseBehaviour;
+
+            waitForCapCheck = new(capCheckInterval);
+
+            StartCoroutine(SpawnRoutine());
+        }
+
+        
+        private void OnDisable() => GameManager.Instance.OnPause -= PauseBehaviour;
     }
 }

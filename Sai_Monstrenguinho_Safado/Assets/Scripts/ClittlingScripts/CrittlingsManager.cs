@@ -28,20 +28,40 @@ namespace Assets.Scripts.ClittlingScripts
         [SerializeField] private float updateTime = .2f;
         private Coroutine spawnCrittlingRoutine;
         private Coroutine updateCrittlingRoutine;
-       
+
+        private bool isGamePaused;
+        private WaitUntil waitUntilGameUnpauses;
+
         private void Start()
         {
             /*SpawnCrittling();
             SpawnCrittling();*/
+            GameManager.Instance.OnPause += PauseBehaviour;
+
             WaitForPlantedPlot = new(plantedPlotCheckInterval);
             spawnCrittlingRoutine = StartCoroutine(CrittlingSpawnHandler());
             updateCrittlingRoutine = StartCoroutine(UpdateCrittlingBehaviours());
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnPause -= PauseBehaviour;
+        }
+
+        private void PauseBehaviour(bool pause)
+        {
+            isGamePaused = pause;
+
+            if(pause) waitUntilGameUnpauses = new(() => !isGamePaused);
+
         }
 
         private System.Collections.IEnumerator CrittlingSpawnHandler()
         {
             while (true)
             {
+                if (isGamePaused) yield return waitUntilGameUnpauses; //slk
+
                 if(!isSpawning) yield break;
 
                 var spawnTime = Random.Range(minTime, maxTime);
@@ -51,10 +71,14 @@ namespace Assets.Scripts.ClittlingScripts
                 var plantedPlots = GetPlantedPlots();
                 while (plantedPlots == null || spawnedCrittlings.Count > CrittlingCap)
                 {
+                    if (isGamePaused) yield return waitUntilGameUnpauses; //mano so taquei em tudo isso
+
                     Debug.Log("Aguardando condições...");
                     plantedPlots = GetPlantedPlots();
                     yield return WaitForPlantedPlot;
                 }
+
+                if (isGamePaused) yield return waitUntilGameUnpauses; //aqui tb
 
                 var spawnAmount = Random.Range(CurrentMinHorde, CurrentMaxHorde + 1);
 
@@ -86,6 +110,8 @@ namespace Assets.Scripts.ClittlingScripts
         {
             while (true) 
             {
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+
                 yield return new WaitForSeconds(updateTime);
 
                 foreach(var crittling in spawnedCrittlings)

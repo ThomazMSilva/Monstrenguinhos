@@ -34,6 +34,10 @@ namespace Assets.Scripts
         [Space(8f)]
         [SerializeField] private AudioManager _audioManager;
         public AudioManager AudioManager => _audioManager;
+        
+        [Space(8f)]
+        [SerializeField] private bool isPaused;
+        public bool IsPaused => isPaused;
 
         private void Awake() => InitializeReferences();
 
@@ -64,6 +68,15 @@ namespace Assets.Scripts
         public void SetOptionsScreenActive(bool active) => optionsScreen.SetActive(active);
 
         public void LoadScene(string sceneName) => _sceneLoader.StartLoadingScene(sceneName);
+
+        public void SetPause(bool pause)
+        {
+            isPaused = pause;
+            OnPause?.Invoke(pause);
+        }
+
+        public delegate void PauseDelegate(bool pause);
+        public event PauseDelegate OnPause;
     }
 
 

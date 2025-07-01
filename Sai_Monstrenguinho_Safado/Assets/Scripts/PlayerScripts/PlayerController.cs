@@ -1,4 +1,5 @@
 using Assets.Scripts.GridScripts;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Assets.Scripts.PlayerScripts
@@ -18,7 +19,9 @@ namespace Assets.Scripts.PlayerScripts
         [SerializeField] private string emoteInput = "Fire1";
         [SerializeField] private string interactionInput = "Fire2";
         [SerializeField] private string sprintInput = "Fire3";
+        [SerializeField] private string pauseInput = "Pause";
         private bool m_interactionAxisDown;
+        private bool m_pauseAxisDown;
         private bool isRunning;
         private Vector2 inputAxis;
         #endregion
@@ -29,12 +32,20 @@ namespace Assets.Scripts.PlayerScripts
         [Space(8f)]
 
         [SerializeField] private Rigidbody playerRB;
+        [SerializeField] private UnityEngine.AI.NavMeshAgent playerNavigationAgent;
         [SerializeField] private Transform forwardAnchor;
-        [SerializeField] private float speed = 2f;
+        [SerializeField] private float speed = 4f;
         [SerializeField, Range(1.1f, 3f)] private float sprintMultiplier = 1.5f;
         [SerializeField] private float rotationSpeed = 10;
+
+        [Space(8f)]
+
+        [SerializeField] private Transform pauseLocation;
+        [SerializeField] private float aiSpeed = 2f;
         private float CurrentSpeedMultiplier => isRunning ? sprintMultiplier : 1;
-        
+
+        private bool IsAutomatic => playerNavigationAgent.enabled;
+        private Coroutine automaticMovementRoutine;
         private Vector3 playerDirection;
         private Vector3 playerVelocity;
         private Vector3 isometricForward, isometricRight;
@@ -73,6 +84,10 @@ namespace Assets.Scripts.PlayerScripts
 
         private void FixedUpdate()
         {
+            if (GameManager.Instance.IsPaused) return;
+
+            if (IsAutomatic) return;
+
             HandleMovement();
 
             playerAnim.SetFloat("velocityMagnitude", inputAxis.magnitude * CurrentSpeedMultiplier);
@@ -106,12 +121,27 @@ namespace Assets.Scripts.PlayerScripts
                 if (!m_interactionAxisDown)
                 {
                     m_interactionAxisDown = true;
-                    Interact();
+                    
+                    if(!GameManager.Instance.IsPaused)
+                        Interact();
                 }
             }
             if(Input.GetAxisRaw(interactionInput) == 0)
             {
                 m_interactionAxisDown = false;
+            }
+
+            if (Input.GetAxisRaw(pauseInput) != 0)
+            {
+                if (!m_pauseAxisDown)
+                {
+                    m_pauseAxisDown = true;
+                    TriggerPause();
+                }
+            }
+            if (Input.GetAxisRaw(pauseInput) == 0)
+            {
+                m_pauseAxisDown = false;
             }
 
             playerAnim.SetBool("Emoting_0", Input.GetAxisRaw(emoteInput) != 0);
@@ -231,6 +261,72 @@ namespace Assets.Scripts.PlayerScripts
             currentHeldTag = new();
             currentHeldInteractible = null;
             interactionShadow.gameObject.SetActive(false);
+        }
+
+        public void TriggerPause()
+        {
+            if (pauseLocation == null) return;
+            
+            if (GameManager.Instance.IsPaused) 
+                SetPauseFalse();
+            else
+                SetNavigationTarget(pauseLocation);
+        }
+
+        public void SetPauseTrue() => GameManager.Instance.SetPause(true);
+        
+        public void SetPauseFalse() => GameManager.Instance.SetPause(false);
+
+        public void SetNavigationTarget(Transform target)
+        {
+            if(automaticMovementRoutine != null) StopCoroutine(automaticMovementRoutine);
+            
+            automaticMovementRoutine = StartCoroutine
+            (
+                MoveToDestinationAI
+                (   
+                    target, 
+                    SetPauseTrue,
+                    () => 
+                    { 
+                        transform.DORotate(target.rotation.eulerAngles, .7f); 
+                        //SetPauseFalse();
+                    }
+                )
+            );
+        }
+
+        private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
+        {
+            actionBefore?.Invoke();
+
+            playerNavigationAgent.enabled = true;
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0;
+            var a = Quaternion.LookRotation( direction, Vector3.up );
+            yield return transform.DORotate(a.eulerAngles, .7f).WaitForCompletion();
+
+            playerNavigationAgent.speed = aiSpeed;
+            
+            playerNavigationAgent.SetDestination(target.position);
+
+            playerAnim.SetFloat("velocityMagnitude", .15f);
+
+            yield return new WaitUntil
+            (
+                () =>
+                {
+                    return !playerNavigationAgent.pathPending
+                    && (playerNavigationAgent.remainingDistance <= playerNavigationAgent.stoppingDistance);
+                }
+            );
+
+            playerNavigationAgent.enabled = false;
+
+            actionAfter?.Invoke();
+
+            automaticMovementRoutine = null;
         }
 
         public HeldItem HeldItem => currentHeldTag;
