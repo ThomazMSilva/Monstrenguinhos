@@ -322,6 +322,8 @@ namespace Assets.Scripts.PlayerScripts
                 }
             );
 
+            playerNavigationAgent.Warp(target.position);
+
             playerNavigationAgent.enabled = false;
 
             actionAfter?.Invoke();

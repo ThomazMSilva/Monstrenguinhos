@@ -1678,6 +1678,90 @@ MonoBehaviour:
     generalSlider: {fileID: 3155762218482799587}
     musicSlider: {fileID: 5985962785771760864}
     sfxSlider: {fileID: 1803249241974332021}
+  isPaused: 0
+  stageAttributes:
+  - stageName: Tutorial
+    stageID: 0
+    isTutorial: 1
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: cc7965ad8de51bd4594c808238b881b1, type: 2}
+      MinInterval: 2
+      MaxInterval: 4
+      SpawnCap: 1
+    Crittlings:
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      MinInterval: 15
+      MaxInterval: 20
+      MinHorde: 1
+      MaxHorde: 2
+      SpawnCap: 4
+    Conditions:
+      TimeBased: 0
+      TimeToPass: 300
+      SuccessBased: 1
+      SuccessfulClientsToPass: 1
+    nextStageID: 1
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: Estagio_1
+    stageID: 1
+    isTutorial: 0
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
+      - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
+      - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+      MinInterval: 50
+      MaxInterval: 60
+      SpawnCap: 4
+    Crittlings:
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      MinInterval: 15
+      MaxInterval: 20
+      MinHorde: 1
+      MaxHorde: 2
+      SpawnCap: 6
+    Conditions:
+      TimeBased: 1
+      TimeToPass: 300
+      SuccessBased: 1
+      SuccessfulClientsToPass: 5
+    nextStageID: 2
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: Estagio_2
+    stageID: 2
+    isTutorial: 0
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
+      - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
+      - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+      MinInterval: 50
+      MaxInterval: 60
+      SpawnCap: 4
+    Crittlings:
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      MinInterval: 15
+      MaxInterval: 20
+      MinHorde: 1
+      MaxHorde: 2
+      SpawnCap: 6
+    Conditions:
+      TimeBased: 1
+      TimeToPass: 300
+      SuccessBased: 1
+      SuccessfulClientsToPass: 4
+    nextStageID: 0
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
   optionsScreen: {fileID: 6764307416009737589}
 --- !u!1 &5941088186837337013
 GameObject:

@@ -1,49 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.NPCScripts
 {
-    [System.Serializable]
-    public class StageAttributes
-    {
-        public string stageName;
-        public int stageID;
-        public bool isTutorial;
-        
-        [Space(8f)]
-        
-        public List<ClientAttributes> spawnableClients = new(3);
-        
-        [Space(8f)]
-       
-        public float minSpawnInterval = 50f;
-        public float maxSpawnInterval = 60f;
-        public int spawnCap = 4;
-
-        [Space(8f), Header("Condições de Passagem"), Space(8f)]
-        
-        public bool timeBased;
-        [Tooltip("Em segundos")]
-        public float timeToPass = 300;
-        
-        [Space(8f)]
-
-        public bool successBased = true;
-        public int successfulClientsToPass = 1;
-        private int successfulClientsPassed;
-        public int SuccessfulClientsPassed { get => successfulClientsPassed; set { successfulClientsPassed = value; } }
-        private int failedClientsPassed;
-        public int FailedClientsPassed { get => failedClientsPassed; set { failedClientsPassed = value; } }
-
-
-        [Space(8f)]
-       
-        public int nextStageID;
-        public UnityEngine.Events.UnityEvent OnCompleted;
-    }
-
     public class NPCManager : MonoBehaviour
     {
         #region ATTRIBUTES
@@ -51,9 +11,6 @@ namespace Assets.Scripts.NPCScripts
         [SerializeField] private Transform npcParent;
 
         [SerializeField] private Transform targetPositionParent;
-
-        [SerializeField] private List<StageAttributes> stageAttributes = new(1);
-        private StageAttributes currentStageAttributes;
 
         [Tooltip("As posições pra onde os npcs vão quando spawnam (a filazinha). Eles spawnam e são designados uma posição pra ir. \nVão na ordem da lista, então se uma posição x tá na frente da y no mundo, mas tá embaixo da y na lista, os npcs vão primeiro pra y.")]
         [SerializeField] private List<Transform> targetPositions = new();
@@ -72,18 +29,15 @@ namespace Assets.Scripts.NPCScripts
         private int totalFailedClients;
         public UnityEngine.Events.UnityEvent OnLost;
 
+        private GameManager game;
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
         #endregion
 
-        public void PassToStage(int stageID)
-        {
-            StageAttributes stageToGo = stageAttributes.FirstOrDefault(s => s.stageID == stageID);
-            if (stageToGo != null) { currentStageAttributes = stageToGo; }
-        }
-
         private bool TryInitializeTargetPositions()
         {
+            game = GameManager.Instance;
+
             if (targetPositions.Count < 1)
             {
                 Debug.LogError("Não há posição de spawn serializada no NPCManager; Retornando Start()");
@@ -92,9 +46,9 @@ namespace Assets.Scripts.NPCScripts
 
             int maxClients = 5;
 
-            foreach (var attribute in stageAttributes)
+            foreach (var attribute in game.StageAttributes)
             {
-                if(attribute.spawnCap > maxClients) maxClients = attribute.spawnCap;
+                if(attribute.Clients.SpawnCap > maxClients) maxClients = attribute.Clients.SpawnCap;
             }
 
             if (targetPositions.Count < maxClients)
@@ -148,7 +102,7 @@ namespace Assets.Scripts.NPCScripts
         {
             var client = Instantiate(npcPrefab, transform.position, transform.rotation, npcParent).GetComponent<NPCBehaviour>();
             spawnedNPCs.Add(client);
-            client.SetAttributes(currentStageAttributes.spawnableClients[Random.Range(0, currentStageAttributes.spawnableClients.Count)]);
+            client.SetAttributes(game.CurrentStage.Clients.SpawnableClients[Random.Range(0, game.CurrentStage.Clients.SpawnableClients.Count)]);
             client.gameObject.name = $"Cliente ({spawnedNPCs.Count - 1}) - {client.Name}";
 
             Transform furthestAvailablePosition = targetPositions[0];
@@ -168,13 +122,13 @@ namespace Assets.Scripts.NPCScripts
             
             client.onDestroy.AddListener(RemoveClientFromList);
             
-            var current = currentStageAttributes;
+            var current = game.CurrentStage;
 
             client.OnFailed.AddListener
             (
                 () => 
                 { 
-                    current.FailedClientsPassed++;
+                    current.Conditions.FailedClientsPassed++;
                     totalFailedClients++;
                     if(totalFailedClients >= maximumFailedClients)
                     {
@@ -186,13 +140,13 @@ namespace Assets.Scripts.NPCScripts
             (
                 () =>
                 {
-                    current.SuccessfulClientsPassed++;
-                    if(current.successBased && current.SuccessfulClientsPassed >= current.successfulClientsToPass)
+                    current.Conditions.SuccessfulClientsPassed++;
+                    if(current.Conditions.SuccessBased && current.Conditions.SuccessfulClientsPassed >= current.Conditions.SuccessfulClientsToPass)
                     {
                         current.OnCompleted?.Invoke();
 
                         //Tirar daqui se não quiser automático
-                        PassToStage(current.nextStageID);
+                        game.PassToStage(current.nextStageID);
                     }
                 }
             );
@@ -216,13 +170,13 @@ namespace Assets.Scripts.NPCScripts
             {
                 if(isGamePaused) yield return waitUntilGameUnpauses;
 
-                while (spawnedNPCs.Count >= currentStageAttributes.spawnCap)
+                while (spawnedNPCs.Count >= game.CurrentStage.Clients.SpawnCap)
                 {
                     if (isGamePaused) yield return waitUntilGameUnpauses;
                     yield return waitForCapCheck;
                 }
 
-                currentInterval = Random.Range(currentStageAttributes.minSpawnInterval, currentStageAttributes.maxSpawnInterval);
+                currentInterval = Random.Range(game.CurrentStage.Clients.MinInterval, game.CurrentStage.Clients.MaxInterval);
 
                 while (currentInterval > 0)
                 {
@@ -235,6 +189,14 @@ namespace Assets.Scripts.NPCScripts
             }
         }
     
+        private void ReturnAllClients()
+        {
+            foreach (var client in spawnedNPCs)
+            {
+                
+            }
+        }
+
         private void PauseBehaviour(bool isPaused)
         {
             isGamePaused = isPaused;
@@ -246,17 +208,13 @@ namespace Assets.Scripts.NPCScripts
         {
             if (!TryInitializeTargetPositions()) return;
             
-            GameManager.Instance.OnPause += PauseBehaviour;
+            game.OnPause += PauseBehaviour;
 
             waitForCapCheck = new(capCheckInterval);
 
-            //muda aqui pra 0 se quiser tutorial
-            currentStageAttributes = stageAttributes[0];
-
             StartCoroutine(SpawnRoutine());
         }
-
         
-        private void OnDisable() => GameManager.Instance.OnPause -= PauseBehaviour;
+        private void OnDisable() => game.OnPause -= PauseBehaviour;
     }
 }

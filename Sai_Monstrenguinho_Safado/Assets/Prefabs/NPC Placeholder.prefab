@@ -4339,16 +4339,10 @@ MonoBehaviour:
   orderBackgroundPanel: {fileID: 6063738259232119969}
   orderLayoutGroup: {fileID: 6014567894318155734}
   orderTMP: {fileID: 6158295776584438315}
-  sprites:
-  - cropType: 1
-    sprite: {fileID: 315928361, guid: 34235c8f14ec6934aba160a1372d5e2f, type: 3}
-  - cropType: 2
-    sprite: {fileID: 21300000, guid: 9e329765b2c34454dbd77d728e61cc4a, type: 3}
-  - cropType: 3
-    sprite: {fileID: 386911227, guid: c187ef8cc6bc94244b7af47bbd729bb7, type: 3}
-  orderImagePrefab: {fileID: 7399510674358752049, guid: d777b697c4ea62a4fa30b1c316a1b525, type: 3}
   orderFadeDuration: 1.5
   deliveredCrops: 
+  orderImagePrefab: {fileID: 7399510674358752049, guid: d777b697c4ea62a4fa30b1c316a1b525, type: 3}
+  cropSpritesReference: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}
   OnSucceeded:
     m_PersistentCalls:
       m_Calls: []

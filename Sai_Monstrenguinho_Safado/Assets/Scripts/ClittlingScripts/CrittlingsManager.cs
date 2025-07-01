@@ -7,7 +7,6 @@ namespace Assets.Scripts.ClittlingScripts
 {
     public class CrittlingsManager : MonoBehaviour
     {
-        [SerializeField] private GameObject crittlingPrefab;
         [SerializeField] private Transform crittlingParent;
 
         [SerializeField] private List<Transform> spawnablePositions = new();
@@ -18,17 +17,12 @@ namespace Assets.Scripts.ClittlingScripts
 
         [SerializeField] private float plantedPlotCheckInterval = 1f;
         private WaitForSeconds WaitForPlantedPlot;
-        public float minTime = 15f;
-        public float maxTime = 20f;
-        
-        public int CurrentMinHorde = 1;
-        public int CurrentMaxHorde = 3;
-        public int CrittlingCap = 6;
 
         [SerializeField] private float updateTime = .2f;
         private Coroutine spawnCrittlingRoutine;
         private Coroutine updateCrittlingRoutine;
 
+        private GameManager game;
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
 
@@ -36,7 +30,8 @@ namespace Assets.Scripts.ClittlingScripts
         {
             /*SpawnCrittling();
             SpawnCrittling();*/
-            GameManager.Instance.OnPause += PauseBehaviour;
+            game = GameManager.Instance;
+            game.OnPause += PauseBehaviour;
 
             WaitForPlantedPlot = new(plantedPlotCheckInterval);
             spawnCrittlingRoutine = StartCoroutine(CrittlingSpawnHandler());
@@ -45,7 +40,7 @@ namespace Assets.Scripts.ClittlingScripts
 
         private void OnDisable()
         {
-            GameManager.Instance.OnPause -= PauseBehaviour;
+            game.OnPause -= PauseBehaviour;
         }
 
         private void PauseBehaviour(bool pause)
@@ -64,12 +59,12 @@ namespace Assets.Scripts.ClittlingScripts
 
                 if(!isSpawning) yield break;
 
-                var spawnTime = Random.Range(minTime, maxTime);
+                var spawnTime = Random.Range(game.CurrentStage.Crittlings.MinInterval, game.CurrentStage.Crittlings.MaxInterval);
                 yield return new WaitForSeconds(spawnTime);
 
                 Debug.Log("Terminou intervalo de spawn");
                 var plantedPlots = GetPlantedPlots();
-                while (plantedPlots == null || spawnedCrittlings.Count > CrittlingCap)
+                while (plantedPlots == null || spawnedCrittlings.Count > game.CurrentStage.Crittlings.SpawnCap)
                 {
                     if (isGamePaused) yield return waitUntilGameUnpauses; //mano so taquei em tudo isso
 
@@ -80,7 +75,7 @@ namespace Assets.Scripts.ClittlingScripts
 
                 if (isGamePaused) yield return waitUntilGameUnpauses; //aqui tb
 
-                var spawnAmount = Random.Range(CurrentMinHorde, CurrentMaxHorde + 1);
+                var spawnAmount = Random.Range(game.CurrentStage.Crittlings.MinHorde, game.CurrentStage.Crittlings.MaxHorde + 1);
 
                 for (int i = 0; i < spawnAmount; i++)
                 {
@@ -92,7 +87,16 @@ namespace Assets.Scripts.ClittlingScripts
 
         private void SpawnCrittling()
         {
-            var positionIndex = Random.Range(0, spawnablePositions.Count);
+            int possibleCrittlingsCount = game.CurrentStage.Crittlings.SpawnableCrittlings.Count;
+
+            if (possibleCrittlingsCount <= 0) return;
+            
+            int spawnIndex = Random.Range(0, possibleCrittlingsCount);
+
+            int positionIndex = Random.Range(0, spawnablePositions.Count);
+            
+            var crittlingPrefab = game.CurrentStage.Crittlings.SpawnableCrittlings[spawnIndex];
+
             var crittling = Instantiate
             (
                 crittlingPrefab,
@@ -100,6 +104,7 @@ namespace Assets.Scripts.ClittlingScripts
                 Quaternion.identity,
                 crittlingParent
             );
+
             crittling.name = $"{crittlingPrefab.name}_{spawnedCrittlings.Count}";
             var critterBehaviour = crittling.GetComponent<CrittlingBehaviour>();
             critterBehaviour.Manager = this;

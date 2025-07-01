@@ -1,13 +1,47 @@
 ﻿using Assets.Scripts.PlayerScripts;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.Interactibles
 {
     public class BoxHoldable : Holdable
     {
+        [UnityEngine.SerializeField] NPCScripts.CropSpritesReference spriteReferences;
+        [UnityEngine.SerializeField] List<UnityEngine.UI.Image> imageTransform;
+        
         public List<CropAttributes> storedCrops = new();
-        public void AddCrop(CropAttributes crop) => storedCrops.Add(crop);
-        public void ClearCrops() => storedCrops.Clear();
+
+        public void AddCrop(CropAttributes crop)
+        {
+            if (storedCrops.Count >= imageTransform.Count) return;
+
+            storedCrops.Add(crop);
+
+            for(int i = 0; i < imageTransform.Count; i++)
+            {
+                if(i < storedCrops.Count)
+                {
+                    imageTransform[i].gameObject.SetActive(true);
+                    imageTransform[i].sprite = spriteReferences.sprites
+                        .Where(s => s.cropType == storedCrops[i].CropName)
+                        .FirstOrDefault().sprite ?? null;
+
+                    continue;
+                }
+                imageTransform[i].sprite = null;
+                imageTransform[i].gameObject.SetActive(false);
+            }
+        }
+
+        public void ClearCrops()
+        {
+            storedCrops.Clear();
+            foreach (var crop in imageTransform)
+            {
+                crop.sprite = null;
+                crop.gameObject.SetActive(false);
+            }
+        }
 
         public override void Interact(object sender = null)
         {

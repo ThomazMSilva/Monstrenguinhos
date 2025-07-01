@@ -1,8 +1,77 @@
 ﻿using UnityEngine;
 using Assets.Scripts.ManagerScripts;
+using Assets.Scripts.NPCScripts;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts
 {
+    [System.Serializable]
+    public class StageAttributes
+    {
+        public string stageName;
+        public int stageID;
+        public bool isTutorial;
+
+        [System.Serializable]
+        public class NpcAttributes
+        {
+            [Space(8f)]
+
+            public List<ClientAttributes> SpawnableClients = new(3);
+
+            [Space(8f), Header("Spawn"), Space(5f)]
+
+            public float MinInterval = 50f;
+            public float MaxInterval = 60f;
+            public int SpawnCap = 4;
+        }
+
+        [System.Serializable]
+        public class EnemyAttributes
+        {
+            public List<GameObject> SpawnableCrittlings;
+            [Space(8f), Header("Spawn"), Space(5f)]
+
+            public float MinInterval = 15f;
+            public float MaxInterval = 20f;
+            public int MinHorde = 1;
+            public int MaxHorde = 2;
+            public int SpawnCap = 6;
+
+        }
+
+        [System.Serializable]
+        public class StageConditions
+        {
+            [Space(8f), Header("Condições de Passagem"), Space(8f)]
+
+            public bool TimeBased;
+            [Tooltip("Em segundos")]
+            public float TimeToPass = 300;
+
+            [Space(8f)]
+
+            public bool SuccessBased = true;
+            public int SuccessfulClientsToPass = 1;
+
+            [Space(8f), Header("Estado da Condição"), Space(8f)]
+            private int successfulClientsPassed;
+            public int SuccessfulClientsPassed { get => successfulClientsPassed; set { successfulClientsPassed = value; } }
+            private int failedClientsPassed;
+            public int FailedClientsPassed { get => failedClientsPassed; set { failedClientsPassed = value; } }
+        }
+
+        public NpcAttributes Clients;
+        public EnemyAttributes Crittlings;
+        public StageConditions Conditions;
+
+        [Space(8f)]
+
+        public int nextStageID;
+        public UnityEngine.Events.UnityEvent OnCompleted;
+    }
+
     public class GameManager : MonoBehaviour
     {
         private static readonly string prefabPath = "Prefabs/GameManager";
@@ -39,11 +108,27 @@ namespace Assets.Scripts
         [SerializeField] private bool isPaused;
         public bool IsPaused => isPaused;
 
+        [Space(8f)]
+        [SerializeField] private List<StageAttributes> stageAttributes = new(1);
+        public List<StageAttributes> StageAttributes => stageAttributes;
+
+        private StageAttributes currentStageAttributes;
+        public StageAttributes CurrentStage => currentStageAttributes;
+
+
+        public void PassToStage(int stageID)
+        {
+            StageAttributes stageToGo = stageAttributes.FirstOrDefault(s => s.stageID == stageID);
+            if (stageToGo != null) { currentStageAttributes = stageToGo; }
+        }
+
         private void Awake() => InitializeReferences();
 
         private void InitializeReferences()
         {
             if (!InstanceInitializedCorrectly()) return;
+
+            currentStageAttributes = stageAttributes[0];
 
             _audioManager.Initialize(this);
             _sceneLoader.Initialize(this);
