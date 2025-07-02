@@ -26,12 +26,17 @@ namespace Assets.Scripts.NPCScripts
         private Dictionary<Transform, NPCBehaviour> positionsOccupationDict = new();
 
         [SerializeField] private int maximumFailedClients = 3;
+        public int MaximumFailedClients => maximumFailedClients;
+
         private int totalFailedClients;
+        public UnityEngine.Events.UnityEvent OnFailedClient;
+        public UnityEngine.Events.UnityEvent OnSucceededClient;
         public UnityEngine.Events.UnityEvent OnLost;
 
         private GameManager game;
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
+        private Coroutine stageTimerRoutine;
         #endregion
 
         private bool TryInitializeTargetPositions()
@@ -130,8 +135,10 @@ namespace Assets.Scripts.NPCScripts
                 { 
                     current.Conditions.FailedClientsPassed++;
                     totalFailedClients++;
+                    OnFailedClient?.Invoke();
                     if(totalFailedClients >= maximumFailedClients)
                     {
+                        ReturnAllClients(client);
                         OnLost?.Invoke();
                     }
                 }
@@ -141,10 +148,12 @@ namespace Assets.Scripts.NPCScripts
                 () =>
                 {
                     current.Conditions.SuccessfulClientsPassed++;
+                    OnSucceededClient?.Invoke();
+                    //Passagem de estagio na condição de "por sucesso"
                     if(current.Conditions.SuccessBased && current.Conditions.SuccessfulClientsPassed >= current.Conditions.SuccessfulClientsToPass)
                     {
+                        ReturnAllClients(client);
                         current.OnCompleted?.Invoke();
-
                         //Tirar daqui se não quiser automático
                         game.PassToStage(current.nextStageID);
                     }
@@ -189,11 +198,14 @@ namespace Assets.Scripts.NPCScripts
             }
         }
     
-        private void ReturnAllClients()
+        private void ReturnAllClients(NPCBehaviour except = null)
         {
+            bool exc = (except != null); 
+
             foreach (var client in spawnedNPCs)
             {
-                
+                if (exc && client == except) continue;
+                client.ReturnHome();
             }
         }
 
@@ -204,17 +216,49 @@ namespace Assets.Scripts.NPCScripts
                 waitUntilGameUnpauses = new(() => !isGamePaused);
         }
         
+        private void CheckStartStageTimer()
+        {
+            Debug.Log("dando check stage timer");
+            if (stageTimerRoutine != null) StopCoroutine(stageTimerRoutine);
+
+            if(game.CurrentStage.Conditions.TimeBased)
+                stageTimerRoutine = StartCoroutine(StageTimer());
+        }
+
+        private IEnumerator StageTimer()
+        {
+            game.CurrentStage.Conditions.TimeElapsed = 0;
+            
+            while (game.CurrentStage.Conditions.TimeElapsed < game.CurrentStage.Conditions.TimeToPass)
+            {
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+
+                game.CurrentStage.Conditions.TimeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            game.PassToStage(game.CurrentStage.nextStageID);
+            stageTimerRoutine = null;
+        }
+
         private void Start()
         {
             if (!TryInitializeTargetPositions()) return;
-            
+
+            CheckStartStageTimer();
+
             game.OnPause += PauseBehaviour;
+            game.OnStagePassed += CheckStartStageTimer;
+            game.OnStagePassed += SpawnClient;
 
             waitForCapCheck = new(capCheckInterval);
 
             StartCoroutine(SpawnRoutine());
         }
-        
-        private void OnDisable() => game.OnPause -= PauseBehaviour;
+
+        private void OnDisable()
+        {
+            game.OnPause -= PauseBehaviour;
+            game.OnStagePassed -= CheckStartStageTimer;
+        }
     }
 }

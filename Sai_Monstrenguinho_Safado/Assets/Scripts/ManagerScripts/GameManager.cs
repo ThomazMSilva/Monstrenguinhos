@@ -56,6 +56,8 @@ namespace Assets.Scripts
             public int SuccessfulClientsToPass = 1;
 
             [Space(8f), Header("Estado da Condição"), Space(8f)]
+            private float timeElapsed;
+            public float TimeElapsed { get => timeElapsed; set { timeElapsed = value; } }
             private int successfulClientsPassed;
             public int SuccessfulClientsPassed { get => successfulClientsPassed; set { successfulClientsPassed = value; } }
             private int failedClientsPassed;
@@ -115,11 +117,20 @@ namespace Assets.Scripts
         private StageAttributes currentStageAttributes;
         public StageAttributes CurrentStage => currentStageAttributes;
 
+        public delegate void StagePassedDelegate();
+        public event StagePassedDelegate OnStagePassed;
 
         public void PassToStage(int stageID)
         {
+            if (currentStageAttributes != null && stageID == currentStageAttributes.stageID) return;
+            
             StageAttributes stageToGo = stageAttributes.FirstOrDefault(s => s.stageID == stageID);
-            if (stageToGo != null) { currentStageAttributes = stageToGo; }
+
+            if (stageToGo == null) return;
+         
+            currentStageAttributes = stageToGo;
+            Debug.Log("Passou pra estagio "+stageID);
+            OnStagePassed?.Invoke();
         }
 
         private void Awake() => InitializeReferences();
@@ -128,7 +139,7 @@ namespace Assets.Scripts
         {
             if (!InstanceInitializedCorrectly()) return;
 
-            currentStageAttributes = stageAttributes[0];
+            PassToStage(0);
 
             _audioManager.Initialize(this);
             _sceneLoader.Initialize(this);
@@ -142,8 +153,8 @@ namespace Assets.Scripts
                 Destroy(gameObject);
                 //return false;
             }
-
             _Instance = this;
+            Debug.Log("inicializou instancia de gm");
             DontDestroyOnLoad(_Instance.transform.root.gameObject);
             return true;
         }

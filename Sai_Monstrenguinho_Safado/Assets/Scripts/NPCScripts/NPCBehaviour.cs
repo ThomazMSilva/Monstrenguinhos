@@ -12,12 +12,17 @@ namespace Assets.Scripts.NPCScripts
         
         #region ORDER_ATTRIBUTES
         [SerializeField] private Animator npcAnim;
+        [SerializeField] private Renderer[] npcRenderer;
+        [SerializeField] private Color unsatisfactionColor = Color.red;
+        private System.Collections.Generic.List<Color> npcOriginalColors = new();
+        private System.Collections.Generic.List<Material> npcMaterials = new();
 
         [Space(8f), Header("Pedidos"), Space(8f)]
         [SerializeField] private ClientAttributes attributes;
         [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCamera;
         [Space(8f)]
         [SerializeField] private GameObject orderDisplay;
+        [SerializeField] private GameObject orderPlacement;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private RectTransform orderBackgroundPanel;
         [SerializeField] private UnityEngine.UI.LayoutGroup orderLayoutGroup;
@@ -102,9 +107,16 @@ namespace Assets.Scripts.NPCScripts
         private System.Collections.IEnumerator CountTolerance()
         {
             elapsedTolerance = 0;
+            var toleranceMultipler = 1 / tolerance;
+
             while (elapsedTolerance < tolerance)
             {
                 if (isGamePaused) yield return waitUntilGameUnpauses;
+
+                for (int i = 0; i < npcMaterials.Count; i++)
+                {
+                    npcMaterials[i].color = Color.Lerp(npcOriginalColors[i], unsatisfactionColor, elapsedTolerance * toleranceMultipler);
+                }
 
                 elapsedTolerance += Time.deltaTime;
                 yield return null;
@@ -155,30 +167,30 @@ namespace Assets.Scripts.NPCScripts
             return true;
         }
 
-        private void ReturnHome()
+        #endregion
+
+        #region PUBLIC_METHODS
+        public  void ReturnHome()
         {
             if(toleranceRoutine != null) StopCoroutine(toleranceRoutine);
-
+            orderPlacement.SetActive(false);
             canvasGroup.DOFade(0, orderFadeDuration).OnComplete(() => orderDisplay.SetActive(false));
 
-            var rends = GetComponentsInChildren<Renderer>();
+            float npcFadeDuration = orderFadeDuration * 2f;
 
-            for (int i = 0; i < rends.Length; i++)
+            for (int i = 0; i < npcMaterials.Count; i++)
             {
-                Renderer rend = rends[i];
-                if (i == rends.Length - 1)
+                if (i == npcMaterials.Count - 1)
                 {
-                    rend.material.DOFade(0, orderFadeDuration).OnComplete(() => Destroy(gameObject, 2f));
+                    npcMaterials[i].DOFade(0, npcFadeDuration).OnComplete(() => Destroy(gameObject, 2f));
                     break;
                 }
-                rend.material.DOFade(0, orderFadeDuration * 3f);
+                npcMaterials[i].DOFade(0, npcFadeDuration);
             }
 
             SetTarget(originalPosition, Quaternion.identity, () => { });
         }
-        #endregion
-
-        #region PUBLIC_METHODS
+        
         public void SetAttributes(ClientAttributes newAttributes)
         {
             originalPosition = transform.position;
@@ -206,11 +218,11 @@ namespace Assets.Scripts.NPCScripts
         {
             canvasGroup.alpha = 0f;
 
-
             orderDisplay.SetActive(true);
+            orderPlacement.SetActive(true);
             canvasGroup.DOFade(1, orderFadeDuration);
 
-            for (int i = 0; i <= orderAmount; i++)
+            for (int i = 0; i < orderAmount; i++)
             {
                 var desiredCrop = (Interactibles.CropType)
                     WeightedRandomByPercentage
@@ -354,7 +366,24 @@ namespace Assets.Scripts.NPCScripts
             }
         }
 
-        private void Start() => GameManager.Instance.OnPause += PauseBehaviour;
+        private void Start()
+        {
+            GameManager.Instance.OnPause += PauseBehaviour;
+            if(npcRenderer == null) npcRenderer = GetComponentsInChildren<Renderer>(true);
+
+            for (int i = 0; i < npcRenderer.Length; i++)
+            {
+                Debug.Log($"renderer {npcRenderer[i].gameObject.name}");
+                var materials = npcRenderer[i].materials;
+                foreach(var m in materials)
+                {
+                    Debug.Log($"Tentando{m.name}");
+                    Debug.Log($"cor: {m.color}");
+                    npcMaterials.Add(m);
+                    npcOriginalColors.Add(m.color);
+                }
+            }
+        }
 
         private void OnDestroy()
         {

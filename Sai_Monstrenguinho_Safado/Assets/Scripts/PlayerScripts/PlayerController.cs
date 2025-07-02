@@ -71,6 +71,8 @@ namespace Assets.Scripts.PlayerScripts
 
         private Interactibles.Interactible selectedInteractible = null;
         #endregion
+
+        public UnityEngine.Events.UnityEvent OnPaused;
         #endregion
 
         #region UNITY_METHODS
@@ -289,12 +291,16 @@ namespace Assets.Scripts.PlayerScripts
                     SetPauseTrue,
                     () => 
                     { 
-                        transform.DORotate(target.rotation.eulerAngles, .7f); 
+                        transform.DORotate(target.rotation.eulerAngles, .7f);
                         //SetPauseFalse();
+                        ActivatePauseScreen();
+                        OnPaused?.Invoke();
                     }
                 )
             );
         }
+
+        private void ActivatePauseScreen() => GameManager.Instance.SetOptionsScreenActive(true);
 
         private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
         {
