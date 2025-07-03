@@ -1883,9 +1883,9 @@ MonoBehaviour:
       SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 300
+      TimeToPass: 400
       SuccessBased: 1
-      SuccessfulClientsToPass: 5
+      SuccessfulClientsToPass: 10
     nextStageID: 2
     OnCompleted:
       m_PersistentCalls:
@@ -1913,7 +1913,33 @@ MonoBehaviour:
       TimeBased: 1
       TimeToPass: 300
       SuccessBased: 1
-      SuccessfulClientsToPass: 4
+      SuccessfulClientsToPass: 6
+    nextStageID: 3
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: Estagio_3
+    stageID: 3
+    isTutorial: 0
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: 385ab5cc6649ec24d92918d0d620cd56, type: 2}
+      MinInterval: 20
+      MaxInterval: 50
+      SpawnCap: 1
+    Crittlings:
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      MinInterval: 30
+      MaxInterval: 40
+      MinHorde: 2
+      MaxHorde: 3
+      SpawnCap: 6
+    Conditions:
+      TimeBased: 0
+      TimeToPass: 200
+      SuccessBased: 1
+      SuccessfulClientsToPass: 1
     nextStageID: 0
     OnCompleted:
       m_PersistentCalls:
