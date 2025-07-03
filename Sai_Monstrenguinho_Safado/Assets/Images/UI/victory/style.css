@@ -1,0 +1,98 @@
+body {
+    background-color: #2e4d3a; /* Dark, muted green */
+    font-family: 'Bangers', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    color: #e8f5e9; /* Light green text */
+}
+
+#menu-container {
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 20px rgba(118, 255, 3, 0.4));
+    max-width: 90%;
+    width: 500px;
+}
+
+#logo-text {
+    width: 250px;
+    height: auto;
+}
+
+.wing {
+    width: 125px;
+    animation: flap 2s ease-in-out infinite;
+}
+
+#left-wing {
+    transform-origin: right center;
+}
+#right-wing {
+    transform-origin: left center;
+}
+
+@keyframes flap {
+    0% {
+        transform: rotateZ(0deg) scale(1);
+    }
+    50% {
+        transform: rotateZ(-15deg) scale(1.05);
+    }
+    100% {
+        transform: rotateZ(0deg) scale(1);
+    }
+}
+
+#main-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#main-menu li {
+    margin-bottom: 1.5rem;
+}
+
+#main-menu button {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: #1b2e21; /* Dark green text */
+    background-color: #76ff03; /* Bright green from logo */
+    border: 4px solid #33691e; /* Darker green border */
+    border-radius: 50px;
+    padding: 10px 30px;
+    cursor: pointer;
+    text-shadow: 1px 1px 0px #c5ff8f;
+    transition: all 0.15s ease-out;
+    width: 320px;
+    box-shadow: 0 7px 0 #33691e;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+#main-menu button:hover {
+    background-color: #9aff53; /* Lighter green on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 0 #33691e;
+}
+
+#main-menu button:active {
+    transform: translateY(3px);
+    box-shadow: 0 4px 0 #33691e;
+}

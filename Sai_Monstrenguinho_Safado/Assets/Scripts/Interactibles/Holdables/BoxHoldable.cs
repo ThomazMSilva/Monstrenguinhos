@@ -66,5 +66,11 @@ namespace Assets.Scripts.Interactibles
                 }
             }
         }
+
+        public override void ReturnToStartingPoint()
+        {
+            base.ReturnToStartingPoint();
+            ClearCrops();
+        }
     }
 }

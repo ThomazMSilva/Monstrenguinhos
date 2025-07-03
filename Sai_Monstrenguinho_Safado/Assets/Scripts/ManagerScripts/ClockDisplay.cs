@@ -37,6 +37,11 @@ namespace Assets.Scripts.ManagerScripts
             var conditions = currentStage.Conditions;
             var critters = currentStage.Crittlings;
 
+            List<StageAttributes> allStages = new();
+
+            if (rotationConditions.Contains(RotationCondition.AllTimeBased) || rotationConditions.Contains(RotationCondition.AllSuccessBased))
+                allStages = GameManager.Instance.StageAttributes;
+
             foreach(var requiredCondition in rotationConditions)
             {
                 switch (requiredCondition)
@@ -75,12 +80,35 @@ namespace Assets.Scripts.ManagerScripts
                         break;
                 
                     case RotationCondition.AllTimeBased:
-                        var allStages = GameManager.Instance.StageAttributes;
                         float allTimes = 0;
+                        float allTimeElapsed = 0;
                         foreach(var stage in allStages)
                         {
                             allTimes += stage.Conditions.TimeToPass;
+                            allTimeElapsed += stage.Conditions.TimeElapsed;
                         }
+                        float allTimeStep = 1 / allTimes;
+                        var currentRotationAllTime = Mathf.Lerp(0, 360 * multiplier, allTimeElapsed * allTimeStep);
+
+                        if (currentRotationAllTime > highestValue)
+                            highestValue = currentRotationAllTime;
+
+                        break;
+
+                    case RotationCondition.AllSuccessBased:
+                        int allSuccesses = 0;
+                        float allSuccessesElapsed = 0;
+                        foreach (var stage in allStages)
+                        {
+                            allSuccesses += stage.Conditions.SuccessfulClientsToPass;
+                            allSuccessesElapsed += stage.Conditions.SuccessfulClientsPassed;
+                        }
+                        float allSuccessStep = 1 / allSuccesses;
+                        var currentRotationAllSuccess = Mathf.Lerp(0, 360 * multiplier, allSuccessesElapsed * allSuccessStep);
+
+                        if(currentRotationAllSuccess > highestValue)
+                            highestValue = currentRotationAllSuccess;
+
                         break;
 
                 }

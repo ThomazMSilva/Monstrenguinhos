@@ -254,6 +254,15 @@ namespace Assets.Scripts.NPCScripts
             stageTimerRoutine = null;
         }
 
+        public void OnStagePassed()
+        {
+            CheckStartStageTimer();
+            game.CurrentStage.Clients.TimeRemaining = game.CurrentStage.Clients.Interval;
+            
+            if(game.CurrentStage.Clients.PreSpawn)
+                SpawnClient();
+        }
+
         private void Start()
         {
             if (!TryInitializeTargetPositions()) return;
@@ -261,8 +270,7 @@ namespace Assets.Scripts.NPCScripts
             CheckStartStageTimer();
 
             game.OnPause += PauseBehaviour;
-            game.OnStagePassed += CheckStartStageTimer;
-            game.OnStagePassed += SpawnClient;
+            game.OnStagePassed += OnStagePassed;
             game.OnRestart += Restart;
 
             waitForCapCheck = new(capCheckInterval);
@@ -273,7 +281,7 @@ namespace Assets.Scripts.NPCScripts
         private void OnDisable()
         {
             game.OnPause -= PauseBehaviour;
-            game.OnStagePassed -= CheckStartStageTimer;
+            game.OnStagePassed -= OnStagePassed;
             game.OnRestart -= Restart;
         }
     }

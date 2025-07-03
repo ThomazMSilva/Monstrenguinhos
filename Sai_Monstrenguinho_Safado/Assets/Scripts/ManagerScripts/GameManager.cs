@@ -22,6 +22,7 @@ namespace Assets.Scripts
 
             [Space(8f), Header("Spawn"), Space(5f)]
 
+            public bool PreSpawn = true;
             public float MinInterval = 50f;
             public float MaxInterval = 60f;
             private float currentInterval;
@@ -172,9 +173,22 @@ namespace Assets.Scripts
             return true;
         }
 
+
         [SerializeField] private GameObject optionsScreen;
 
         public void SetOptionsScreenActive(bool active) => optionsScreen.SetActive(active);
+
+        [SerializeField] private GameObject creditsScreen;
+
+        public void SetCreditsScreenActive(bool active) => creditsScreen.SetActive(active);
+
+        [SerializeField] private GameObject controlsScreen;
+        public void SetControlsScreenActive(bool active) => controlsScreen.SetActive(active);
+
+        [SerializeField] private GameObject menuScreen;
+        public void SetMenuScreenActive(bool active) => menuScreen.SetActive(active);
+
+        public void QuitGame() => Application.Quit();
 
         public void LoadScene(string sceneName) => _sceneLoader.StartLoadingScene(sceneName);
 
