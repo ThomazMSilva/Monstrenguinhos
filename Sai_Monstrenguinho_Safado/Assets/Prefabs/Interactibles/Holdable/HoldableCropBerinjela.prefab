@@ -127,7 +127,7 @@ MonoBehaviour:
   relatedItem:
     itemTag: 5
     transform: {fileID: 2553307682450301816}
-  placeRayDist: 2
+  placeRayDist: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 1

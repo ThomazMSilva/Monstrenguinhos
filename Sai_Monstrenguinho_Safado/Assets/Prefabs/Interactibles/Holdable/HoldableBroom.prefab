@@ -210,13 +210,14 @@ MonoBehaviour:
   relatedItem:
     itemTag: 1
     transform: {fileID: 1755332230324385251}
-  placeRayDist: 2
+  placeRayDist: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
   interactibleLayer:
     serializedVersion: 2
     m_Bits: 8
+  canDrop: 0
 --- !u!208 &6714700030432152382
 NavMeshObstacle:
   m_ObjectHideFlags: 0

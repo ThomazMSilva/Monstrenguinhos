@@ -373,12 +373,9 @@ namespace Assets.Scripts.NPCScripts
 
             for (int i = 0; i < npcRenderer.Length; i++)
             {
-                Debug.Log($"renderer {npcRenderer[i].gameObject.name}");
                 var materials = npcRenderer[i].materials;
                 foreach(var m in materials)
                 {
-                    Debug.Log($"Tentando{m.name}");
-                    Debug.Log($"cor: {m.color}");
                     npcMaterials.Add(m);
                     npcOriginalColors.Add(m.color);
                 }

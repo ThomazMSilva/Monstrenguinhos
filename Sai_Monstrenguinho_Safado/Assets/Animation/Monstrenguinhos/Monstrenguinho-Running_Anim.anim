@@ -123,4 +123,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.033333335
+    functionName: PlayerIdleSound
+    data: 
+    objectReferenceParameter: {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

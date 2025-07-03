@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7915211971689058817}
   - component: {fileID: 9087911344449678570}
   - component: {fileID: 1519275203467426500}
+  - component: {fileID: 6912358035917089675}
   m_Layer: 3
   m_Name: Monstrenguinho
   m_TagString: Untagged
@@ -50,9 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 9130691724831183256}
   Manager: {fileID: 0}
-  crittlingAnim: {fileID: 513655012368921231}
+  crittlingAnim: {fileID: 825067624574995154}
   spriteRenderer: {fileID: 778473395415026884}
   CurrentState: 0
+  hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
   cropPreferenceName: 3
   destinationThreshold: 1.5
@@ -106,6 +108,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &6912358035917089675
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164327085067446792}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a185acf512fb74f4c98a114b9b00b4d0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4862657318231139837
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +140,8 @@ GameObject:
   - component: {fileID: 5230896788187179457}
   - component: {fileID: 778473395415026884}
   - component: {fileID: 2201478938605486767}
-  - component: {fileID: 513655012368921231}
+  - component: {fileID: 825067624574995154}
+  - component: {fileID: 7365528886867057265}
   m_Layer: 3
   m_Name: Monstrenguinho Sprite
   m_TagString: Untagged
@@ -204,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63455b08ffbfafb4d91e86a0682f1d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &513655012368921231
+--- !u!95 &825067624574995154
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -225,6 +249,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7365528886867057265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862657318231139837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff8b5810b27c694e9ec836417bbc59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9130691724831183256
 GameObject:
   m_ObjectHideFlags: 0

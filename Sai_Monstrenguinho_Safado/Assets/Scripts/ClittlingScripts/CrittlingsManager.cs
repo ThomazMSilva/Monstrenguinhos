@@ -32,6 +32,7 @@ namespace Assets.Scripts.ClittlingScripts
             SpawnCrittling();*/
             game = GameManager.Instance;
             game.OnPause += PauseBehaviour;
+            game.OnRestart += ReturnAllCrittlings;
 
             WaitForPlantedPlot = new(plantedPlotCheckInterval);
             spawnCrittlingRoutine = StartCoroutine(CrittlingSpawnHandler());
@@ -41,6 +42,7 @@ namespace Assets.Scripts.ClittlingScripts
         private void OnDisable()
         {
             game.OnPause -= PauseBehaviour;
+            game.OnRestart -= ReturnAllCrittlings;
         }
 
         private void PauseBehaviour(bool pause)
@@ -62,13 +64,13 @@ namespace Assets.Scripts.ClittlingScripts
                 var spawnTime = Random.Range(game.CurrentStage.Crittlings.MinInterval, game.CurrentStage.Crittlings.MaxInterval);
                 yield return new WaitForSeconds(spawnTime);
 
-                Debug.Log("Terminou intervalo de spawn");
+                Debug.Log("Terminou intervalo de spawn de monstrenguinho");
                 var plantedPlots = GetPlantedPlots();
                 while (plantedPlots == null || spawnedCrittlings.Count > game.CurrentStage.Crittlings.SpawnCap)
                 {
                     if (isGamePaused) yield return waitUntilGameUnpauses; //mano so taquei em tudo isso
 
-                    Debug.Log("Aguardando condições...");
+                    //Debug.Log("Aguardando condições...");
                     plantedPlots = GetPlantedPlots();
                     yield return WaitForPlantedPlot;
                 }
@@ -125,6 +127,14 @@ namespace Assets.Scripts.ClittlingScripts
                 }
             }
         }
+
+        private void ReturnAllCrittlings()
+        {
+            foreach(var critl in spawnedCrittlings)
+            {
+                critl.ScareAway();
+            }
+        } 
 
         public List<Plot> GetPlantedPlots()
         {

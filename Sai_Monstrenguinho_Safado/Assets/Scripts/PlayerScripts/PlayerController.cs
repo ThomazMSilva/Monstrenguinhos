@@ -61,11 +61,17 @@ namespace Assets.Scripts.PlayerScripts
         [SerializeField] private float interactionHeight = 1f;
         [SerializeField] private LayerMask groundLayerMask;
         [SerializeField] private LayerMask interactibleLayerMask;
+        [SerializeField] private bool isGridSelectionActive;
+        [SerializeField] private Vector3 gridSelectionSize = new(.8f, .8f, .8f);
+        [SerializeField] private float gridSelectioVerticalOffset = .01f;
 
         [Space(8f)]
         [SerializeField] private HeldItem currentHeldTag;
         private Interactibles.Holdable currentHeldInteractible;
         private bool isInteracting;
+
+        private Collider[] gridColliders = new Collider[8];
+        private Vector3 gridPosition = Vector3.zero;
 
         private RaycastHit interactibleHit;
 
@@ -179,10 +185,43 @@ namespace Assets.Scripts.PlayerScripts
 
         private void CheckForInteractible()
         {
-            if(Physics.Raycast(interactionOrigin.position, Vector3.down, out interactibleHit, interactionHeight, interactibleLayerMask))
+            Ray ray = new(interactionOrigin.position, Vector3.down);
+            if (isGridSelectionActive)
             {
+                if (Physics.Raycast(ray, out var gridHit, interactionHeight))
+                {
+                    gridPosition = BuildSystem.instance.SnappedPosition(gridHit.point);
+                    int overlappedColliders = Physics.OverlapBoxNonAlloc
+                    (
+                        gridPosition + Vector3.up * ((gridSelectionSize.y * .5f) - gridSelectioVerticalOffset),
+                        gridSelectionSize * .5F,
+                        gridColliders,
+                        Quaternion.identity,
+                        interactibleLayerMask
+                    );
 
-                TrySelectInteractible(interactibleHit);
+                    if (overlappedColliders > 0)
+                    {
+                        var highestPriority = gridColliders[0].transform;
+                        for(int i = 0; i < overlappedColliders; i++)
+                        {
+                            var overlappedTransform = gridColliders[i].transform;
+                            if (overlappedTransform.position.y > highestPriority.position.y)
+                            {
+                                highestPriority = overlappedTransform;
+                            }
+                        }
+                        TrySelectInteractible(highestPriority);
+                    }
+                    else DeselectCurrentInteractible();
+                }
+                else DeselectCurrentInteractible();
+                return;
+            }
+            //Selecao normal, de raycast
+            if(Physics.Raycast(ray, out interactibleHit, interactionHeight, interactibleLayerMask))
+            {
+                TrySelectInteractible(interactibleHit.transform);
             }
             else
             {
@@ -192,9 +231,9 @@ namespace Assets.Scripts.PlayerScripts
             //Debug.DrawLine(interactionOrigin.position, interactionOrigin.position + (Vector3.down * interactionHeight), Color.magenta);
         }
 
-        private void TrySelectInteractible(RaycastHit hit)
+        private void TrySelectInteractible(Transform hit)
         {
-            if (hit.transform.TryGetComponent<Assets.Scripts.Interactibles.Interactible >(out var interactible))
+            if (hit.TryGetComponent<Assets.Scripts.Interactibles.Interactible >(out var interactible))
             {
                 if (selectedInteractible == interactible) return;
 
@@ -352,6 +391,14 @@ namespace Assets.Scripts.PlayerScripts
             return false;
         }
         #endregion
+
+        private void OnDrawGizmos()
+        {
+            if (!isGridSelectionActive) return;
+
+            Gizmos.DrawCube(gridPosition + Vector3.up * ((gridSelectionSize.y * .5f) - gridSelectioVerticalOffset), gridSelectionSize);
+            Gizmos.color = Color.yellow;
+        }
     }
 
 }

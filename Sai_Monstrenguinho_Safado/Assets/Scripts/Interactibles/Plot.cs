@@ -8,6 +8,11 @@ namespace Assets.Scripts.Interactibles
         public CropAttributes currentCrop;
         private Coroutine growCropRoutine;
 
+        private ManagerScripts.AudioManager audioManager;
+        private AudioClip wateringAudioClip;
+        private AudioClip plantingAudioClip;
+
+
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
@@ -42,6 +47,7 @@ namespace Assets.Scripts.Interactibles
 
             if (player.HeldItem.transform.TryGetComponent<SeedHoldable>(out var heldSeed))
             {
+                audioManager.PlayClip(plantingAudioClip);
                 currentCrop = new(heldSeed.cropAttributes);
                 cropSpriteRenderer.sprite = currentCrop.cropStage1;
                 player.SetHeldItem(new());
@@ -55,7 +61,8 @@ namespace Assets.Scripts.Interactibles
 
         private void WaterSeed(PlayerScripts.PlayerController player)
         {
-            if (currentCrop == null || growCropRoutine != null) return;
+            if (currentCrop == null || growCropRoutine != null || currentCrop.isReady) return;
+            audioManager.PlayClip(wateringAudioClip);
             growCropRoutine = StartCoroutine(GrowCrop(player));
         }
 
@@ -104,6 +111,13 @@ namespace Assets.Scripts.Interactibles
             }
             growCropRoutine = null;
         }
-        
+
+
+        private void Start()
+        {
+            audioManager = GameManager.Instance.AudioManager;
+            plantingAudioClip = audioManager.AudioClips.PickingSeedAudioClip;
+            wateringAudioClip = audioManager.AudioClips.WateringAudioClip;
+        }
     }
 }

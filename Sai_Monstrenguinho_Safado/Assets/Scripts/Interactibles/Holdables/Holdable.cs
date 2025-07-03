@@ -66,13 +66,16 @@ namespace Assets.Scripts.Interactibles
 
         public virtual void DropItem()
         {
+            Debug.Log("Tentando dropar item");
             Debug.DrawLine(transform.position, transform.position + (Vector3.down * placeRayDist), Color.cyan);
 
             Ray ray = new(transform.position, Vector3.down);
             bool freeDrop = !Physics.Raycast(ray, placeRayDist, interactibleLayer);
+            if(freeDrop) Debug.Log("nao tem interagivel no lugar q ta tentando dropar");
 
             if (freeDrop && Physics.Raycast(ray, out var hit, placeRayDist, groundLayer))
             {
+                Debug.Log("lugar livre pra dropar");
                 var buildSis = GridScripts.BuildSystem.instance;
 
                 var pos = buildSis.SnappedPosition(hit.point);
@@ -118,7 +121,7 @@ namespace Assets.Scripts.Interactibles
             }
         }
 
-        //Zerar o held item do player não-manualmente depois
+        //Zerar o held item do player manualmente depois
         private void PlaceItem(Vector3 position, Quaternion rotation)
         {
             isHeld = false;

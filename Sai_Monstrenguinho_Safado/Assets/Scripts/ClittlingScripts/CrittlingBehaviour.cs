@@ -22,6 +22,9 @@ namespace Assets.Scripts.ClittlingScripts
         [SerializeField] private Animator crittlingAnim;
         [SerializeField] private SpriteRenderer spriteRenderer;
         public BehaviourState CurrentState;
+        [SerializeField] private bool randomizeColor;
+        [SerializeField] private int hitsToFlee = 1;
+        private int hitsTaken;
 
         [Space(8f)]
         [Header("Movement")]
@@ -63,6 +66,8 @@ namespace Assets.Scripts.ClittlingScripts
         private Coroutine eatRoutine;
         private Tween punchScaleTween;
 
+
+
         private bool isGamePaused;
         private WaitUntil waitUntilHameUnpauses;
 
@@ -84,9 +89,17 @@ namespace Assets.Scripts.ClittlingScripts
         private void Start()
         {
             GameManager.Instance.OnPause += PauseBehaviour;
+
             originalPosition = transform.position;
-            spawnColor = Random.ColorHSV(0, 1, 0, 1, .7f, 1, 1, 1);
-            spriteRenderer.material.color = spawnColor;
+            if (randomizeColor)
+            {
+                spawnColor = Random.ColorHSV(0, 1, 0, 1, .7f, 1, 1, 1);
+                spriteRenderer.material.color = spawnColor;
+            }
+            else
+            {
+                spawnColor = spriteRenderer.material.color;
+            }
         }
 
         private void OnDestroy()
@@ -133,7 +146,11 @@ namespace Assets.Scripts.ClittlingScripts
                 {
                     if (player.TryGetFromHeld<Interactibles.BroomHoldable>(out var broom))
                     {
-                        ScareAway();
+                        crittlingAnim.SetTrigger("hit");
+                        hitsTaken++;
+
+                        if(hitsTaken >= hitsToFlee)
+                            ScareAway();
                     }
                 }
             }
@@ -145,14 +162,14 @@ namespace Assets.Scripts.ClittlingScripts
             switch (CurrentState)
             {
                 case BehaviourState.roaming:
-                    Debug.Log($"{gameObject.name} call: roaming;");
+                    //Debug.Log($"{gameObject.name} call: roaming;");
                     crittlingAnim.SetFloat("velocity", 0);
                     agent.speed = digestingSpeed;
                     var closestPlotRoaming = Manager.GetClosestPlot(transform.position, cropPreferenceName);
 
                     if (closestPlotRoaming == null)
                     {
-                        Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
+                        //Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
                         punchScaleTween ??= spriteRenderer.DOBlendableColor(Color.magenta, .04f)
                             .OnComplete
                             (() => 
@@ -169,7 +186,7 @@ namespace Assets.Scripts.ClittlingScripts
                     break;
 
                 case BehaviourState.chasing:
-                    Debug.Log($"{gameObject.name} call: chasing;");
+                    //Debug.Log($"{gameObject.name} call: chasing;");
 
                     crittlingAnim.SetFloat("velocity", 1);
 
@@ -178,7 +195,7 @@ namespace Assets.Scripts.ClittlingScripts
                     var closestPlotChasing = Manager.GetClosestPlot(transform.position, cropPreferenceName);
                     if (closestPlotChasing == null)
                     {
-                        Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
+                        //Debug.Log($"Monstrenguinho {gameObject.name} nao achou transform mais proximo");
                         CurrentState = BehaviourState.roaming;
                         break;
                     }
@@ -195,12 +212,12 @@ namespace Assets.Scripts.ClittlingScripts
                     break;
 
                 case BehaviourState.digesting:
-                    Debug.Log($"{gameObject.name} call: digesting;");
+                    //Debug.Log($"{gameObject.name} call: digesting;");
                     digestRoutine ??= StartCoroutine(Digest());
                     break;
 
                 case BehaviourState.fleeing:
-                    Debug.Log($"{gameObject.name} call: fleeing;");
+                    //Debug.Log($"{gameObject.name} call: fleeing;");
                     agent.SetDestination(originalPosition);
                     break;
             }
@@ -220,7 +237,6 @@ namespace Assets.Scripts.ClittlingScripts
                 StopCoroutine(digestRoutine);
             }
 
-            crittlingAnim.SetTrigger("hit");
             crittlingAnim.SetBool("fleeing", true);
 
             GetComponent<Collider>().enabled = false;
@@ -228,6 +244,7 @@ namespace Assets.Scripts.ClittlingScripts
             CurrentState = BehaviourState.fleeing;
             spriteRenderer.DOFade(0, fadeOutTime).OnComplete(() => Destroy(gameObject, 1f));
         }
+
 
         #region ROUTINES
         private System.Collections.IEnumerator EatCrop()

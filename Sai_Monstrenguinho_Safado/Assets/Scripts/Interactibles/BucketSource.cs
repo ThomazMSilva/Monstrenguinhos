@@ -8,10 +8,15 @@ namespace Assets.Scripts.Interactibles
 
         [SerializeField] private GameObject bucketHoldablePrefab;
 
+        private ManagerScripts.AudioManager audioManager;
+        private AudioClip bucketAudioClip;
+
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
             {
+                audioManager.PlayClip(bucketAudioClip);
+
                 var bucket = Instantiate(bucketHoldablePrefab, transform);
                 var bucketHoldable = bucket.GetComponent<BucketHoldable>();
 
@@ -19,19 +24,11 @@ namespace Assets.Scripts.Interactibles
             }
         }
 
-       /* private void HarvestCrop(PlayerScripts.PlayerController player)
+        public void Start()
         {
-            if (currentCrop.isReady)
-            {
-                var cropGO = Instantiate(bucketHoldablePrefab);
-                if (cropGO.TryGetComponent<Holdable>(out var bucketHoldable))
-                {
-                    Debug.Log("Catou a crop");
-                    bucketHoldable.Interact(player);
-                    bucketHoldable = null;
+            audioManager = GameManager.Instance.AudioManager;
+            bucketAudioClip = GameManager.Instance.AudioManager.AudioClips.PickingBucketAudioClip;
+        }
 
-                }
-            }
-        }*/
     }
 }

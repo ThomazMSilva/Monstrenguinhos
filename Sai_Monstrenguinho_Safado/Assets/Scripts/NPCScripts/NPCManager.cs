@@ -34,6 +34,9 @@ namespace Assets.Scripts.NPCScripts
         public UnityEngine.Events.UnityEvent OnLost;
 
         private GameManager game;
+        private ManagerScripts.AudioManager audioManager;
+        private AudioClip successClip, failureClip;
+
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
         private Coroutine stageTimerRoutine;
@@ -42,6 +45,9 @@ namespace Assets.Scripts.NPCScripts
         private bool TryInitializeTargetPositions()
         {
             game = GameManager.Instance;
+            audioManager = game.AudioManager;
+            successClip = audioManager.AudioClips.SucceessAudioClip;
+            failureClip = audioManager.AudioClips.FailureAudioClip;
 
             if (targetPositions.Count < 1)
             {
@@ -132,7 +138,8 @@ namespace Assets.Scripts.NPCScripts
             client.OnFailed.AddListener
             (
                 () => 
-                { 
+                {
+                    audioManager.PlayClip(failureClip, client.transform);
                     current.Conditions.FailedClientsPassed++;
                     totalFailedClients++;
                     OnFailedClient?.Invoke();
@@ -143,10 +150,12 @@ namespace Assets.Scripts.NPCScripts
                     }
                 }
             );
+            
             client.OnSucceeded.AddListener
             (
                 () =>
                 {
+                    audioManager.PlayClip(successClip, client.transform);
                     current.Conditions.SuccessfulClientsPassed++;
                     OnSucceededClient?.Invoke();
                     //Passagem de estagio na condição de "por sucesso"
@@ -185,12 +194,14 @@ namespace Assets.Scripts.NPCScripts
                     yield return waitForCapCheck;
                 }
 
-                currentInterval = Random.Range(game.CurrentStage.Clients.MinInterval, game.CurrentStage.Clients.MaxInterval);
+                game.CurrentStage.Clients.Interval = Random.Range(game.CurrentStage.Clients.MinInterval, game.CurrentStage.Clients.MaxInterval);
 
-                while (currentInterval > 0)
+                game.CurrentStage.Clients.TimeRemaining = game.CurrentStage.Clients.Interval;
+
+                while (game.CurrentStage.Clients.TimeRemaining > 0)
                 {
                     if (isGamePaused) yield return waitUntilGameUnpauses;
-                    currentInterval -= Time.deltaTime;
+                    game.CurrentStage.Clients.TimeRemaining -= Time.deltaTime;
                     yield return null;
                 }
 
@@ -216,9 +227,13 @@ namespace Assets.Scripts.NPCScripts
                 waitUntilGameUnpauses = new(() => !isGamePaused);
         }
         
+        private void Restart()
+        {
+            ReturnAllClients(null);
+        }
+        
         private void CheckStartStageTimer()
         {
-            Debug.Log("dando check stage timer");
             if (stageTimerRoutine != null) StopCoroutine(stageTimerRoutine);
 
             if(game.CurrentStage.Conditions.TimeBased)
@@ -249,6 +264,7 @@ namespace Assets.Scripts.NPCScripts
             game.OnPause += PauseBehaviour;
             game.OnStagePassed += CheckStartStageTimer;
             game.OnStagePassed += SpawnClient;
+            game.OnRestart += Restart;
 
             waitForCapCheck = new(capCheckInterval);
 
@@ -259,6 +275,7 @@ namespace Assets.Scripts.NPCScripts
         {
             game.OnPause -= PauseBehaviour;
             game.OnStagePassed -= CheckStartStageTimer;
+            game.OnRestart -= Restart;
         }
     }
 }

@@ -450,6 +450,134 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1184078115149553546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2977137842982853954}
+  - component: {fileID: 2177664599793909208}
+  m_Layer: 0
+  m_Name: SFX AudioSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2977137842982853954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184078115149553546}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4791965432537029952}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &2177664599793909208
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184078115149553546}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1446863112427779040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,6 +1790,7 @@ Transform:
   m_Children:
   - {fileID: 5797991755086243278}
   - {fileID: 7107876730913024278}
+  - {fileID: 2977137842982853954}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2578473815430366594
@@ -1686,14 +1815,29 @@ MonoBehaviour:
     musicPrefs: MusicVolumePref
     sfxPrefs: SFXVolumePref
     musicSource: {fileID: 8333142602029639724}
-    sfxSource: {fileID: 8709377831573685286, guid: e9d6c85aaa376634e821f29c3fb81ff8, type: 3}
+    sfxSource: {fileID: 2177664599793909208}
     generalSlider: {fileID: 3155762218482799587}
     musicSlider: {fileID: 5985962785771760864}
     sfxSlider: {fileID: 1803249241974332021}
+    spatialBlend: 0.849
+    _audioReferences:
+      failureAudioClip: {fileID: 8300000, guid: f9bdb22996ed14b4a835018e242ea58b, type: 3}
+      successAudioClip: {fileID: 8300000, guid: a62c846ab6e5af240a319a9854568ce3, type: 3}
+      runningAudioClip: {fileID: 8300000, guid: 577a4f2b98b26224496ad2512b1a83e1, type: 3}
+      playerWalkingAudioClip: {fileID: 8300000, guid: 1161f99a43a187e47b7d9e29d4a03b8f, type: 3}
+      crittlingAudioClip: {fileID: 8300000, guid: 02c5d4cb897777649aece38b06917f4b, type: 3}
+      crittlingFleeingAudioClip: {fileID: 8300000, guid: 5e9895177ef4a704da87dbffbefff0f0, type: 3}
+      crittlingHitAudioClip: {fileID: 8300000, guid: 9ecb553ec6665474cad1cb48a9156058, type: 3}
+      crittlingDigestingAudioClip: {fileID: 8300000, guid: 141d11ae5e4a1ef4a94e37de4f0538b8, type: 3}
+      crittlingIngestingAudioClip: {fileID: 8300000, guid: 9db0b43aad9fd7540966db420b849a7f, type: 3}
+      pickingBucketAudioClip: {fileID: 8300000, guid: aac7a52ad164e4d46b7bc2b686fb7379, type: 3}
+      wateringAudioClip: {fileID: 8300000, guid: 56cc1bbbbe66a0242bca304ec4a52070, type: 3}
+      pickingSeedAudioClip: {fileID: 8300000, guid: 8255d1df78431b647980ee72cf3bd3ba, type: 3}
+      playerHitAudioClip: {fileID: 8300000, guid: 8c4959eed83922a45a5670e63058bc61, type: 3}
   isPaused: 0
   stageAttributes:
   - stageName: Tutorial
-    stageID: 0
+    stageID: 1
     isTutorial: 1
     Clients:
       SpawnableClients:
@@ -1719,7 +1863,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stageName: Estagio_1
-    stageID: 1
+    stageID: 0
     isTutorial: 0
     Clients:
       SpawnableClients:

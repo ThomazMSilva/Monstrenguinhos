@@ -24,6 +24,10 @@ namespace Assets.Scripts
 
             public float MinInterval = 50f;
             public float MaxInterval = 60f;
+            private float currentInterval;
+            public float Interval{ get => currentInterval; set { currentInterval = value; } }
+            private float timeRemaining;
+            public float TimeRemaining{ get => timeRemaining; set { timeRemaining = value; } }
             public int SpawnCap = 4;
         }
 
@@ -72,6 +76,13 @@ namespace Assets.Scripts
 
         public int nextStageID;
         public UnityEngine.Events.UnityEvent OnCompleted;
+
+        public void Reset()
+        {
+            Conditions.TimeElapsed = 0;
+            Conditions.SuccessfulClientsPassed = 0;
+            Conditions.FailedClientsPassed = 0;
+    }
     }
 
     public class GameManager : MonoBehaviour
@@ -105,7 +116,8 @@ namespace Assets.Scripts
         [Space(8f)]
         [SerializeField] private AudioManager _audioManager;
         public AudioManager AudioManager => _audioManager;
-        
+
+
         [Space(8f)]
         [SerializeField] private bool isPaused;
         public bool IsPaused => isPaused;
@@ -116,9 +128,6 @@ namespace Assets.Scripts
 
         private StageAttributes currentStageAttributes;
         public StageAttributes CurrentStage => currentStageAttributes;
-
-        public delegate void StagePassedDelegate();
-        public event StagePassedDelegate OnStagePassed;
 
         public void PassToStage(int stageID)
         {
@@ -171,8 +180,21 @@ namespace Assets.Scripts
             OnPause?.Invoke(pause);
         }
 
+        public void Restart()
+        {
+            foreach(var stage in stageAttributes)
+            {
+                stage.Reset();
+            }
+            PassToStage(0);
+            OnRestart?.Invoke();
+        }
+
         public delegate void PauseDelegate(bool pause);
         public event PauseDelegate OnPause;
+        public delegate void ConditionVoidDelegate();
+        public event ConditionVoidDelegate OnStagePassed;
+        public event ConditionVoidDelegate OnRestart;
     }
 
 
