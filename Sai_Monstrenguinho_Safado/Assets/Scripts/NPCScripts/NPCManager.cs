@@ -145,7 +145,6 @@ namespace Assets.Scripts.NPCScripts
                     OnFailedClient?.Invoke();
                     if(totalFailedClients >= maximumFailedClients)
                     {
-                        ReturnAllClients(client);
                         OnLost?.Invoke();
                     }
                 }
@@ -161,7 +160,6 @@ namespace Assets.Scripts.NPCScripts
                     //Passagem de estagio na condição de "por sucesso"
                     if(current.Conditions.SuccessBased && current.Conditions.SuccessfulClientsPassed >= current.Conditions.SuccessfulClientsToPass)
                     {
-                        ReturnAllClients(client);
                         current.OnCompleted?.Invoke();
                         //Tirar daqui se não quiser automático
                         game.PassToStage(current.nextStageID);
@@ -251,6 +249,7 @@ namespace Assets.Scripts.NPCScripts
                 game.CurrentStage.Conditions.TimeElapsed += Time.deltaTime;
                 yield return null;
             }
+            Debug.Log("Acabou o tempo do "+game.CurrentStage.stageName);
             game.PassToStage(game.CurrentStage.nextStageID);
             stageTimerRoutine = null;
         }

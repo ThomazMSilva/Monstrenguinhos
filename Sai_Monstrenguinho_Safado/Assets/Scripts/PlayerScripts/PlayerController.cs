@@ -40,6 +40,11 @@ namespace Assets.Scripts.PlayerScripts
 
         [Space(8f)]
 
+        [SerializeField] private bool stopWhenInteracting;
+        [SerializeField] private bool hasInteractionCooldown;
+
+        [Space(8f)]
+
         [SerializeField] private Transform pauseLocation;
         [SerializeField] private float aiSpeed = 2f;
         private float CurrentSpeedMultiplier => isRunning ? sprintMultiplier : 1;
@@ -129,8 +134,10 @@ namespace Assets.Scripts.PlayerScripts
                 if (!m_interactionAxisDown)
                 {
                     m_interactionAxisDown = true;
-                    
-                    if(!GameManager.Instance.IsPaused)
+
+                    bool canInteract = !(hasInteractionCooldown && isInteracting);
+
+                    if(!GameManager.Instance.IsPaused && canInteract)
                         Interact();
                 }
             }
@@ -157,7 +164,7 @@ namespace Assets.Scripts.PlayerScripts
 
         private void HandleMovement()
         {
-            if (isInteracting) return;
+            if (stopWhenInteracting && isInteracting) return;
 
             playerDirection = Vector3.ClampMagnitude(isometricRight * inputAxis.x + isometricForward * inputAxis.y, 1);
             playerVelocity = speed * CurrentSpeedMultiplier * playerDirection;
@@ -267,9 +274,15 @@ namespace Assets.Scripts.PlayerScripts
         #endregion
 
         #region PUBLIC_METHODS
-        public void SetInteracting() => isInteracting = true;
-        
-        public void SetNotInteracting() => isInteracting = false;
+        public void SetInteracting()
+        {
+            isInteracting = true;
+        }
+
+        public void SetNotInteracting()
+        {
+            isInteracting = false;
+        }
 
         public void SetHeldItem(HeldItem incomingTag)
         {

@@ -61,8 +61,15 @@ namespace Assets.Scripts.ClittlingScripts
 
                 if(!isSpawning) yield break;
 
-                var spawnTime = Random.Range(game.CurrentStage.Crittlings.MinInterval, game.CurrentStage.Crittlings.MaxInterval);
-                yield return new WaitForSeconds(spawnTime);
+                game.CurrentStage.Crittlings.Interval = Random.Range(game.CurrentStage.Crittlings.MinInterval, game.CurrentStage.Crittlings.MaxInterval);
+                game.CurrentStage.Crittlings.TimeRemaining = game.CurrentStage.Crittlings.Interval;
+
+                while (game.CurrentStage.Crittlings.TimeRemaining > 0)
+                {
+                    if (isGamePaused) yield return waitUntilGameUnpauses; //mano so taquei em tudo isso
+                    game.CurrentStage.Crittlings.TimeRemaining -= Time.deltaTime;
+                    yield return null;
+                }
 
                 Debug.Log("Terminou intervalo de spawn de monstrenguinho");
                 var plantedPlots = GetPlantedPlots();

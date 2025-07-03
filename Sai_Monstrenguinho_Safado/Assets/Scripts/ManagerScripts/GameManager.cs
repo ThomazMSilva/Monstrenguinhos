@@ -39,6 +39,10 @@ namespace Assets.Scripts
 
             public float MinInterval = 15f;
             public float MaxInterval = 20f;
+            private float currentInterval;
+            public float Interval { get => currentInterval; set { currentInterval = value; } }
+            private float timeRemaining;
+            public float TimeRemaining { get => timeRemaining; set { timeRemaining = value; } }
             public int MinHorde = 1;
             public int MaxHorde = 2;
             public int SpawnCap = 6;

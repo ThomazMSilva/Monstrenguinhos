@@ -21,22 +21,17 @@ namespace Assets.Scripts.Interactibles
 
                 switch (player.HeldItem.itemTag)
                 {
-                    case PlayerScripts.ItemTag.None:
-                        HarvestCrop(player);
-                        break;
-
                     case PlayerScripts.ItemTag.Bucket:
                         WaterSeed(player);
-                        break;
-
-                    case PlayerScripts.ItemTag.Box:
-                        HarvestCrop(player);
                         break;
 
                     case PlayerScripts.ItemTag.Seed:
                         PlantSeed(player);
                         break;
-                    default: break;
+
+                    default:
+                        HarvestCrop(player);
+                        break;
                 }
             }
         }
