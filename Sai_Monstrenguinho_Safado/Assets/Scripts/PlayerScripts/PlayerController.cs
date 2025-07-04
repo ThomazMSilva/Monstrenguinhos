@@ -320,10 +320,10 @@ namespace Assets.Scripts.PlayerScripts
         public void TriggerPause()
         {
             if (pauseLocation == null) return;
-            
-            if (GameManager.Instance.IsPaused) 
-                SetPauseFalse();
-            else
+
+            if (!GameManager.Instance.IsPaused)
+                //SetPauseFalse();
+            //else
                 SetNavigationTarget(pauseLocation);
         }
 

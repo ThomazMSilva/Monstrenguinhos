@@ -13,5 +13,11 @@ namespace Assets.Scripts.ManagerScripts
         public void SetControlsScreenActive(bool active) => GameManager.Instance.SetControlsScreenActive(active);
 
         public void SetMenuScreenActive(bool active) => GameManager.Instance.SetMenuScreenActive(active);
+
+        public void QuitGame() => GameManager.Instance?.QuitGame();
+
+        public void FadeScreen(CanvasGroup screen) => GameManager.Instance.Fade(screen);
+
+        public void SetPause(bool pause) => GameManager.Instance.SetPause(pause);
     }
 }

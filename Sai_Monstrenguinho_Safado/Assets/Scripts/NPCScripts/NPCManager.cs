@@ -32,6 +32,7 @@ namespace Assets.Scripts.NPCScripts
         public UnityEngine.Events.UnityEvent OnFailedClient;
         public UnityEngine.Events.UnityEvent OnSucceededClient;
         public UnityEngine.Events.UnityEvent OnLost;
+        public UnityEngine.Events.UnityEvent OnWon;
 
         private GameManager game;
         private ManagerScripts.AudioManager audioManager;
@@ -254,6 +255,8 @@ namespace Assets.Scripts.NPCScripts
             stageTimerRoutine = null;
         }
 
+        public void Win() => OnWon?.Invoke();
+
         public void OnStagePassed()
         {
             CheckStartStageTimer();
@@ -272,6 +275,7 @@ namespace Assets.Scripts.NPCScripts
             game.OnPause += PauseBehaviour;
             game.OnStagePassed += OnStagePassed;
             game.OnRestart += Restart;
+            game.StageAttributes[^1].OnCompleted.AddListener(Win);
 
             waitForCapCheck = new(capCheckInterval);
 
@@ -283,6 +287,7 @@ namespace Assets.Scripts.NPCScripts
             game.OnPause -= PauseBehaviour;
             game.OnStagePassed -= OnStagePassed;
             game.OnRestart -= Restart;
+            game.StageAttributes[^1].OnCompleted.RemoveListener(Win);
         }
     }
 }

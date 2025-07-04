@@ -208,6 +208,18 @@ namespace Assets.Scripts
             OnRestart?.Invoke();
         }
 
+        private Coroutine fadeRoutine;
+        public void Fade(CanvasGroup uiElement)
+        {
+            if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+            
+            bool active = uiElement.gameObject.activeSelf;
+
+            System.Collections.IEnumerator routine = SceneLoader.FadeScreen(uiElement, !active ? 0 : 1, SceneLoader.FadeTime, !active);
+            
+            fadeRoutine = StartCoroutine(routine);
+        }
+
         public delegate void PauseDelegate(bool pause);
         public event PauseDelegate OnPause;
         public delegate void ConditionVoidDelegate();

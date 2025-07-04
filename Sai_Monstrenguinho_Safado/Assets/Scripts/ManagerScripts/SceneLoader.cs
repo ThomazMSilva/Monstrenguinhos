@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.Device;
 
 namespace Assets.Scripts.ManagerScripts
 {
@@ -11,6 +12,7 @@ namespace Assets.Scripts.ManagerScripts
         [Space(8f), Header("Tela de Fade"), Space(8f)]
         [SerializeField] private CanvasGroup fadeCanvasGroup;
         [SerializeField] private float fadeTime = 0.5f;
+        public float FadeTime => fadeTime;
 
         [Space(8f), Header("Gerenciamento de Cena"), Space(8f)]
         [SerializeField] private GameObject loadingScreen;
@@ -79,6 +81,18 @@ namespace Assets.Scripts.ManagerScripts
             fadeCanvasGroup
                 .DOFade(0, fadeTime)
                 .OnComplete(() => fadeCanvasGroup.gameObject.SetActive(false));
+        }
+
+        
+
+        public IEnumerator FadeScreen(CanvasGroup uiElement, float targetAlpha, float duration, bool active)
+        {
+            if (fadeCanvasGroup == null) yield break;
+
+            uiElement.alpha = active ? 0 : 1;
+            fadeCanvasGroup.gameObject.SetActive(true);
+            yield return uiElement.DOFade(targetAlpha, duration).WaitForCompletion();
+            fadeCanvasGroup.gameObject.SetActive(active);
         }
     }
 }
