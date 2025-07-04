@@ -15,7 +15,16 @@ MonoBehaviour:
   sprites:
   - cropType: 1
     sprite: {fileID: 315928361, guid: 34235c8f14ec6934aba160a1372d5e2f, type: 3}
+    stage1sprite: {fileID: 21300000, guid: 5e76b9725d5665f48ab5e27b5154a55b, type: 3}
+    stage2sprite: {fileID: 21300000, guid: 7881f75d3fa2cf345b49c3e12c75364d, type: 3}
+    stage3sprite: {fileID: 21300000, guid: 4ba37fd9de0a10c43bdfef50c6c56e6d, type: 3}
   - cropType: 2
     sprite: {fileID: 21300000, guid: 9e329765b2c34454dbd77d728e61cc4a, type: 3}
+    stage1sprite: {fileID: 21300000, guid: ca1cc2bddf43f5c4fabbb42cb4aef194, type: 3}
+    stage2sprite: {fileID: 21300000, guid: 3b6a062bb3121414aade3120f6b98818, type: 3}
+    stage3sprite: {fileID: 21300000, guid: 71438fd3deebf1b48ad2aaf949c9c543, type: 3}
   - cropType: 3
     sprite: {fileID: 386911227, guid: c187ef8cc6bc94244b7af47bbd729bb7, type: 3}
+    stage1sprite: {fileID: 21300000, guid: 6b17ccc10fb425d4796a16d56d4af403, type: 3}
+    stage2sprite: {fileID: 21300000, guid: ef0ce3bffe07aec4ba1cba9e18512880, type: 3}
+    stage3sprite: {fileID: 21300000, guid: 9c746b5fb8b9f904da0c158c171ed6c7, type: 3}

@@ -44,7 +44,7 @@ namespace Assets.Scripts.Interactibles
             {
                 audioManager.PlayClip(plantingAudioClip);
                 currentCrop = new(heldSeed.cropAttributes);
-                cropSpriteRenderer.sprite = currentCrop.cropStage1;
+                cropSpriteRenderer.sprite = currentCrop.CropStage1;
                 player.SetHeldItem(new());
                 //player.SetHeldEmpty();
             }
@@ -88,7 +88,7 @@ namespace Assets.Scripts.Interactibles
 
             player.SetHeldItem(new());
             currentCrop.isWatered = true;
-            cropSpriteRenderer.sprite = currentCrop.cropStage2;
+            cropSpriteRenderer.sprite = currentCrop.CropStage2;
 
             while (currentCrop.isWatered && !currentCrop.isReady)
             {
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Interactibles
                 if (currentCrop.currentTime >= currentCrop.GrowthTime)
                 {
                     currentCrop.isReady = true;
-                    cropSpriteRenderer.sprite = currentCrop.cropStage3;
+                    cropSpriteRenderer.sprite = currentCrop.CropStage3;
                 } 
 
                 if (currentCrop.isReady || !currentCrop.isWatered) break;

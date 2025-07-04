@@ -234,9 +234,7 @@ MonoBehaviour:
     m_Bits: 8
   cropAttributes:
     cropPrefab: {fileID: 3894122223799165937, guid: 06f606b699e11b64bafe6eb6a26200bb, type: 3}
-    cropStage1: {fileID: 21300000, guid: 49a70a0a025154f42a5962a525d3a58e, type: 3}
-    cropStage2: {fileID: 21300000, guid: b80ac37d3ba02fc4cb218b09b4df7b93, type: 3}
-    cropStage3: {fileID: 21300000, guid: c44d8fac29a9e704284af6eb59795339, type: 3}
+    spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}
     cropName: 3
     growthMultiplier: 1
     growthTime: 10

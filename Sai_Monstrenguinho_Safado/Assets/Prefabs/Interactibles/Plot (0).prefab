@@ -207,10 +207,8 @@ MonoBehaviour:
   cropSpriteRenderer: {fileID: 5527409782472608198}
   currentCrop:
     cropPrefab: {fileID: 0}
-    cropStage1: {fileID: 0}
-    cropStage2: {fileID: 0}
-    cropStage3: {fileID: 0}
-    cropName: 
+    spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}
+    cropName: 0
     growthMultiplier: 0
     growthTime: 0
     currentTime: 0
@@ -242,7 +240,7 @@ Transform:
   m_GameObject: {fileID: 5039511715997562021}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.98, z: 0}
+  m_LocalPosition: {x: 0, y: 1.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -294,7 +292,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.2, y: 1.2}
+  m_Size: {x: 1.8, y: 1.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

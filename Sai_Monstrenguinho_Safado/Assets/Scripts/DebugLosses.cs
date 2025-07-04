@@ -8,7 +8,30 @@ namespace Assets.Scripts
     {
         [SerializeField] private NPCScripts.NPCManager npcManager;
         [SerializeField] private List<GameObject> visualFeedbacks = new();
-        [SerializeField] private Vector3 defaultOffset = Vector3.right;
+        private int currentFeedbacks = 0;
+
+        public void ClearFeedbacks()
+        {
+            foreach (var feedback in visualFeedbacks)
+            {
+                feedback/*.transform.GetChild(0).gameObject*/.SetActive(true);
+            }
+
+            currentFeedbacks = 0;
+        }
+
+        public void AddFeedback()
+        {
+            currentFeedbacks++;
+            visualFeedbacks[^currentFeedbacks].SetActive(false);
+            /*for (int i = 0; i < currentFeedbacks && i < visualFeedbacks.Count; i++)
+            { 
+                visualFeedbacks[i]*//*.transform.GetChild(0).gameObject.*//*.SetActive(false);
+            }*/
+        }
+
+
+        /*[SerializeField] private Vector3 defaultOffset = Vector3.right;
         private int currentFeedbacks = 0;
 
         public void ClearFeedbacks()
@@ -52,7 +75,7 @@ namespace Assets.Scripts
                     visualFeedbacks.Add(newVisualFeedback);
                 }
             }
-        }
+        }*/
 
     }
 }

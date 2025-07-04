@@ -225,6 +225,8 @@ namespace Assets.Scripts
         public delegate void ConditionVoidDelegate();
         public event ConditionVoidDelegate OnStagePassed;
         public event ConditionVoidDelegate OnRestart;
+
+        private void OnApplicationQuit() => Destroy(gameObject);
     }
 
 

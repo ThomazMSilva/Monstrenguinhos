@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.NPCScripts;
+using UnityEngine;
+using System.Linq;
 
 namespace Assets.Scripts.Interactibles
 {
@@ -15,11 +17,38 @@ namespace Assets.Scripts.Interactibles
     public class CropAttributes
     {
         [SerializeField] private GameObject cropPrefab;
+        [SerializeField] private CropSpritesReference spriteReferences;
+        
         public GameObject CropPrefab => cropPrefab;
 
-        public Sprite cropStage1;
-        public Sprite cropStage2;
-        public Sprite cropStage3;
+        public Sprite CropStage1
+        {
+            get
+            {
+                Debug.Log($"tentando referenciar croptype {cropName.ToString()}");
+                var reference = spriteReferences.sprites.FirstOrDefault(reference => reference.cropType == cropName);
+                Debug.Assert(reference != null, $"nao achou referencia com o mesmo tipo que croptype");
+                string refName = spriteReferences.name;
+                string refType = reference.cropType.ToString();
+                return reference.stage1sprite;
+            }
+        }
+
+        public Sprite CropStage2
+        {
+            get
+            {
+                return spriteReferences.sprites.FirstOrDefault(reference => reference.cropType == cropName).stage2sprite;
+            }
+        }
+
+        public Sprite CropStage3
+        {
+            get
+            {
+                return spriteReferences.sprites.FirstOrDefault(reference => reference.cropType == cropName).stage3sprite;
+            }
+        }
 
         [SerializeField] private CropType cropName;
         public CropType CropName => cropName;
@@ -52,9 +81,11 @@ namespace Assets.Scripts.Interactibles
             this.currentTime = crop.currentTime;
             this.isWatered = crop.isWatered;
             this.isReady = crop.isReady;
-            this.cropStage1 = crop.cropStage1;
-            this.cropStage2 = crop.cropStage2;
-            this.cropStage3 = crop.cropStage3;
+            this.spriteReferences = crop.spriteReferences;
+            /*var reference = spriteReferences.sprites.FirstOrDefault(reference => reference.cropType == cropName);
+            this.CropStage1 = reference.stage1sprite;
+            this.CropStage2 = reference.stage2sprite;
+            this.CropStage3 = reference.stage3sprite;*/
         }
     }
 }
