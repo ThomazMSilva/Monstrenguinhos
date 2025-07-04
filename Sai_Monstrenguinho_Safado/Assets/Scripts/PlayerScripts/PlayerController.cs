@@ -352,7 +352,7 @@ namespace Assets.Scripts.PlayerScripts
             );
         }
 
-        private void ActivatePauseScreen() => GameManager.Instance.SetOptionsScreenActive(true);
+        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
 
         private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
         {

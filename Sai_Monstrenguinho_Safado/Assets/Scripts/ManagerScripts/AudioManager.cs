@@ -17,6 +17,7 @@ namespace Assets.Scripts.ManagerScripts
         [SerializeField] private Slider sfxSlider;
         public float SfxSliderValue => sfxSlider != null ? sfxSlider.value : 1f;
         [SerializeField, Range(0, 1)] private float spatialBlend = .8f;
+        [SerializeField] private bool spawnSfxSources;
 
         [Space(8f)]
         [SerializeField] private AudioReferences _audioReferences;
@@ -61,7 +62,7 @@ namespace Assets.Scripts.ManagerScripts
 
         public void PlayClip(AudioClip clip, Transform pointTransform = null)
         {
-            if(pointTransform == null)
+            if(pointTransform == null || !spawnSfxSources)
             {
                 //sfxSource.clip = clip;
                 sfxSource.PlayOneShot(clip);

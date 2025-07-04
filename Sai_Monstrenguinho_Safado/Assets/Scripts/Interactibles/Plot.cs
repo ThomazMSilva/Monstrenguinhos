@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Interactibles
 {
     public class Plot : Interactible
     {
         [SerializeField] private SpriteRenderer cropSpriteRenderer;
+        [SerializeField] private Material fadeMaterial;
+        private Material fadeMaterialCopy;
+        private Material originalMaterial;
         public CropAttributes currentCrop;
         private Coroutine growCropRoutine;
 
@@ -80,6 +85,7 @@ namespace Assets.Scripts.Interactibles
         {
             cropSpriteRenderer.sprite = null;
             currentCrop = null;
+            StopShining();
         }
 
         private System.Collections.IEnumerator GrowCrop(PlayerScripts.PlayerController player)
@@ -98,6 +104,7 @@ namespace Assets.Scripts.Interactibles
                 {
                     currentCrop.isReady = true;
                     cropSpriteRenderer.sprite = currentCrop.CropStage3;
+                    StartShining();
                 } 
 
                 if (currentCrop.isReady || !currentCrop.isWatered) break;
@@ -107,12 +114,46 @@ namespace Assets.Scripts.Interactibles
             growCropRoutine = null;
         }
 
+        private Tween fadeTween;
+        private Color faceColor;
+        [SerializeField] private float fadeDuration = .7f;
+        [SerializeField] private Ease fadeEase = Ease.InOutSine;
+
+        private void StartShining()
+        {
+            fadeTween = DOTween.To(
+                () => fadeMaterialCopy.GetColor("_FaceColor"),
+                x => fadeMaterialCopy.SetColor("_FaceColor", x),
+                new Color(faceColor.r, faceColor.g, faceColor.b, 1f),
+                fadeDuration
+            )
+            .SetEase(fadeEase)
+            .SetLoops(-1, LoopType.Yoyo);
+
+        }
+
+        private void StopShining()
+        {
+            fadeTween?.Kill();
+            faceColor.a = 0f;
+            fadeMaterialCopy.SetColor("_FaceColor", faceColor);
+            fadeTween = null;
+        }
 
         private void Start()
         {
             audioManager = GameManager.Instance.AudioManager;
             plantingAudioClip = audioManager.AudioClips.PickingSeedAudioClip;
             wateringAudioClip = audioManager.AudioClips.WateringAudioClip;
+
+            originalMaterial = cropSpriteRenderer.material;
+            fadeMaterialCopy = new(fadeMaterial);
+            faceColor = fadeMaterialCopy.GetColor("_FaceColor");
+            faceColor.a = 0;
+            fadeMaterialCopy.SetColor("_FaceColor", faceColor);
+            cropSpriteRenderer.materials = new Material[] { originalMaterial, fadeMaterialCopy};
+
+            
         }
     }
 }

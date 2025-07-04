@@ -11,6 +11,9 @@ namespace Assets.Scripts.Interactibles
         private ManagerScripts.AudioManager audioManager;
         private AudioClip bucketAudioClip;
 
+        [SerializeField] private int maximumSpawnable = 1;
+        private System.Collections.Generic.Queue<BucketHoldable> spawned = new();
+
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
@@ -18,9 +21,19 @@ namespace Assets.Scripts.Interactibles
                 audioManager.PlayClip(bucketAudioClip);
 
                 var bucket = Instantiate(bucketHoldablePrefab, transform);
+
                 var bucketHoldable = bucket.GetComponent<BucketHoldable>();
+                
+                spawned.Enqueue(bucketHoldable);
 
                 bucketHoldable.Interact(sender);
+                
+                if (spawned.Count > maximumSpawnable)
+                {
+                    var old = spawned.Dequeue();
+                    if(old != null)
+                        Destroy(old.gameObject);
+                }
             }
         }
 

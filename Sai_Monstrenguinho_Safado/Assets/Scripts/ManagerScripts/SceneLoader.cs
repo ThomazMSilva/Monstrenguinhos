@@ -54,7 +54,7 @@ namespace Assets.Scripts.ManagerScripts
                 sceneLoadingBar.fillAmount = loadScene.progress;
                 yield return null;
             }
-
+            loadingSceneRoutine = null;
             loadingScreen.SetActive(false);
         }
 

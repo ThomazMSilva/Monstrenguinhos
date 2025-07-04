@@ -26,6 +26,7 @@ namespace Assets.Scripts.NPCScripts
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private RectTransform orderBackgroundPanel;
         [SerializeField] private UnityEngine.UI.LayoutGroup orderLayoutGroup;
+        [SerializeField] private UnityEngine.UI.Image orderTimer;
         [SerializeField] private TMPro.TextMeshProUGUI orderTMP;
 
         [SerializeField] private float orderFadeDuration = .7f;
@@ -41,7 +42,7 @@ namespace Assets.Scripts.NPCScripts
         private System.Collections.Generic.List<Interactibles.CropType> desiredCrops = new();
         private int orderAmount;
         private float tolerance;
-        private float elapsedTolerance;
+        private float remainingTolerance;
         public string Name => attributes.ClientName;
         public UnityEngine.Events.UnityEvent OnSucceeded;
         public UnityEngine.Events.UnityEvent OnFailed;
@@ -106,19 +107,23 @@ namespace Assets.Scripts.NPCScripts
 
         private System.Collections.IEnumerator CountTolerance()
         {
-            elapsedTolerance = 0;
+            remainingTolerance = tolerance;
             var toleranceMultipler = 1 / tolerance;
 
-            while (elapsedTolerance < tolerance)
+
+            while (remainingTolerance > 0)
             {
+                float multiplier = Mathf.Lerp(1, 0, remainingTolerance * toleranceMultipler);
+
                 if (isGamePaused) yield return waitUntilGameUnpauses;
 
                 for (int i = 0; i < npcMaterials.Count; i++)
                 {
-                    npcMaterials[i].color = Color.Lerp(npcOriginalColors[i], unsatisfactionColor, elapsedTolerance * toleranceMultipler);
+                    npcMaterials[i].color = Color.Lerp(npcOriginalColors[i], unsatisfactionColor, 1 - multiplier);
                 }
 
-                elapsedTolerance += Time.deltaTime;
+                orderTimer.fillAmount = multiplier;
+                remainingTolerance -= Time.deltaTime;
                 yield return null;
             }
             OnFailed?.Invoke();
@@ -126,7 +131,7 @@ namespace Assets.Scripts.NPCScripts
             toleranceRoutine = null;
         }
         
-        private bool IsDeliveryCorrect()
+        private bool IsDeliveryFlawless()
         {
             var desired = desiredCrops;
             var delivered = deliveredCrops;
@@ -140,17 +145,20 @@ namespace Assets.Scripts.NPCScripts
             var groupedDesiredList = desired.GroupBy(d => d.ToString()).ToList();
             var groupedDeliveredList = delivered.GroupBy(d => d.ToString()).ToList();
 
+
+            System.Collections.Generic.List<Interactibles.CropType> desiredCropTypes = new();
             foreach(var group in groupedDesiredList)
             {
-                Interactibles.CropType cropType = (Interactibles.CropType)System.Enum.Parse(typeof(Interactibles.CropType), group.Key);
+                Interactibles.CropType desiredCropType = (Interactibles.CropType)System.Enum.Parse(typeof(Interactibles.CropType), group.Key);
+                desiredCropTypes.Add(desiredCropType);
 
                 var groupDesiredImages = desiredCropImages
-                    .Where(img => img.sprite == cropSpritesReference.sprites.FirstOrDefault(s => s.cropType == cropType).sprite).ToList();
+                    .Where(img => img.sprite == cropSpritesReference.sprites.FirstOrDefault(s => s.cropType == desiredCropType).sprite).ToList();
                     //.FirstOrDefault();
 
-                var deliveredInGroup = deliveredCrops.Where(c => c == cropType).ToList();
+                var deliveredInGroup = deliveredCrops.Where(c => c == desiredCropType).ToList();
 
-                Debug.Log($"Checando {cropType.ToString()} - desejadas: {group.Count()}; imagens achadas: {groupDesiredImages.Count}; entregues: {deliveredInGroup.Count}");
+                Debug.Log($"Checando {desiredCropType.ToString()} - desejadas: {group.Count()}; imagens achadas: {groupDesiredImages.Count}; entregues: {deliveredInGroup.Count}");
 
                 for (int i = 0; i < deliveredInGroup.Count && i < groupDesiredImages.Count; i++)
                 {
@@ -158,12 +166,15 @@ namespace Assets.Scripts.NPCScripts
                 }
 
             }
-
-            if (groupedDeliveredList.Count != groupedDesiredList.Count)
+            foreach ( var deliveredGroup in groupedDeliveredList) 
             {
-                Debug.Log("Lista agrupada tem tamanho diferente, nem calcula");
-                return false;
+                Interactibles.CropType deliveredCropType = (Interactibles.CropType)System.Enum.Parse(typeof(Interactibles.CropType), deliveredGroup.Key);
+                if (!desiredCropTypes.Contains(deliveredCropType))
+                {
+                    return false;
+                }
             }
+
             return true;
         }
 
@@ -254,25 +265,30 @@ namespace Assets.Scripts.NPCScripts
 
             deliveredCrops.AddRange(cropTypes);
 
-            bool isCorrect = IsDeliveryCorrect();
-
-            if (deliveredCrops.Count >= desiredCrops.Count)
+            if (IsDeliveryFlawless())
             {
-                if (isCorrect)
+                if (deliveredCrops.Count >= desiredCrops.Count)
                 {
                     Debug.Log($"{gameObject.name}: Eba entregou certo");
+                    ReturnHome();
+
                     OnSucceeded?.Invoke();
                 }
-
                 else
                 {
-                    Debug.Log($"{gameObject.name}: Seu bosta entregou tudo errado");
-                    OnFailed?.Invoke();
+                    Debug.Log($"{gameObject.name}: Ta faltando coisa, filho. Pedi mais, cade");
                 }
-
-                ReturnHome();
+                return;
             }
-            else Debug.Log($"{gameObject.name}: Ta faltando coisa, filho. Pedi mais, cade");
+
+            else
+            {
+                Debug.Log($"{gameObject.name}: Seu bosta entregou tudo errado");
+                ReturnHome();
+                OnFailed?.Invoke();
+            }
+
+            
         }
 
         public static int WeightedRandomByPercentage(int minInlcusive, int maxInclusive, int preference, float percentage)

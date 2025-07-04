@@ -190,7 +190,11 @@ namespace Assets.Scripts
 
         public void QuitGame() => Application.Quit();
 
-        public void LoadScene(string sceneName) => _sceneLoader.StartLoadingScene(sceneName);
+        public void LoadScene(string sceneName)
+        {
+            _sceneLoader.StartLoadingScene(sceneName);
+            SetMenuScreenActive(false);
+        }
 
         public void SetPause(bool pause)
         {

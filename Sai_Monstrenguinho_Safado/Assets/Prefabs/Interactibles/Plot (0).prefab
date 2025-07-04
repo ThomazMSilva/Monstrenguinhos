@@ -205,6 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 2171521741204294079}
   cropSpriteRenderer: {fileID: 5527409782472608198}
+  fadeMaterial: {fileID: 8679462435330285415, guid: 22fd7f9b975291d43a2c9c04683e271b, type: 2}
   currentCrop:
     cropPrefab: {fileID: 0}
     spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}
@@ -214,6 +215,8 @@ MonoBehaviour:
     currentTime: 0
     isWatered: 0
     isReady: 0
+  fadeDuration: 0.5
+  fadeEase: 4
 --- !u!1 &5039511715997562021
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +245,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6262073617306763738}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -292,7 +295,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.8, y: 1.6}
+  m_Size: {x: 1.3636364, y: 1.3636364}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
