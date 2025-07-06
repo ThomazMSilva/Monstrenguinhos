@@ -184,25 +184,17 @@ namespace Assets.Scripts.NPCScripts
         {
             if (Camera.main == null) return maximumSize;
 
-            // Get the panel's position in viewport space
             Vector3 panelViewportPos = Camera.main.WorldToViewportPoint(orderBackgroundPanel.position);
 
-            // Calculate available space above and below the panel
             float availableSpaceAbove = 1f - panelViewportPos.y;
-            float availableSpaceBelow = panelViewportPos.y;
 
-            // Convert available space to canvas units
             RectTransform canvasRect = orderBackgroundPanel.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
             float canvasHeight = canvasRect.rect.height;
 
-            // We want to use the smaller available space (either above or below)
-            // Since the panel is bottom-center anchored, we'll use the space above
             float maxVisibleHeight = availableSpaceAbove * canvasHeight;
 
-            // Subtract a small margin to ensure it stays fully visible
             //maxVisibleHeight -= 20f; // 20 pixels margin
 
-            // Ensure we don't return a negative value
             return Mathf.Max(maxVisibleHeight, 0);
         }
         #endregion
@@ -282,8 +274,9 @@ namespace Assets.Scripts.NPCScripts
             float maxVisibleHeight = CalculateMaxVisibleHeight();
             //float desiredHeight = orderLayoutGroup.preferredHeight;
             float finalHeight = Mathf.Max(maxVisibleHeight, 1);
+            float limitedSize = Mathf.Min(orderAmount, maximumSize);
 
-            orderBackgroundPanel.sizeDelta = new Vector2(orderBackgroundPanel.sizeDelta.x, finalHeight);
+            orderBackgroundPanel.sizeDelta = new Vector2(orderBackgroundPanel.sizeDelta.x, limitedSize);
 
             toleranceRoutine = StartCoroutine(CountTolerance());
         }
