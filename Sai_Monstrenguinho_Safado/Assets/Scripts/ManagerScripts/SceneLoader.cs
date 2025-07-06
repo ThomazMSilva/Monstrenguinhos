@@ -34,6 +34,8 @@ namespace Assets.Scripts.ManagerScripts
                 return;
             }
 
+            if (loadingSceneRoutine != null) _coroutineRunner.StopCoroutine(loadingSceneRoutine);
+
             loadingSceneRoutine ??= _coroutineRunner.StartCoroutine(
                 LoadScreen(
                     LoadSceneAsync(sceneName)
@@ -46,6 +48,7 @@ namespace Assets.Scripts.ManagerScripts
             if (loadingSceneRoutine == null) yield break;
 
             loadingScreen.SetActive(true);
+            Debug.Log("Loading information setado pra true");
 
             AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneName);
 
@@ -54,8 +57,9 @@ namespace Assets.Scripts.ManagerScripts
                 sceneLoadingBar.fillAmount = loadScene.progress;
                 yield return null;
             }
-            loadingSceneRoutine = null;
             loadingScreen.SetActive(false);
+            Debug.Log("Loading information setado pra false");
+            loadingSceneRoutine = null;
         }
 
         private IEnumerator LoadScreen(object operation)
@@ -88,11 +92,14 @@ namespace Assets.Scripts.ManagerScripts
         public IEnumerator FadeScreen(CanvasGroup uiElement, float targetAlpha, float duration, bool active)
         {
             if (fadeCanvasGroup == null) yield break;
+            Debug.Log($"Setando {uiElement.name} (estado {uiElement.gameObject.activeSelf}) pra alpha {targetAlpha} e estado ativo {active}");
 
             uiElement.alpha = active ? 0 : 1;
-            fadeCanvasGroup.gameObject.SetActive(true);
+            Debug.Log("Inicializando pra alpha " + uiElement.alpha);
+            uiElement.gameObject.SetActive(true);
             yield return uiElement.DOFade(targetAlpha, duration).WaitForCompletion();
-            fadeCanvasGroup.gameObject.SetActive(active);
+            uiElement.gameObject.SetActive(active);
+            Debug.Log($"Setando {uiElement.name} (estado {uiElement.gameObject.activeSelf}) pra alpha {targetAlpha} e estado ativo {active}");
         }
     }
 }

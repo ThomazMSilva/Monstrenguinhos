@@ -23,6 +23,7 @@ namespace Assets.Scripts
         public void AddFeedback()
         {
             currentFeedbacks++;
+            if (currentFeedbacks > visualFeedbacks.Count) return;
             visualFeedbacks[^currentFeedbacks].SetActive(false);
             /*for (int i = 0; i < currentFeedbacks && i < visualFeedbacks.Count; i++)
             { 

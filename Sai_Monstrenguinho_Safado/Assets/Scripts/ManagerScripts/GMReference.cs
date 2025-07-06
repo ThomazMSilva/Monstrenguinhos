@@ -18,6 +18,8 @@ namespace Assets.Scripts.ManagerScripts
 
         public void FadeScreen(CanvasGroup screen) => GameManager.Instance.Fade(screen);
 
+        public void RestartGame() => GameManager.Instance.Restart();
+
         public void SetPause(bool pause) => GameManager.Instance.SetPause(pause);
     }
 }

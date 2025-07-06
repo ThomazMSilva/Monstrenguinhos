@@ -28,6 +28,7 @@ namespace Assets.Scripts.NPCScripts
         [SerializeField] private UnityEngine.UI.LayoutGroup orderLayoutGroup;
         [SerializeField] private UnityEngine.UI.Image orderTimer;
         [SerializeField] private TMPro.TextMeshProUGUI orderTMP;
+        [SerializeField] private float maximumSize;
 
         [SerializeField] private float orderFadeDuration = .7f;
         [SerializeField] private System.Collections.Generic.List<Interactibles.CropType> deliveredCrops = new();
@@ -113,7 +114,7 @@ namespace Assets.Scripts.NPCScripts
 
             while (remainingTolerance > 0)
             {
-                float multiplier = Mathf.Lerp(1, 0, remainingTolerance * toleranceMultipler);
+                float multiplier = Mathf.Lerp(0, 1, remainingTolerance * toleranceMultipler);
 
                 if (isGamePaused) yield return waitUntilGameUnpauses;
 
@@ -122,10 +123,11 @@ namespace Assets.Scripts.NPCScripts
                     npcMaterials[i].color = Color.Lerp(npcOriginalColors[i], unsatisfactionColor, 1 - multiplier);
                 }
 
-                orderTimer.fillAmount = multiplier;
+                orderTimer.fillAmount = 1 - multiplier;
                 remainingTolerance -= Time.deltaTime;
                 yield return null;
             }
+            //Debug.Log($"Falhou entrega com {gameObject.name}");
             OnFailed?.Invoke();
             ReturnHome();
             toleranceRoutine = null;
@@ -178,6 +180,31 @@ namespace Assets.Scripts.NPCScripts
             return true;
         }
 
+        private float CalculateMaxVisibleHeight()
+        {
+            if (Camera.main == null) return maximumSize;
+
+            // Get the panel's position in viewport space
+            Vector3 panelViewportPos = Camera.main.WorldToViewportPoint(orderBackgroundPanel.position);
+
+            // Calculate available space above and below the panel
+            float availableSpaceAbove = 1f - panelViewportPos.y;
+            float availableSpaceBelow = panelViewportPos.y;
+
+            // Convert available space to canvas units
+            RectTransform canvasRect = orderBackgroundPanel.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+            float canvasHeight = canvasRect.rect.height;
+
+            // We want to use the smaller available space (either above or below)
+            // Since the panel is bottom-center anchored, we'll use the space above
+            float maxVisibleHeight = availableSpaceAbove * canvasHeight;
+
+            // Subtract a small margin to ensure it stays fully visible
+            //maxVisibleHeight -= 20f; // 20 pixels margin
+
+            // Ensure we don't return a negative value
+            return Mathf.Max(maxVisibleHeight, 0);
+        }
         #endregion
 
         #region PUBLIC_METHODS
@@ -251,8 +278,13 @@ namespace Assets.Scripts.NPCScripts
                 desiredCropImages.Add(order);
                 desiredCrops.Add(desiredCrop);
             }
-            orderBackgroundPanel.sizeDelta = new(orderBackgroundPanel.sizeDelta.x, desiredCrops.Count);
-            //orderTMP.text = TempDesiredAmountDebug();
+
+            float maxVisibleHeight = CalculateMaxVisibleHeight();
+            //float desiredHeight = orderLayoutGroup.preferredHeight;
+            float finalHeight = Mathf.Max(maxVisibleHeight, 1);
+
+            orderBackgroundPanel.sizeDelta = new Vector2(orderBackgroundPanel.sizeDelta.x, finalHeight);
+
             toleranceRoutine = StartCoroutine(CountTolerance());
         }
 

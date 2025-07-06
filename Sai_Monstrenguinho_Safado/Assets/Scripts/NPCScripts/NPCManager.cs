@@ -146,7 +146,7 @@ namespace Assets.Scripts.NPCScripts
                     OnFailedClient?.Invoke();
                     if(totalFailedClients >= maximumFailedClients)
                     {
-                        OnLost?.Invoke();
+                        Lose();
                     }
                 }
             );
@@ -257,13 +257,15 @@ namespace Assets.Scripts.NPCScripts
 
         public void Win() => OnWon?.Invoke();
 
+        public void Lose() => OnLost?.Invoke();
+
         public void OnStagePassed()
         {
             CheckStartStageTimer();
             game.CurrentStage.Clients.TimeRemaining = game.CurrentStage.Clients.Interval;
             
-            if(game.CurrentStage.Clients.PreSpawn)
-                SpawnClient();
+            /*if(game.CurrentStage.Clients.PreSpawn)
+                SpawnClient();*/
         }
 
         private void Start()
@@ -275,7 +277,7 @@ namespace Assets.Scripts.NPCScripts
             game.OnPause += PauseBehaviour;
             game.OnStagePassed += OnStagePassed;
             game.OnRestart += Restart;
-            game.StageAttributes[^1].OnCompleted.AddListener(Win);
+            game.LastStage.OnCompleted.AddListener(Win);
 
             waitForCapCheck = new(capCheckInterval);
 
@@ -287,7 +289,7 @@ namespace Assets.Scripts.NPCScripts
             game.OnPause -= PauseBehaviour;
             game.OnStagePassed -= OnStagePassed;
             game.OnRestart -= Restart;
-            game.StageAttributes[^1].OnCompleted.RemoveListener(Win);
+            game.LastStage.OnCompleted.RemoveListener(Win);
         }
     }
 }

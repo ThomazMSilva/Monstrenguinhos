@@ -12,6 +12,7 @@ namespace Assets.Scripts
         public string stageName;
         public int stageID;
         public bool isTutorial;
+        public bool isFinal;
 
         [System.Serializable]
         public class NpcAttributes
@@ -134,6 +135,8 @@ namespace Assets.Scripts
         private StageAttributes currentStageAttributes;
         public StageAttributes CurrentStage => currentStageAttributes;
 
+        public StageAttributes LastStage => stageAttributes.FirstOrDefault(s => s.isFinal);
+
         public void PassToStage(int stageID)
         {
             if (currentStageAttributes != null && stageID == currentStageAttributes.stageID) return;
@@ -153,7 +156,8 @@ namespace Assets.Scripts
         {
             if (!InstanceInitializedCorrectly()) return;
 
-            PassToStage(0);
+            int firstStage = stageAttributes.Min(s => s.stageID);
+            PassToStage(firstStage);
 
             _audioManager.Initialize(this);
             _sceneLoader.Initialize(this);
@@ -215,11 +219,15 @@ namespace Assets.Scripts
         private Coroutine fadeRoutine;
         public void Fade(CanvasGroup uiElement)
         {
-            if (fadeRoutine != null) StopCoroutine(fadeRoutine);
-            
+            if (fadeRoutine != null)
+            {
+                StopCoroutine(fadeRoutine);
+                Debug.Log("encerrando rotina de fade no GameGamanger");
+            }
+
             bool active = uiElement.gameObject.activeSelf;
 
-            System.Collections.IEnumerator routine = SceneLoader.FadeScreen(uiElement, !active ? 0 : 1, SceneLoader.FadeTime, !active);
+            System.Collections.IEnumerator routine = SceneLoader.FadeScreen(uiElement, active ? 0 : 1, SceneLoader.FadeTime, !active);
             
             fadeRoutine = StartCoroutine(routine);
         }

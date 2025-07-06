@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 2171521741204294079}
   cropSpriteRenderer: {fileID: 5527409782472608198}
-  fadeMaterial: {fileID: 8679462435330285415, guid: 22fd7f9b975291d43a2c9c04683e271b, type: 2}
+  fadeMaterial: {fileID: 2100000, guid: 30a78ad253aefc4459e688342ace4064, type: 2}
   currentCrop:
     cropPrefab: {fileID: 0}
     spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}

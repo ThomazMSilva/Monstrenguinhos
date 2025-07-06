@@ -4332,6 +4332,7 @@ MonoBehaviour:
     musicSlider: {fileID: 5985962785771760864}
     sfxSlider: {fileID: 1803249241974332021}
     spatialBlend: 0.849
+    spawnSfxSources: 0
     _audioReferences:
       failureAudioClip: {fileID: 8300000, guid: f9bdb22996ed14b4a835018e242ea58b, type: 3}
       successAudioClip: {fileID: 8300000, guid: a62c846ab6e5af240a319a9854568ce3, type: 3}
@@ -4349,8 +4350,9 @@ MonoBehaviour:
   isPaused: 0
   stageAttributes:
   - stageName: Tutorial
-    stageID: 1
+    stageID: 0
     isTutorial: 1
+    isFinal: 0
     Clients:
       SpawnableClients:
       - {fileID: 11400000, guid: cc7965ad8de51bd4594c808238b881b1, type: 2}
@@ -4376,8 +4378,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stageName: Estagio_1
-    stageID: 0
+    stageID: 1
     isTutorial: 0
+    isFinal: 0
     Clients:
       SpawnableClients:
       - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
@@ -4407,6 +4410,7 @@ MonoBehaviour:
   - stageName: Estagio_2
     stageID: 2
     isTutorial: 0
+    isFinal: 0
     Clients:
       SpawnableClients:
       - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
@@ -4436,6 +4440,7 @@ MonoBehaviour:
   - stageName: Estagio_3
     stageID: 3
     isTutorial: 0
+    isFinal: 1
     Clients:
       SpawnableClients:
       - {fileID: 11400000, guid: 385ab5cc6649ec24d92918d0d620cd56, type: 2}
@@ -4446,6 +4451,33 @@ MonoBehaviour:
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      MinInterval: 30
+      MaxInterval: 40
+      MinHorde: 2
+      MaxHorde: 3
+      SpawnCap: 6
+    Conditions:
+      TimeBased: 0
+      TimeToPass: 200
+      SuccessBased: 1
+      SuccessfulClientsToPass: 1
+    nextStageID: 0
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: Estagio_Teste_Falha
+    stageID: -1
+    isTutorial: 0
+    isFinal: 0
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: fea6faba8807e72458d6a5a409feec8a, type: 2}
+      PreSpawn: 1
+      MinInterval: 2
+      MaxInterval: 3
+      SpawnCap: 3
+    Crittlings:
+      SpawnableCrittlings: []
       MinInterval: 30
       MaxInterval: 40
       MinHorde: 2
