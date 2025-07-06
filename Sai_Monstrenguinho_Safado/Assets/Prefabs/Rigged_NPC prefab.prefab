@@ -3742,6 +3742,7 @@ MonoBehaviour:
   orderLayoutGroup: {fileID: 1690265983676631625}
   orderTimer: {fileID: 3348385498345927590}
   orderTMP: {fileID: 2215425844374044937}
+  maximumSize: 5
   orderFadeDuration: 1.5
   deliveredCrops: 
   orderImagePrefab: {fileID: 7399510674358752049, guid: d777b697c4ea62a4fa30b1c316a1b525, type: 3}

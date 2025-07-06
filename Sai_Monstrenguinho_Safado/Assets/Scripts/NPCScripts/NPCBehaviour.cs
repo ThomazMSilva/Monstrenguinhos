@@ -44,6 +44,7 @@ namespace Assets.Scripts.NPCScripts
         private int orderAmount;
         private float tolerance;
         private float remainingTolerance;
+        private float serviceTime;
         public string Name => attributes.ClientName;
         public UnityEngine.Events.UnityEvent OnSucceeded;
         public UnityEngine.Events.UnityEvent OnFailed;
@@ -125,6 +126,7 @@ namespace Assets.Scripts.NPCScripts
 
                 orderTimer.fillAmount = 1 - multiplier;
                 remainingTolerance -= Time.deltaTime;
+                serviceTime += Time.deltaTime;
                 yield return null;
             }
             //Debug.Log($"Falhou entrega com {gameObject.name}");
@@ -203,6 +205,10 @@ namespace Assets.Scripts.NPCScripts
         public  void ReturnHome()
         {
             if(toleranceRoutine != null) StopCoroutine(toleranceRoutine);
+            StageAttributes stage = GameManager.Instance.CurrentStage;
+            stage.Clients.serviceTime.Add(serviceTime);
+            stage.Clients.AverageServiceTime = stage.Clients.AverageTime();
+
             orderPlacement.SetActive(false);
             canvasGroup.DOFade(0, orderFadeDuration).OnComplete(() => orderDisplay.SetActive(false));
 

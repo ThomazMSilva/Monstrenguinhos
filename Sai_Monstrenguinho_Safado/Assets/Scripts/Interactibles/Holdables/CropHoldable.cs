@@ -10,6 +10,11 @@ namespace Assets.Scripts.Interactibles
 
         public CropAttributes cropAttributes;
 
+        public override void DropItem()
+        {
+            return;
+        }
+
         public override void Interact(object sender = null)
         {
             if (sender != null && sender is PlayerController player)

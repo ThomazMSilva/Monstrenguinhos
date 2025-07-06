@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1519275203467426500}
   - component: {fileID: 6912358035917089675}
   m_Layer: 3
-  m_Name: Monstrenguinho Resistente
+  m_Name: Monstrenguinho Padrao 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 778473395415026884}
   CurrentState: 0
   randomizeColor: 1
-  hitsToFlee: 2
+  hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
   cropPreferenceName: 3
   destinationThreshold: 1.5

@@ -84,6 +84,7 @@ namespace Assets.Scripts.ManagerScripts
                         float allTimeElapsed = 0;
                         foreach(var stage in allStages)
                         {
+                            if (!stage.Conditions.TimeBased) continue;
                             allTimes += stage.Conditions.TimeToPass;
                             allTimeElapsed += stage.Conditions.TimeElapsed;
                         }
@@ -100,6 +101,7 @@ namespace Assets.Scripts.ManagerScripts
                         float allSuccessesElapsed = 0;
                         foreach (var stage in allStages)
                         {
+                            if (!stage.Conditions.SuccessBased) continue;
                             allSuccesses += stage.Conditions.SuccessfulClientsToPass;
                             allSuccessesElapsed += stage.Conditions.SuccessfulClientsPassed;
                         }

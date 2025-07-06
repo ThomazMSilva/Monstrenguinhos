@@ -30,7 +30,24 @@ namespace Assets.Scripts
             public float Interval{ get => currentInterval; set { currentInterval = value; } }
             private float timeRemaining;
             public float TimeRemaining{ get => timeRemaining; set { timeRemaining = value; } }
+            
+            private float timeWaitedWithNoClients;
+            public float TimeWaitedWithNoClients { get => timeWaitedWithNoClients; set => timeWaitedWithNoClients = value; }
+            private float timeWaitedWithClients;
+            public float TimeWaitedWithClients { get => timeWaitedWithClients; set => timeWaitedWithClients = value; }
+            
+            private float timeTakenFromNextStage;
+            public float TimeTakenFromNextStage { get => timeTakenFromNextStage; set => timeTakenFromNextStage = value; }
+
             public int SpawnCap = 4;
+            private int spawnedAmount;
+            public int SpawnedAmount { get => spawnedAmount; set => spawnedAmount = value; }
+            private int clientsCurrentlyActive;
+            public int ClientsRemaining { get => clientsCurrentlyActive; set => clientsCurrentlyActive = value; }
+            public List<float> serviceTime;
+            public float AverageServiceTime;
+
+            public float AverageTime() => serviceTime.Average();
         }
 
         [System.Serializable]
@@ -45,10 +62,15 @@ namespace Assets.Scripts
             public float Interval { get => currentInterval; set { currentInterval = value; } }
             private float timeRemaining;
             public float TimeRemaining { get => timeRemaining; set { timeRemaining = value; } }
+            
+            private float timeWaitedBetweenSpawns;
+            public float TimeWaitedBetweenSpawns { get => timeWaitedBetweenSpawns; set => timeWaitedBetweenSpawns = value; }
+
             public int MinHorde = 1;
             public int MaxHorde = 2;
             public int SpawnCap = 6;
-
+            private int spawnedAmount;
+            public int SpawnedAmount { get => spawnedAmount; set => spawnedAmount = value; }
         }
 
         [System.Serializable]
@@ -77,6 +99,9 @@ namespace Assets.Scripts
         public NpcAttributes Clients;
         public EnemyAttributes Crittlings;
         public StageConditions Conditions;
+
+        private float stageTime;
+        public float StageTime { get => stageTime; set => stageTime = value; }
 
         [Space(8f)]
 
