@@ -40,6 +40,7 @@ namespace Assets.Scripts.NPCScripts
 
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
+        private WaitUntil waitUntilLastCLientFromStage;
         private Coroutine stageTimerRoutine;
         #endregion
 
@@ -114,6 +115,9 @@ namespace Assets.Scripts.NPCScripts
         {
             var client = Instantiate(npcPrefab, transform.position, transform.rotation, npcParent).GetComponent<NPCBehaviour>();
             spawnedNPCs.Add(client);
+            game.CurrentStage.Clients.SpawnedAmount += 1;
+            game.CurrentStage.Clients.ClientsRemaining += 1;
+
             client.SetAttributes(game.CurrentStage.Clients.SpawnableClients[Random.Range(0, game.CurrentStage.Clients.SpawnableClients.Count)]);
             client.gameObject.name = $"Cliente ({spawnedNPCs.Count - 1}) - {client.Name}";
 
@@ -132,14 +136,16 @@ namespace Assets.Scripts.NPCScripts
             positionsOccupationDict[furthestAvailablePosition] = client;
             client.SetTarget(furthestAvailablePosition, client.OrderCrops);
             
-            client.onDestroy.AddListener(RemoveClientFromList);
             
             var current = game.CurrentStage;
+
+            client.onDestroy.AddListener(RemoveClientFromList);  
 
             client.OnFailed.AddListener
             (
                 () => 
                 {
+                    current.Clients.ClientsRemaining -= 1;
                     audioManager.PlayClip(failureClip, client.transform);
                     current.Conditions.FailedClientsPassed++;
                     totalFailedClients++;
@@ -155,6 +161,7 @@ namespace Assets.Scripts.NPCScripts
             (
                 () =>
                 {
+                    current.Clients.ClientsRemaining -= 1;
                     audioManager.PlayClip(successClip, client.transform);
                     current.Conditions.SuccessfulClientsPassed++;
                     OnSucceededClient?.Invoke();
@@ -163,21 +170,42 @@ namespace Assets.Scripts.NPCScripts
                     {
                         current.OnCompleted?.Invoke();
                         //Tirar daqui se não quiser automático
-                        game.PassToStage(current.nextStageID);
+                        //game.PassToStage(current.nextStageID);
+
+                        readyToPassStage = true;
                     }
                 }
             );
         }
 
+        private bool readyToPassStage;
+
         private void RemoveClientFromList(NPCBehaviour client)
         {
             spawnedNPCs.Remove(client);
-            foreach(var kvp in positionsOccupationDict)
+            foreach (var kvp in positionsOccupationDict)
             {
                 if (kvp.Value != client) continue;
                 
                 positionsOccupationDict[kvp.Key] = null;
                 break;
+            }
+        }
+
+        private void Update()
+        {
+            if (game.IsPaused) return;
+
+            game.CurrentStage.StageTime += Time.deltaTime;
+
+            if(game.CurrentStage.Clients.ClientsRemaining <= 0)
+            {
+                game.CurrentStage.Clients.TimeWaitedWithNoClients += Time.deltaTime;
+            }
+
+            if(game.CurrentStage.Clients.ClientsRemaining > 0)
+            {
+                game.CurrentStage.Clients.TimeWaitedWithClients += Time.deltaTime;
             }
         }
 
@@ -202,6 +230,17 @@ namespace Assets.Scripts.NPCScripts
                     if (isGamePaused) yield return waitUntilGameUnpauses;
                     game.CurrentStage.Clients.TimeRemaining -= Time.deltaTime;
                     yield return null;
+                }
+                
+                if(readyToPassStage)
+                {
+                    while (game.CurrentStage.Clients.ClientsRemaining > 0)
+                    {
+                        game.CurrentStage.Clients.TimeTakenFromNextStage += Time.deltaTime;
+                        yield return null;
+                    }
+                    readyToPassStage = false;
+                    game.PassToStage(game.CurrentStage.nextStageID);
                 }
 
                 SpawnClient();
@@ -251,7 +290,7 @@ namespace Assets.Scripts.NPCScripts
                 yield return null;
             }
             Debug.Log("Acabou o tempo do "+game.CurrentStage.stageName);
-            game.PassToStage(game.CurrentStage.nextStageID);
+            readyToPassStage = true;
             stageTimerRoutine = null;
         }
 

@@ -4393,6 +4393,7 @@ MonoBehaviour:
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
       MinInterval: 40
       MaxInterval: 60
       MinHorde: 1
@@ -4466,7 +4467,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stageName: Estagio_Teste_Falha
-    stageID: -1
+    stageID: 999
     isTutorial: 0
     isFinal: 0
     Clients:
