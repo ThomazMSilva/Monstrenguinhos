@@ -62,9 +62,9 @@ MonoBehaviour:
   chasingSpeed: 1
   fleeingSpeed: 5
   eatingSpeed: 0
-  digestingSpeed: 0.01
-  eatingTime: 7
-  digestingTime: 3
+  digestingSpeed: 0.02
+  eatingTime: 5
+  digestingTime: 2
   fadeOutTime: 3
 --- !u!195 &9087911344449678570
 NavMeshAgent:

@@ -104,7 +104,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -137,7 +137,9 @@ MonoBehaviour:
     m_Bits: 8
   cropAttributes:
     cropPrefab: {fileID: 3894122223799165937, guid: 02e68446e76a3f54ca34df94eb4ba043, type: 3}
-    spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}
+    cropStage1: {fileID: 21300000, guid: 7a90f8259ba397c45948115a493cb161, type: 3}
+    cropStage2: {fileID: 21300000, guid: 84bf54b4a49e64049a3e324f981ec957, type: 3}
+    cropStage3: {fileID: 21300000, guid: 40fd7b438a56c82448944a70dd06e371, type: 3}
     cropName: 2
     growthMultiplier: 1
     growthTime: 5
@@ -163,7 +165,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3894122223799165937}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
