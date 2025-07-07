@@ -4516,8 +4516,7 @@ MonoBehaviour:
     isTutorial: 0
     isFinal: 0
     Clients:
-      SpawnableClients:
-      - {fileID: 11400000, guid: fea6faba8807e72458d6a5a409feec8a, type: 2}
+      SpawnableClients: []
       PreSpawn: 1
       MinInterval: 2
       MaxInterval: 3
@@ -4525,9 +4524,10 @@ MonoBehaviour:
       serviceTime: []
       AverageServiceTime: 0
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 30
-      MaxInterval: 40
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
+      MinInterval: 1
+      MaxInterval: 1
       MinHorde: 2
       MaxHorde: 3
       SpawnCap: 6

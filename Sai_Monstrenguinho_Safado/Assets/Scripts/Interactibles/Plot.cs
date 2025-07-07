@@ -8,6 +8,7 @@ namespace Assets.Scripts.Interactibles
     {
         [SerializeField] private SpriteRenderer cropSpriteRenderer;
         [SerializeField] private Material fadeMaterial;
+        [SerializeField] private bool broomInteraction;
         private Material fadeMaterialCopy;
         private Material originalMaterial;
         public CropAttributes currentCrop;
@@ -33,6 +34,12 @@ namespace Assets.Scripts.Interactibles
                     case PlayerScripts.ItemTag.Seed:
                         PlantSeed(player);
                         break;
+
+                    case PlayerScripts.ItemTag.Broom:
+                        if (!broomInteraction) 
+                            break;
+                        else HarvestCrop(player); 
+                            break;
 
                     default:
                         HarvestCrop(player);
@@ -117,6 +124,7 @@ namespace Assets.Scripts.Interactibles
         private Tween fadeTween;
         private Color faceColor;
         [SerializeField] private float fadeDuration = .7f;
+        [SerializeField, Range(0, 1)] private float fadeStrength = .7f;
         [SerializeField] private Ease fadeEase = Ease.InOutSine;
 
         private void StartShining()
@@ -124,7 +132,7 @@ namespace Assets.Scripts.Interactibles
             fadeTween = DOTween.To(
                 () => fadeMaterialCopy.GetColor("_FaceColor"),
                 x => fadeMaterialCopy.SetColor("_FaceColor", x),
-                new Color(faceColor.r, faceColor.g, faceColor.b, 1f),
+                new Color(faceColor.r, faceColor.g, faceColor.b, fadeStrength),
                 fadeDuration
             )
             .SetEase(fadeEase)

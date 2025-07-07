@@ -29,7 +29,7 @@ namespace Assets.Scripts.Interactibles
                             //UnityEngine.Debug.Log("box component");
                             box.AddCrop(new(cropAttributes));
                             //player.SetHeldItem(new());
-                            Destroy(gameObject, 1);
+                            Destroy(gameObject);
                         }
                         break;
 
