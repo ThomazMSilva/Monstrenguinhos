@@ -57,7 +57,7 @@ MonoBehaviour:
   randomizeColor: 1
   hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
-  cropPreferenceName: 3
+  cropPreferenceName: 0
   destinationThreshold: 1.5
   chasingSpeed: 1
   fleeingSpeed: 5

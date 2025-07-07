@@ -1,6 +1,7 @@
 using Assets.Scripts.GridScripts;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.PlayerScripts
 {
@@ -14,13 +15,16 @@ namespace Assets.Scripts.PlayerScripts
         [Header("Input")]
         [Space(8f)]
 
+        [SerializeField] private bool legacyInput;
         [SerializeField] private string verticalInput = "Vertical";
         [SerializeField] private string horizontalInput = "Horizontal";
         [SerializeField] private string emoteInput = "Fire1";
         [SerializeField] private string interactionInput = "Fire2";
         [SerializeField] private string sprintInput = "Fire3";
         [SerializeField] private string pauseInput = "Pause";
+        [SerializeField] private InputAction playerActions;
         private bool m_interactionAxisDown;
+        private bool m_emotingAxisDown;
         private bool m_pauseAxisDown;
         private bool isRunning;
         private Vector2 inputAxis;
@@ -83,6 +87,7 @@ namespace Assets.Scripts.PlayerScripts
         private Interactibles.Interactible selectedInteractible = null;
         #endregion
 
+
         public UnityEngine.Events.UnityEvent OnPaused;
         #endregion
 
@@ -93,7 +98,11 @@ namespace Assets.Scripts.PlayerScripts
             CalculateIWorldAxis();
         }
 
-        private void Update() => HandleInput();
+        private void Update()
+        {
+            if (!legacyInput) return;
+            HandleInput();
+        }
 
         private void FixedUpdate()
         {
@@ -114,14 +123,63 @@ namespace Assets.Scripts.PlayerScripts
         }
         #endregion
 
-        #region PRIVATE_METHODS
-        private void CalculateIWorldAxis()
+        #region INPUT_METHODS
+        public void MovementInput(InputAction.CallbackContext value)
         {
-            isometricForward = forwardAnchor.forward;
-            isometricForward.Normalize();
+            if (legacyInput) return;
+            inputAxis = value.ReadValue<Vector2>();
+        }
 
-            isometricRight = forwardAnchor.right;
-            isometricRight.Normalize();
+        public void InteractionInput(InputAction.CallbackContext value)
+        {
+            if (legacyInput) return;
+
+            if (value.started)
+            {
+                bool canInteract = !(hasInteractionCooldown && isInteracting);
+
+                if (!GameManager.Instance.IsPaused && canInteract)
+                    Interact();
+            }
+        }
+
+        public void PauseInput(InputAction.CallbackContext value)
+        {
+            if (legacyInput) return;
+            if (value.started)
+            {
+                TriggerPause();
+            }
+        }
+
+        public void SprintInput(InputAction.CallbackContext value)
+        {
+            if (legacyInput) return;
+
+            if (value.started)
+            {
+                isRunning = true;
+            }
+            else if (value.canceled)
+            {
+                isRunning = false;
+            }
+        }
+
+        public void EmoteInput(InputAction.CallbackContext value)
+        {
+            if (legacyInput) return;
+
+            if (value.started)
+            {
+                m_emotingAxisDown = true;
+            }
+            else if (value.canceled)
+            {
+                m_emotingAxisDown = false;
+            }
+
+            playerAnim.SetBool("Emoting_0", m_emotingAxisDown);
         }
 
         private void HandleInput()
@@ -129,7 +187,7 @@ namespace Assets.Scripts.PlayerScripts
             inputAxis.Set(Input.GetAxis(horizontalInput), Input.GetAxis(verticalInput));
             isRunning = Input.GetAxis(sprintInput) != 0;
 
-            if(Input.GetAxisRaw(interactionInput) != 0)
+            if (Input.GetAxisRaw(interactionInput) != 0)
             {
                 if (!m_interactionAxisDown)
                 {
@@ -137,11 +195,11 @@ namespace Assets.Scripts.PlayerScripts
 
                     bool canInteract = !(hasInteractionCooldown && isInteracting);
 
-                    if(!GameManager.Instance.IsPaused && canInteract)
+                    if (!GameManager.Instance.IsPaused && canInteract)
                         Interact();
                 }
             }
-            if(Input.GetAxisRaw(interactionInput) == 0)
+            if (Input.GetAxisRaw(interactionInput) == 0)
             {
                 m_interactionAxisDown = false;
             }
@@ -160,6 +218,17 @@ namespace Assets.Scripts.PlayerScripts
             }
 
             playerAnim.SetBool("Emoting_0", Input.GetAxisRaw(emoteInput) != 0);
+        }
+        #endregion
+
+        #region PRIVATE_METHODS
+        private void CalculateIWorldAxis()
+        {
+            isometricForward = forwardAnchor.forward;
+            isometricForward.Normalize();
+
+            isometricRight = forwardAnchor.right;
+            isometricRight.Normalize();
         }
 
         private void HandleMovement()
@@ -262,7 +331,7 @@ namespace Assets.Scripts.PlayerScripts
             selectedInteractible?.Deselect();
             selectedInteractible = null;
         }
-        
+
         private void Interact()
         {
             if (currentHeldInteractible == null && selectedInteractible == null) return;
@@ -270,6 +339,43 @@ namespace Assets.Scripts.PlayerScripts
             playerAnim.SetTrigger("Action");
             currentHeldInteractible?.DropItem();
             selectedInteractible?.Interact(this);
+        }
+
+        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
+
+        private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
+        {
+            actionBefore?.Invoke();
+
+            playerNavigationAgent.enabled = true;
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0;
+            var a = Quaternion.LookRotation(direction, Vector3.up);
+            yield return transform.DORotate(a.eulerAngles, .7f).WaitForCompletion();
+
+            playerNavigationAgent.speed = aiSpeed;
+
+            playerNavigationAgent.SetDestination(target.position);
+
+            playerAnim.SetFloat("velocityMagnitude", .15f);
+
+            yield return new WaitUntil
+            (
+                () =>
+                {
+                    return !playerNavigationAgent.pathPending
+                    && (playerNavigationAgent.remainingDistance <= playerNavigationAgent.stoppingDistance);
+                }
+            );
+
+            playerNavigationAgent.Warp(target.position);
+
+            playerNavigationAgent.enabled = false;
+
+            actionAfter?.Invoke();
+
+            automaticMovementRoutine = null;
         }
         #endregion
 
@@ -350,43 +456,6 @@ namespace Assets.Scripts.PlayerScripts
                     }
                 )
             );
-        }
-
-        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
-
-        private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
-        {
-            actionBefore?.Invoke();
-
-            playerNavigationAgent.enabled = true;
-
-            Vector3 direction = target.position - transform.position;
-            direction.y = 0;
-            var a = Quaternion.LookRotation( direction, Vector3.up );
-            yield return transform.DORotate(a.eulerAngles, .7f).WaitForCompletion();
-
-            playerNavigationAgent.speed = aiSpeed;
-            
-            playerNavigationAgent.SetDestination(target.position);
-
-            playerAnim.SetFloat("velocityMagnitude", .15f);
-
-            yield return new WaitUntil
-            (
-                () =>
-                {
-                    return !playerNavigationAgent.pathPending
-                    && (playerNavigationAgent.remainingDistance <= playerNavigationAgent.stoppingDistance);
-                }
-            );
-
-            playerNavigationAgent.Warp(target.position);
-
-            playerNavigationAgent.enabled = false;
-
-            actionAfter?.Invoke();
-
-            automaticMovementRoutine = null;
         }
 
         public HeldItem HeldItem => currentHeldTag;

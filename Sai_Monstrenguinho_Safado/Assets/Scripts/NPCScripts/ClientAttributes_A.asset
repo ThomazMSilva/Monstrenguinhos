@@ -18,4 +18,4 @@ MonoBehaviour:
   cropsOrderedMin: 1
   cropsOrderedMax: 2
   cropPreference: 1
-  preferencePercentage: 75
+  preferencePercentage: 50

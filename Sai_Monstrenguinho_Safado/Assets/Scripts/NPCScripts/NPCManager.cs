@@ -192,6 +192,7 @@ namespace Assets.Scripts.NPCScripts
             }
         }
 
+#if UNITY_EDITOR
         private void Update()
         {
             if (game.IsPaused) return;
@@ -208,7 +209,7 @@ namespace Assets.Scripts.NPCScripts
                 game.CurrentStage.Clients.TimeWaitedWithClients += Time.deltaTime;
             }
         }
-
+#endif
         private IEnumerator SpawnRoutine()
         {
             while (true)

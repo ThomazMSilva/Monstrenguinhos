@@ -215,7 +215,8 @@ MonoBehaviour:
     currentTime: 0
     isWatered: 0
     isReady: 0
-  fadeDuration: 0.5
+  fadeDuration: 1.5
+  fadeStrength: 0.25
   fadeEase: 4
 --- !u!1 &5039511715997562021
 GameObject:

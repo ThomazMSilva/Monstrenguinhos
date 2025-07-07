@@ -60,10 +60,10 @@ MonoBehaviour:
   cropPreferenceName: 3
   destinationThreshold: 1.5
   chasingSpeed: 1
-  fleeingSpeed: 5
+  fleeingSpeed: 6
   eatingSpeed: 0
   digestingSpeed: 0.01
-  eatingTime: 7
+  eatingTime: 8
   digestingTime: 3
   fadeOutTime: 3
 --- !u!195 &9087911344449678570

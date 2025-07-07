@@ -91,7 +91,7 @@ namespace Assets.Scripts.Interactibles
             if (originalParent == null)
             {
                 //Debug.Log(transform.name + "Era prefab ou nao tinha parent. Destruindo");
-                Destroy(gameObject, .5f);
+                Destroy(gameObject);
                 //Temporario
                 FindAnyObjectByType<PlayerController>().SetHeldEmpty();
                 return;

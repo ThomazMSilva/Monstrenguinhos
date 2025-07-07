@@ -65,6 +65,7 @@ namespace Assets.Scripts.NPCScripts
 
         private bool wasStoppedBeforePause;
         private bool wasRootMotionBeforePause;
+        private bool wasNavigatingBeforePause;
         private bool isGamePaused;
         private WaitUntil waitUntilGameUnpauses;
         [HideInInspector] public UnityEngine.Events.UnityEvent<NPCBehaviour> onDestroy;
@@ -74,6 +75,8 @@ namespace Assets.Scripts.NPCScripts
         #region PRIVATE_METHODS
         private void StartMovingToTarget(System.Action onFinish)
         {
+            npcAnim.applyRootMotion = true;
+            npcNavigationAgent.enabled = true;
             npcNavigationAgent.isStopped = false;
             npcNavigationAgent.SetDestination(targetDestination);
             npcAnim.SetFloat("velocityMagnitude", .12f);
@@ -98,9 +101,11 @@ namespace Assets.Scripts.NPCScripts
 
         private void FinishMovingToTarget(System.Action onFinish)
         {
+            npcAnim.applyRootMotion = false;
             npcAnim.SetFloat("velocityMagnitude", 0f);
             npcNavigationAgent.isStopped = true;
             npcNavigationAgent.Warp(targetDestination);
+            npcNavigationAgent.enabled = false;
             transform.DORotate(targetRotation.eulerAngles, rotationDuration)
                      .OnComplete(() => onFinish?.Invoke());
 
@@ -392,6 +397,7 @@ namespace Assets.Scripts.NPCScripts
 
             if (isPaused)
             {
+                wasNavigatingBeforePause = npcNavigationAgent.enabled;
                 wasStoppedBeforePause = npcNavigationAgent.isStopped;
                 wasRootMotionBeforePause = npcAnim.applyRootMotion;
                 //npcNavigationAgent.speed = 0;
@@ -402,6 +408,7 @@ namespace Assets.Scripts.NPCScripts
             }
             else
             {
+                npcNavigationAgent.enabled = wasNavigatingBeforePause;
                 npcNavigationAgent.isStopped = wasStoppedBeforePause;
                 npcNavigationAgent.speed = navigationSpeed;
                 npcAnim.applyRootMotion = wasRootMotionBeforePause;
