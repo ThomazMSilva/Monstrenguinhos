@@ -259,7 +259,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Monstrenguinho
+  m_Name: Monstrenguinho_Default_AnimController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: eating
