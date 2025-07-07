@@ -2,7 +2,7 @@
 - Project name: Sai_Monstrenguinho_Safado
 - Unity version: Unity 2022.3.31f1
 - Active game object:
-  - Name: Espantar (TMP) (4)
+  - Name: Player (Running)
   - Tag: Untagged
-  - Layer: Default
+  - Layer: Player
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

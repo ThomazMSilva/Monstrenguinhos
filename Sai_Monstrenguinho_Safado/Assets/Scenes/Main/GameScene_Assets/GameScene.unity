@@ -6113,12 +6113,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnim: {fileID: 539884553}
+  legacyInput: 0
   verticalInput: Vertical
   horizontalInput: Horizontal
   emoteInput: Emote
   interactionInput: Interact
   sprintInput: Sprint
   pauseInput: Pause
+  playerActions:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 54751723-55f2-402a-aec8-0ca9ce995c2a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   playerRB: {fileID: 539884555}
   playerNavigationAgent: {fileID: 539884558}
   forwardAnchor: {fileID: 1723406130}
@@ -6395,7 +6405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 596402018}
   - component: {fileID: 596402017}
-  - component: {fileID: 596402016}
+  - component: {fileID: 596402019}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -6403,26 +6413,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &596402016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596402015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &596402017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6453,6 +6443,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1337262700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &596402019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596402015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: f1dcd1ee1f662a0449bfcaf3d093e1ea, type: 3}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: 0}
+  m_SubmitAction: {fileID: 0}
+  m_CancelAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &598860844
 GameObject:
   m_ObjectHideFlags: 0
@@ -13483,7 +13503,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.24812502, y: 0.82800007}
   m_AnchorMax: {x: 0.77675, y: 0.9722222}
-  m_AnchoredPosition: {x: -1, y: -5.310898}
+  m_AnchoredPosition: {x: -0.9999924, y: -5.310898}
   m_SizeDelta: {x: 30, y: 12.6217}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1451181056
@@ -18377,6 +18397,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99c64b4c1c21c834a83f6d5cfe91ff1f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2041266501}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99c64b4c1c21c834a83f6d5cfe91ff1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2041266502}
   m_SourcePrefab: {fileID: 100100000, guid: 99c64b4c1c21c834a83f6d5cfe91ff1f, type: 3}
 --- !u!1 &2041266494 stripped
 GameObject:
@@ -18473,12 +18496,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnim: {fileID: 2041266500}
+  legacyInput: 0
   verticalInput: Vertical
   horizontalInput: Horizontal
   emoteInput: Emote
   interactionInput: Interact
   sprintInput: Sprint
   pauseInput: Pause
+  playerActions:
+    m_Name: Player Actions
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6be55129-5b06-43dd-981d-2b77350aa3e6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   playerRB: {fileID: 2041266496}
   playerNavigationAgent: {fileID: 2041266498}
   forwardAnchor: {fileID: 1723406130}
@@ -18537,6 +18570,121 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runningParticles: {fileID: 2106570425}
+--- !u!114 &2041266502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041266494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: f1dcd1ee1f662a0449bfcaf3d093e1ea, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 596402019}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2041266499}
+        m_TargetAssemblyTypeName: Assets.Scripts.PlayerScripts.PlayerController,
+          Assembly-CSharp
+        m_MethodName: MovementInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 80c19fe2-8c5e-4dca-8191-607df4e636df
+    m_ActionName: PlayerInput/Movement[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2041266499}
+        m_TargetAssemblyTypeName: Assets.Scripts.PlayerScripts.PlayerController,
+          Assembly-CSharp
+        m_MethodName: InteractionInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ab63cf9a-3c4e-4b63-8d59-30f191aa68be
+    m_ActionName: PlayerInput/Interaction[/Keyboard/space,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2041266499}
+        m_TargetAssemblyTypeName: Assets.Scripts.PlayerScripts.PlayerController,
+          Assembly-CSharp
+        m_MethodName: SprintInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ce0d2641-ec62-4289-a33e-f2825c1a021a
+    m_ActionName: PlayerInput/Sprint[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2041266499}
+        m_TargetAssemblyTypeName: Assets.Scripts.PlayerScripts.PlayerController,
+          Assembly-CSharp
+        m_MethodName: EmoteInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f6cc6097-b160-4a26-9426-8d4cb9d20148
+    m_ActionName: PlayerInput/Emote[/Mouse/middleButton,/Keyboard/y]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2041266499}
+        m_TargetAssemblyTypeName: Assets.Scripts.PlayerScripts.PlayerController,
+          Assembly-CSharp
+        m_MethodName: PauseInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2b7664fb-b827-454d-96f8-f7f8ee99fdb1
+    m_ActionName: PlayerInput/Pause[/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: PlayerInput
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 963194227}
 --- !u!1 &2050034886
 GameObject:
   m_ObjectHideFlags: 0
@@ -19725,12 +19873,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnim: {fileID: 5866666021355635338}
+  legacyInput: 0
   verticalInput: Vertical
   horizontalInput: Horizontal
   emoteInput: Fire1
   interactionInput: Fire2
   sprintInput: Fire3
   pauseInput: Pause
+  playerActions:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c992569f-96ec-4bee-a211-3d86a8b09ca9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   playerRB: {fileID: 5866666021355635342}
   playerNavigationAgent: {fileID: 0}
   forwardAnchor: {fileID: 1723406130}
