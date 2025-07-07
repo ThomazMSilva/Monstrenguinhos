@@ -1499,7 +1499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.275, y: 0.10041965}
   m_AnchorMax: {x: 0.734375, y: 0.20832142}
-  m_AnchoredPosition: {x: -2, y: 4.013977}
+  m_AnchoredPosition: {x: -2, y: 4.013916}
   m_SizeDelta: {x: 38, y: 20.799988}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8883345092134143712
@@ -4360,9 +4360,11 @@ MonoBehaviour:
       MinInterval: 2
       MaxInterval: 4
       SpawnCap: 1
+      serviceTime: []
+      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
-      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
       MinInterval: 60
       MaxInterval: 90
       MinHorde: 1
@@ -4387,23 +4389,25 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
       - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
       PreSpawn: 1
-      MinInterval: 30
-      MaxInterval: 50
-      SpawnCap: 4
+      MinInterval: 20
+      MaxInterval: 20
+      SpawnCap: 3
+      serviceTime: []
+      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
-      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
-      MinInterval: 40
-      MaxInterval: 60
+      MinInterval: 30
+      MaxInterval: 50
       MinHorde: 1
       MaxHorde: 2
       SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 400
+      TimeToPass: 100
       SuccessBased: 1
-      SuccessfulClientsToPass: 10
+      SuccessfulClientsToPass: 5
     nextStageID: 2
     OnCompleted:
       m_PersistentCalls:
@@ -4414,32 +4418,71 @@ MonoBehaviour:
     isFinal: 0
     Clients:
       SpawnableClients:
-      - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
+      - {fileID: 11400000, guid: 3f538c5ddae60aa45bedc735ff126599, type: 2}
       - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
-      - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
+      - {fileID: 11400000, guid: 67d7b3c265cd0b442ab123ce47913926, type: 2}
       PreSpawn: 1
-      MinInterval: 20
-      MaxInterval: 50
-      SpawnCap: 6
+      MinInterval: 15
+      MaxInterval: 25
+      SpawnCap: 3
+      serviceTime: []
+      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
-      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
+      - {fileID: 4164327085067446792, guid: 018603cdb672fc541b6f3c47b3bd7441, type: 3}
       MinInterval: 30
       MaxInterval: 40
       MinHorde: 1
       MaxHorde: 3
-      SpawnCap: 6
+      SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 300
+      TimeToPass: 400
       SuccessBased: 1
-      SuccessfulClientsToPass: 6
+      SuccessfulClientsToPass: 12
     nextStageID: 3
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
   - stageName: Estagio_3
     stageID: 3
+    isTutorial: 0
+    isFinal: 0
+    Clients:
+      SpawnableClients:
+      - {fileID: 11400000, guid: 3f538c5ddae60aa45bedc735ff126599, type: 2}
+      - {fileID: 11400000, guid: 133c628ab75b6114bae0178c94ce182f, type: 2}
+      - {fileID: 11400000, guid: 13bbb8cfef07d7f44a85493268af3366, type: 2}
+      PreSpawn: 1
+      MinInterval: 15
+      MaxInterval: 25
+      SpawnCap: 4
+      serviceTime: []
+      AverageServiceTime: 0
+    Crittlings:
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: 018603cdb672fc541b6f3c47b3bd7441, type: 3}
+      MinInterval: 25
+      MaxInterval: 35
+      MinHorde: 2
+      MaxHorde: 3
+      SpawnCap: 6
+    Conditions:
+      TimeBased: 0
+      TimeToPass: 300
+      SuccessBased: 1
+      SuccessfulClientsToPass: 6
+    nextStageID: 4
+    OnCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stageName: Estagio_4
+    stageID: 4
     isTutorial: 0
     isFinal: 1
     Clients:
@@ -4449,6 +4492,8 @@ MonoBehaviour:
       MinInterval: 20
       MaxInterval: 50
       SpawnCap: 1
+      serviceTime: []
+      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
@@ -4477,6 +4522,8 @@ MonoBehaviour:
       MinInterval: 2
       MaxInterval: 3
       SpawnCap: 3
+      serviceTime: []
+      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings: []
       MinInterval: 30

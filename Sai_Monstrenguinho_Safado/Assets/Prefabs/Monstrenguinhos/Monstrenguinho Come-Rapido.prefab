@@ -57,14 +57,14 @@ MonoBehaviour:
   randomizeColor: 1
   hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
-  cropPreferenceName: 3
+  cropPreferenceName: 1
   destinationThreshold: 1.5
   chasingSpeed: 1
-  fleeingSpeed: 5
+  fleeingSpeed: 7
   eatingSpeed: 0
   digestingSpeed: 0.01
-  eatingTime: 7
-  digestingTime: 3
+  eatingTime: 5
+  digestingTime: 2
   fadeOutTime: 3
 --- !u!195 &9087911344449678570
 NavMeshAgent:

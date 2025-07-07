@@ -15,6 +15,7 @@ MonoBehaviour:
   clientName: Trolha
   baseToleranceTimeMin: 50
   baseToleranceTimeMax: 70
-  cropsOrderedMin: 1
-  cropsOrderedMax: 1
+  cropsOrderedMin: 2
+  cropsOrderedMax: 2
   cropPreference: 2
+  preferencePercentage: 25
