@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_E 1
   m_EditorClassIdentifier: 
   clientName: Gilson
-  baseToleranceTimeMin: 30
-  baseToleranceTimeMax: 40
+  baseToleranceTimeMin: 40
+  baseToleranceTimeMax: 50
   cropsOrderedMin: 1
   cropsOrderedMax: 3
   cropPreference: 2

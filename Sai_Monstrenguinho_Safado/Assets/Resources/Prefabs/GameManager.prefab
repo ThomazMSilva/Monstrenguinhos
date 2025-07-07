@@ -5382,7 +5382,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 3baa3dade5bbd4a43a9b5832a1ef7226, type: 2}
       PreSpawn: 1
       MinInterval: 20
-      MaxInterval: 20
+      MaxInterval: 30
       SpawnCap: 3
       serviceTime: []
       AverageServiceTime: 0
@@ -5414,8 +5414,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 1183149da7f2d3d4aa2896501d8b9e0d, type: 2}
       - {fileID: 11400000, guid: 67d7b3c265cd0b442ab123ce47913926, type: 2}
       PreSpawn: 1
-      MinInterval: 15
-      MaxInterval: 25
+      MinInterval: 25
+      MaxInterval: 35
       SpawnCap: 3
       serviceTime: []
       AverageServiceTime: 0
@@ -5448,7 +5448,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 133c628ab75b6114bae0178c94ce182f, type: 2}
       - {fileID: 11400000, guid: 13bbb8cfef07d7f44a85493268af3366, type: 2}
       PreSpawn: 1
-      MinInterval: 15
+      MinInterval: 20
       MaxInterval: 25
       SpawnCap: 4
       serviceTime: []

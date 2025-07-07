@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_H
   m_EditorClassIdentifier: 
   clientName: Ponio
-  baseToleranceTimeMin: 40
-  baseToleranceTimeMax: 50
+  baseToleranceTimeMin: 50
+  baseToleranceTimeMax: 60
   cropsOrderedMin: 2
   cropsOrderedMax: 3
   cropPreference: 1

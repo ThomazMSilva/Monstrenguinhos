@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_C
   m_EditorClassIdentifier: 
   clientName: Trolha
-  baseToleranceTimeMin: 50
-  baseToleranceTimeMax: 70
+  baseToleranceTimeMin: 55
+  baseToleranceTimeMax: 75
   cropsOrderedMin: 2
   cropsOrderedMax: 2
   cropPreference: 2
