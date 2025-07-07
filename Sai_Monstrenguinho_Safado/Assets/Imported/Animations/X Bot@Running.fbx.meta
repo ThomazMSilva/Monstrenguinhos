@@ -56,7 +56,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.32988158
+        functionName: PlayWalkingEffects
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 161100689e3c89c4b8b6e2fc280ab8e0, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8731901
+        functionName: PlayWalkingEffects
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 161100689e3c89c4b8b6e2fc280ab8e0, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

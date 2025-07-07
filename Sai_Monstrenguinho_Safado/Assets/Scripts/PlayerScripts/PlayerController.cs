@@ -83,6 +83,7 @@ namespace Assets.Scripts.PlayerScripts
         private Interactibles.Interactible selectedInteractible = null;
         #endregion
 
+
         public UnityEngine.Events.UnityEvent OnPaused;
         #endregion
 
@@ -271,6 +272,43 @@ namespace Assets.Scripts.PlayerScripts
             currentHeldInteractible?.DropItem();
             selectedInteractible?.Interact(this);
         }
+
+        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
+
+        private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
+        {
+            actionBefore?.Invoke();
+
+            playerNavigationAgent.enabled = true;
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0;
+            var a = Quaternion.LookRotation(direction, Vector3.up);
+            yield return transform.DORotate(a.eulerAngles, .7f).WaitForCompletion();
+
+            playerNavigationAgent.speed = aiSpeed;
+
+            playerNavigationAgent.SetDestination(target.position);
+
+            playerAnim.SetFloat("velocityMagnitude", .15f);
+
+            yield return new WaitUntil
+            (
+                () =>
+                {
+                    return !playerNavigationAgent.pathPending
+                    && (playerNavigationAgent.remainingDistance <= playerNavigationAgent.stoppingDistance);
+                }
+            );
+
+            playerNavigationAgent.Warp(target.position);
+
+            playerNavigationAgent.enabled = false;
+
+            actionAfter?.Invoke();
+
+            automaticMovementRoutine = null;
+        }
         #endregion
 
         #region PUBLIC_METHODS
@@ -350,43 +388,6 @@ namespace Assets.Scripts.PlayerScripts
                     }
                 )
             );
-        }
-
-        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
-
-        private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
-        {
-            actionBefore?.Invoke();
-
-            playerNavigationAgent.enabled = true;
-
-            Vector3 direction = target.position - transform.position;
-            direction.y = 0;
-            var a = Quaternion.LookRotation( direction, Vector3.up );
-            yield return transform.DORotate(a.eulerAngles, .7f).WaitForCompletion();
-
-            playerNavigationAgent.speed = aiSpeed;
-            
-            playerNavigationAgent.SetDestination(target.position);
-
-            playerAnim.SetFloat("velocityMagnitude", .15f);
-
-            yield return new WaitUntil
-            (
-                () =>
-                {
-                    return !playerNavigationAgent.pathPending
-                    && (playerNavigationAgent.remainingDistance <= playerNavigationAgent.stoppingDistance);
-                }
-            );
-
-            playerNavigationAgent.Warp(target.position);
-
-            playerNavigationAgent.enabled = false;
-
-            actionAfter?.Invoke();
-
-            automaticMovementRoutine = null;
         }
 
         public HeldItem HeldItem => currentHeldTag;
