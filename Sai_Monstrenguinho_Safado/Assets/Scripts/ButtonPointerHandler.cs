@@ -1,11 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class ButtonPointerHandler : MonoBehaviour
+    , IPointerEnterHandler
+    , IPointerExitHandler
+    , IPointerUpHandler
+    , ISelectHandler
+    , IDeselectHandler
+    , ISubmitHandler
+    //, ICancelHandler
 {
+    #region ATTRIBUTES
     [Header("References")]
     [SerializeField] private RectTransform foregroundButton;
     [SerializeField] private RectTransform backgroundImage;
@@ -28,6 +34,8 @@ public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     private bool isHovering = false;
     private Tween wing1Tween;
     private Tween wing2Tween;
+    private Tween moveTween;
+    #endregion
 
     private void Awake()
     {
@@ -38,8 +46,35 @@ public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         wing1OriginalRotation = wingIMG1.eulerAngles;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void OnDestroy()
     {
+        wing1Tween?.Kill();
+        wing2Tween?.Kill();
+        moveTween?.Kill();
+    }
+
+    #region INTERFACE_IMPLEMENTATION
+    public void OnPointerEnter(PointerEventData eventData) => Select();
+
+    public void OnSelect(BaseEventData eventData) => Select();
+
+    public void OnPointerExit(PointerEventData eventData) => Deselect();
+
+    public void OnDeselect(BaseEventData eventData) => Deselect();
+
+    public void OnPointerDown(PointerEventData eventData) => Press();
+
+    public void OnSubmit(BaseEventData eventData) => Press();
+
+    public void OnPointerUp(PointerEventData eventData) => Release();
+
+    public void OnCancel(BaseEventData eventData) => Release();
+    #endregion
+
+    #region METHODS
+    private void Select()
+    {
+        if (isHovering) return;
         isHovering = true;
         MoveToPosition(new Vector2(
             originalPosition.x,
@@ -53,12 +88,12 @@ public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointe
                 (
                     wing1OriginalRotation.x,
                     wing1OriginalRotation.y,
-                    wing1OriginalRotation.z + 30
+                    wing1OriginalRotation.z + wingsRotation
                 ),
                 wingsTweenDuration
             )
             .SetEase(wingsEaseType)
-            .SetLoops(-1, LoopType.Yoyo);
+            .SetLoops(-1, wingsLoopType);
 
         wing2Tween = wingIMG2
             .DORotate
@@ -67,31 +102,31 @@ public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointe
                 (
                     wing2OriginalRotation.x,
                     wing2OriginalRotation.y,
-                    wing2OriginalRotation.z + 30
+                    wing2OriginalRotation.z + wingsRotation
                 ),
                 wingsTweenDuration
             )
             .SetEase(wingsEaseType)
-            .SetLoops(-1, LoopType.Yoyo);
+            .SetLoops(-1, wingsLoopType);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    private void Deselect()
     {
+        if (!isHovering) return;
         isHovering = false;
         MoveToPosition(originalPosition);
         wing1Tween?.Kill();
         wing2Tween?.Kill();
         wing1Tween = wingIMG1.DORotate(wing1OriginalRotation, wingsTweenDuration);
         wing2Tween = wingIMG2.DORotate(wing2OriginalRotation, wingsTweenDuration);
-
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    private void Press()
     {
         MoveToPosition(backgroundPosition);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void Release()
     {
         MoveToPosition(isHovering
             ? new Vector2(originalPosition.x, originalPosition.y + hoverYOffset)
@@ -100,6 +135,7 @@ public class ButtonPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
     private void MoveToPosition(Vector2 targetPosition)
     {
-        foregroundButton.DOAnchorPos(targetPosition, buttonTweenDuration, true).SetEase(buttonEaseType);
+        moveTween = foregroundButton.DOAnchorPos(targetPosition, buttonTweenDuration, true).SetEase(buttonEaseType);
     }
+    #endregion
 }

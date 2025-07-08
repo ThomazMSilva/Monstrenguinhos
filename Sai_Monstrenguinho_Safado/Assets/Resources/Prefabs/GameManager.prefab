@@ -5272,6 +5272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4791965432537029952}
   - component: {fileID: 2578473815430366594}
+  - component: {fileID: 2688813586036409635}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5309,6 +5310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a00b4057e222ca4eb917fb5f57750d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 2688813586036409635}
   _sceneLoader:
     fadeCanvasGroup: {fileID: 1990601068669872197}
     fadeTime: 0.5
@@ -5536,6 +5538,19 @@ MonoBehaviour:
   creditsScreen: {fileID: 7809107946588094215}
   controlsScreen: {fileID: 378891535186625282}
   menuScreen: {fileID: 2526418947027334608}
+--- !u!114 &2688813586036409635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5776794470116428934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a758cba894876f46a211c03f79ff1fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuScreen: {fileID: 0}
 --- !u!1 &5941088186837337013
 GameObject:
   m_ObjectHideFlags: 0

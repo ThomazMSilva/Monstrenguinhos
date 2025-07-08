@@ -189,7 +189,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9130054548898406188
 MonoBehaviour:
@@ -206,6 +206,7 @@ MonoBehaviour:
   selectionDisplay: {fileID: 2171521741204294079}
   cropSpriteRenderer: {fileID: 5527409782472608198}
   fadeMaterial: {fileID: 2100000, guid: 30a78ad253aefc4459e688342ace4064, type: 2}
+  broomInteraction: 0
   currentCrop:
     cropPrefab: {fileID: 0}
     spriteReferences: {fileID: 11400000, guid: cf5e143722c4b7b46b8788ccb1823a9d, type: 2}

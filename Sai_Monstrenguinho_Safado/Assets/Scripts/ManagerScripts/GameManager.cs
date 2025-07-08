@@ -140,6 +140,8 @@ namespace Assets.Scripts
             }
         }
 
+        [SerializeField] private UINavigationManager uiManager;
+
         [Space(8f)]
         [SerializeField] private SceneLoader _sceneLoader;
         public SceneLoader SceneLoader => _sceneLoader;
@@ -152,6 +154,8 @@ namespace Assets.Scripts
         [Space(8f)]
         [SerializeField] private bool isPaused;
         public bool IsPaused => isPaused;
+
+        public bool IsLoading;
 
         [Space(8f)]
         [SerializeField] private List<StageAttributes> stageAttributes = new(1);
@@ -202,27 +206,11 @@ namespace Assets.Scripts
             return true;
         }
 
-
-        [SerializeField] private GameObject optionsScreen;
-
-        public void SetOptionsScreenActive(bool active) => optionsScreen.SetActive(active);
-
-        [SerializeField] private GameObject creditsScreen;
-
-        public void SetCreditsScreenActive(bool active) => creditsScreen.SetActive(active);
-
-        [SerializeField] private GameObject controlsScreen;
-        public void SetControlsScreenActive(bool active) => controlsScreen.SetActive(active);
-
-        [SerializeField] private GameObject menuScreen;
-        public void SetMenuScreenActive(bool active) => menuScreen.SetActive(active);
-
         public void QuitGame() => Application.Quit();
 
         public void LoadScene(string sceneName)
         {
             _sceneLoader.StartLoadingScene(sceneName);
-            SetMenuScreenActive(false);
         }
 
         public void SetPause(bool pause)

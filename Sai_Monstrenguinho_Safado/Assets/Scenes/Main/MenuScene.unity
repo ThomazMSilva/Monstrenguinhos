@@ -377,6 +377,7 @@ GameObject:
   - component: {fileID: 466168423}
   - component: {fileID: 466168422}
   - component: {fileID: 466168421}
+  - component: {fileID: 466168425}
   m_Layer: 5
   m_Name: Menu Canvas
   m_TagString: Untagged
@@ -474,6 +475,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &466168425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466168420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5df6ef46c95b3b4d898b72ac2cf8b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navigationManager: {fileID: 1676090393}
 --- !u!1 &489728997
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,18 +566,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 1192853647904695063}
+    m_SelectOnDown: {fileID: 489729000}
+    m_SelectOnLeft: {fileID: 1192853647904695063}
+    m_SelectOnRight: {fileID: 772587842}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
     m_HighlightedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
     m_PressedColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
-    m_SelectedColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
+    m_SelectedColor: {r: 0.8773585, g: 0.8055583, b: 0.69112676, a: 1}
     m_DisabledColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 0.5019608}
     m_ColorMultiplier: 2.22
     m_FadeDuration: 0.1
@@ -838,18 +852,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 489729000}
+    m_SelectOnDown: {fileID: 1192853647904695063}
+    m_SelectOnLeft: {fileID: 489729000}
+    m_SelectOnRight: {fileID: 1192853647904695063}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
     m_HighlightedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
     m_PressedColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
-    m_SelectedColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
+    m_SelectedColor: {r: 0.8773585, g: 0.8055583, b: 0.69112676, a: 1}
     m_DisabledColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 0.5019608}
     m_ColorMultiplier: 2.22
     m_FadeDuration: 0.1
@@ -1029,7 +1043,7 @@ GameObject:
   - component: {fileID: 1133248861}
   - component: {fileID: 1133248860}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Monstrenguinho Image (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1393,48 +1407,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623862544}
   m_CullTransparentMesh: 1
---- !u!1 &1676090390
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1676090391}
-  - component: {fileID: 1676090392}
-  m_Layer: 0
-  m_Name: GameManagerReference
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1676090391
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1676090390}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1676090392
+--- !u!114 &1676090392 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 9087869666948628733, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+  m_PrefabInstance: {fileID: 4558755059567365576}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1676090390}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d487d696455bfa54399cab18c2b18d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1676090393 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2568013352213505571, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+  m_PrefabInstance: {fileID: 4558755059567365576}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a758cba894876f46a211c03f79ff1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1712808553
@@ -1583,7 +1575,7 @@ GameObject:
   - component: {fileID: 1820472814}
   - component: {fileID: 1820472813}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Monstrenguinho Image (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1810,7 +1802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 772587840}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1932596054
@@ -1939,18 +1931,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 772587842}
+    m_SelectOnDown: {fileID: 489729000}
+    m_SelectOnLeft: {fileID: 772587842}
+    m_SelectOnRight: {fileID: 489729000}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
     m_HighlightedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
     m_PressedColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
-    m_SelectedColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 1}
+    m_SelectedColor: {r: 0.8773585, g: 0.8055583, b: 0.69112676, a: 1}
     m_DisabledColor: {r: 0.48235297, g: 0.35686275, b: 0.15686275, a: 0.5019608}
     m_ColorMultiplier: 2.22
     m_FadeDuration: 0.1
@@ -2115,6 +2107,67 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &4558755059567365576
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2568013352213505571, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: mainMenuScreen
+      value: 
+      objectReference: {fileID: 466168420}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359249022885439686, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7347513697608082621, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
+      propertyPath: m_Name
+      value: GameManagerReference
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de8a5df7a511e364d8a81e187a41e168, type: 3}
 --- !u!114 &4953856672759847597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2384,4 +2437,4 @@ SceneRoots:
   - {fileID: 118464437}
   - {fileID: 466168424}
   - {fileID: 1932596054}
-  - {fileID: 1676090391}
+  - {fileID: 4558755059567365576}

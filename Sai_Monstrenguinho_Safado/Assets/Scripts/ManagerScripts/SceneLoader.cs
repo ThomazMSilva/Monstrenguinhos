@@ -51,6 +51,7 @@ namespace Assets.Scripts.ManagerScripts
             Debug.Log("Loading information setado pra true");
 
             AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneName);
+            GameManager.Instance.IsLoading = true;
 
             while (!loadScene.isDone)
             {
@@ -58,6 +59,7 @@ namespace Assets.Scripts.ManagerScripts
                 yield return null;
             }
             loadingScreen.SetActive(false);
+            GameManager.Instance.IsLoading = false;
             Debug.Log("Loading information setado pra false");
             loadingSceneRoutine = null;
         }

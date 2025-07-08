@@ -391,18 +391,20 @@ namespace Assets.Scripts.NPCScripts
 
         private void PauseBehaviour(bool isPaused)
         {
+            Debug.Log("Chamou pause");
             if (isGamePaused == isPaused) return;
 
             isGamePaused = isPaused;
 
             if (isPaused)
             {
-                wasNavigatingBeforePause = npcNavigationAgent.enabled;
                 wasStoppedBeforePause = npcNavigationAgent.isStopped;
+                npcNavigationAgent.isStopped = true;
                 wasRootMotionBeforePause = npcAnim.applyRootMotion;
                 //npcNavigationAgent.speed = 0;
                 npcNavigationAgent.velocity = Vector3.zero;
-                npcNavigationAgent.isStopped = true;
+                npcAnim.SetFloat("velocityMagnitude", 0);
+                wasNavigatingBeforePause = npcNavigationAgent.enabled;
                 npcAnim.applyRootMotion = false;
                 waitUntilGameUnpauses = new(() => !isGamePaused);
             }

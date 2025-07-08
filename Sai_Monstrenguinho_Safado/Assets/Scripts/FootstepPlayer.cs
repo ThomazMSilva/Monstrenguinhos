@@ -25,8 +25,8 @@ namespace Assets.Scripts
 
         public void PlayRunningEffects()
         {
-            audioManager.PlayClip(runningAudioClip);
-            //soltar particulas
+            //audioManager.PlayClip(runningAudioClip);
+            audioManager.PlayClip(walkingAudioClip);
             runningParticles.Play();
         }
     }

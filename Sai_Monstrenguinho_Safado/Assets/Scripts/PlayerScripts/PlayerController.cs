@@ -46,6 +46,7 @@ namespace Assets.Scripts.PlayerScripts
 
         [SerializeField] private bool stopWhenInteracting;
         [SerializeField] private bool hasInteractionCooldown;
+        [SerializeField] private bool lerpRotation;
 
         [Space(8f)]
 
@@ -88,7 +89,8 @@ namespace Assets.Scripts.PlayerScripts
         #endregion
 
 
-        public UnityEngine.Events.UnityEvent OnPaused;
+        public UnityEngine.Events.UnityEvent OnStartedTarget;
+        public UnityEngine.Events.UnityEvent OnReachedTarget;
         #endregion
 
         #region UNITY_METHODS
@@ -245,7 +247,9 @@ namespace Assets.Scripts.PlayerScripts
             playerRB.Move
             (
                 transform.position + (playerVelocity * Time.fixedDeltaTime),
-                Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed)
+                lerpRotation 
+                ? Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed)
+                : targetRotation
             );
         }
 
@@ -341,8 +345,6 @@ namespace Assets.Scripts.PlayerScripts
             selectedInteractible?.Interact(this);
         }
 
-        private void ActivatePauseScreen() => GameManager.Instance.SetMenuScreenActive(true);
-
         private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
         {
             actionBefore?.Invoke();
@@ -370,6 +372,8 @@ namespace Assets.Scripts.PlayerScripts
             );
 
             playerNavigationAgent.Warp(target.position);
+
+            playerAnim.SetFloat("velocityMagnitude", 0);
 
             playerNavigationAgent.enabled = false;
 
@@ -446,13 +450,11 @@ namespace Assets.Scripts.PlayerScripts
                 MoveToDestinationAI
                 (   
                     target, 
-                    SetPauseTrue,
+                    () => OnStartedTarget?.Invoke(),
                     () => 
                     { 
                         transform.DORotate(target.rotation.eulerAngles, .7f);
-                        //SetPauseFalse();
-                        ActivatePauseScreen();
-                        OnPaused?.Invoke();
+                        OnReachedTarget?.Invoke();
                     }
                 )
             );
