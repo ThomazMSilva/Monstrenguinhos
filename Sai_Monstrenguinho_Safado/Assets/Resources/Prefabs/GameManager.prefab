@@ -5448,8 +5448,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 133c628ab75b6114bae0178c94ce182f, type: 2}
       - {fileID: 11400000, guid: 13bbb8cfef07d7f44a85493268af3366, type: 2}
       PreSpawn: 1
-      MinInterval: 20
-      MaxInterval: 25
+      MinInterval: 25
+      MaxInterval: 30
       SpawnCap: 4
       serviceTime: []
       AverageServiceTime: 0

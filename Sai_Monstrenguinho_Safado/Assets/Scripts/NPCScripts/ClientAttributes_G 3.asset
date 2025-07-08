@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_G 3
   m_EditorClassIdentifier: 
   clientName: Vitor
-  baseToleranceTimeMin: 50
-  baseToleranceTimeMax: 60
+  baseToleranceTimeMin: 65
+  baseToleranceTimeMax: 80
   cropsOrderedMin: 2
   cropsOrderedMax: 3
   cropPreference: 3
