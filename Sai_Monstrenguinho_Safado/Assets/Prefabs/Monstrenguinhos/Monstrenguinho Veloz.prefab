@@ -54,7 +54,7 @@ MonoBehaviour:
   crittlingAnim: {fileID: 825067624574995154}
   spriteRenderer: {fileID: 778473395415026884}
   CurrentState: 0
-  randomizeColor: 1
+  randomizeColor: 0
   hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
   cropPreferenceName: 3
@@ -207,7 +207,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 6a486200468af1e4f9b97b3d0cbf49ec, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.0047169924, g: 1, b: 0.15469319, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

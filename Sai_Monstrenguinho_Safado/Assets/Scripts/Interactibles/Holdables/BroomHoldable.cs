@@ -8,11 +8,11 @@ namespace Assets.Scripts.Interactibles
         private ManagerScripts.AudioManager audioManager;
         private AudioClip hitClip;
 
-        public override void DropItem()
+        public override void DropItem(PlayerScripts.PlayerController player)
         {
             audioManager.PlayClip(hitClip);
             if (!canDrop) return;
-            base.DropItem();
+            base.DropItem(player);
         }
 
         public override void Start()

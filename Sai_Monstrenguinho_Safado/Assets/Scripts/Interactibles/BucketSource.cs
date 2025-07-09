@@ -18,6 +18,7 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
             {
+                if(triggersAnimation) player.TriggerAnimation();
                 audioManager.PlayClip(bucketAudioClip);
 
                 var bucket = Instantiate(bucketHoldablePrefab, transform);

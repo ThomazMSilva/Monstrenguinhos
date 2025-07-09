@@ -48,6 +48,8 @@ namespace Assets.Scripts.Interactibles
             //UnityEngine.Debug.Log("BoxHoldable interact call");
             if (sender is PlayerController player)
             {
+                if(triggersAnimation) player.TriggerAnimation();
+
                 switch (player.HeldItem.itemTag)
                 {
                     default:

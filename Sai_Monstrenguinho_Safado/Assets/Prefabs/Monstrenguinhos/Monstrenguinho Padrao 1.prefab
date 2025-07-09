@@ -54,7 +54,7 @@ MonoBehaviour:
   crittlingAnim: {fileID: 825067624574995154}
   spriteRenderer: {fileID: 778473395415026884}
   CurrentState: 0
-  randomizeColor: 1
+  randomizeColor: 0
   hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
   cropPreferenceName: 3

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace Assets.Scripts
         [SerializeField] private NPCScripts.NPCManager npcManager;
         [SerializeField] private List<GameObject> visualFeedbacks = new();
         private int currentFeedbacks = 0;
+        [SerializeField] private float tweenDuration = .5f;
+        [SerializeField] private float fadeDuration = 2f;
+        [SerializeField] private Ease easeType = Ease.OutSine;
 
         public void ClearFeedbacks()
         {
@@ -24,11 +28,48 @@ namespace Assets.Scripts
         {
             currentFeedbacks++;
             if (currentFeedbacks > visualFeedbacks.Count) return;
-            visualFeedbacks[^currentFeedbacks].SetActive(false);
-            /*for (int i = 0; i < currentFeedbacks && i < visualFeedbacks.Count; i++)
-            { 
-                visualFeedbacks[i]*//*.transform.GetChild(0).gameObject.*//*.SetActive(false);
-            }*/
+
+            var star = visualFeedbacks[^currentFeedbacks];
+
+            if (star == null || !star.activeSelf) return;
+            var starParent = star.transform.parent;
+
+            starParent.rotation = Quaternion.identity;
+
+            var originalPosition = star.transform.position;
+
+            starParent
+            .DORotate(new(15, 0, 0), tweenDuration)
+            .SetEase(easeType)
+            .OnComplete
+            (
+                () => 
+                {
+                    star.transform.parent = starParent.parent;
+                    
+                    var rb = star.GetComponent<Rigidbody>();
+                    rb.isKinematic = false;
+                    rb.useGravity = true;
+                        
+                    var rend = star.GetComponent<SpriteRenderer>();
+                    rend
+                    .DOFade(0, fadeDuration)
+                    .OnComplete
+                    (   
+                        () =>
+                        { 
+                            star.SetActive(false);
+                            rb.useGravity = false;
+                            rb.isKinematic = true;
+                            var c = rend.material.color;
+                            c.a = 1;
+                            rend.material.color = c;
+                            star.transform.parent = starParent;
+                            star.transform.position = originalPosition;
+                        }
+                    );
+                }
+            );
         }
 
 

@@ -54,6 +54,7 @@ namespace Assets.Scripts.Interactibles
 
             if (player.HeldItem.transform.TryGetComponent<SeedHoldable>(out var heldSeed))
             {
+                if (triggersAnimation) player.TriggerAnimation();
                 audioManager.PlayClip(plantingAudioClip);
                 currentCrop = new(heldSeed.cropAttributes);
                 cropSpriteRenderer.sprite = currentCrop.CropStage1;
@@ -68,8 +69,9 @@ namespace Assets.Scripts.Interactibles
 
         private void WaterSeed(PlayerScripts.PlayerController player)
         {
-            if (currentCrop == null || growCropRoutine != null || currentCrop.isReady) return;
+            if (currentCrop == null || currentCrop.CropName == CropType.None || growCropRoutine != null || currentCrop.isReady) return;
             audioManager.PlayClip(wateringAudioClip);
+            if (triggersAnimation) player.TriggerAnimation();
             growCropRoutine = StartCoroutine(GrowCrop(player));
         }
 
@@ -78,6 +80,7 @@ namespace Assets.Scripts.Interactibles
             if (currentCrop == null) return;
             if (currentCrop.isReady)
             {
+                if (triggersAnimation) player.TriggerAnimation();
                 var cropGO = Instantiate(currentCrop.CropPrefab);
                 if (cropGO.TryGetComponent<Holdable>(out var cropHoldable))
                 {

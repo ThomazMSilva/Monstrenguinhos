@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 namespace Assets.Scripts.ManagerScripts
 {
@@ -23,7 +24,27 @@ namespace Assets.Scripts.ManagerScripts
         public void SetControlsScreenActive(bool active) => uiManager.SetPanelActive(controlsScreen, active);
 
         [SerializeField] private GameObject menuScreen;
+        [SerializeField] private float draggingMenuOffset = 250f;
+        [SerializeField] private float draggingMenuDuration = 1f;
+        [SerializeField] private Ease draggingMenuEase = Ease.OutBounce;
+        private Tween draggingMenuTween;
+
         public void SetMenuScreenActive(bool active) => uiManager.SetPanelActive(menuScreen, active);
+
+        public void DragMenuScreen()
+        {
+            Vector3 originalPos = menuScreen.transform.position;
+            Vector3 menuOffsetPosition = new(originalPos.x, originalPos.y - draggingMenuOffset, originalPos.z);
+
+            menuScreen.transform.position = menuOffsetPosition;
+
+            SetMenuScreenActive(true);
+
+            draggingMenuTween = menuScreen.transform
+                .DOMove(originalPos, draggingMenuDuration, true)
+                .SetEase(draggingMenuEase);
+            
+        }
 
         [SerializeField] private GameObject tutorialScreen;
         public void SetTutorialScreenActive(bool active) => uiManager.SetPanelActive(tutorialScreen, active);

@@ -3589,7 +3589,7 @@ GameObject:
   - component: {fileID: 5535717288878210965}
   - component: {fileID: 1123957184178954682}
   m_Layer: 5
-  m_Name: Menu BF Panel (0)
+  m_Name: Menu BG Panel (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6626,6 +6626,9 @@ MonoBehaviour:
   creditsScreen: {fileID: 9008170906068241630}
   controlsScreen: {fileID: 3568731713160980589}
   menuScreen: {fileID: 8155248344355830659}
+  draggingMenuOffset: 250
+  draggingMenuDuration: 1
+  draggingMenuEase: 30
   tutorialScreen: {fileID: 20003765845249476}
 --- !u!114 &2568013352213505571
 MonoBehaviour:
@@ -7987,7 +7990,7 @@ GameObject:
   - component: {fileID: 2576799710167709049}
   - component: {fileID: 5798749617676264150}
   m_Layer: 5
-  m_Name: Menu BF Panel (1)
+  m_Name: Menu BG Panel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Interactibles
 
         public CropAttributes cropAttributes;
 
-        public override void DropItem()
+        public override void DropItem(PlayerController player)
         {
             return;
         }
@@ -23,6 +23,7 @@ namespace Assets.Scripts.Interactibles
                 switch (player.HeldItem.itemTag)
                 {
                     case ItemTag.Box:
+                        if (triggersAnimation) player.TriggerAnimation();
                         //UnityEngine.Debug.Log("box tag");
                         if (player.TryGetFromHeld<BoxHoldable>(out var box))
                         {

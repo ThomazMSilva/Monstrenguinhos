@@ -28,6 +28,8 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender is PlayerController player && player.HeldItem.itemTag != ItemTag.None)
             {
+                if(triggersAnimation) player.TriggerAnimation();
+
                 if (player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
                     held.ReturnToStartingPoint();
                 

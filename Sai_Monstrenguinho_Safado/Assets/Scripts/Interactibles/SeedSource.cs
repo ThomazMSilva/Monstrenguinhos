@@ -16,6 +16,8 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender != null && sender is PlayerScripts.PlayerController player)
             {
+                player.TriggerAnimation();
+
                 audioManager.PlayClip(seedAudioClip);
 
                 var seed = Instantiate(seedSeedHoldablePrefab, transform);

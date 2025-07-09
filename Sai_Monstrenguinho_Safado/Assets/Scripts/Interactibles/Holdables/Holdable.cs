@@ -55,6 +55,8 @@ namespace Assets.Scripts.Interactibles
 
         public virtual void PickUpItem(PlayerController player)
         {
+            if (triggersAnimation) player.TriggerAnimation();
+
             isHeld = true;
             holdableCollider.enabled = false;
             if(navigationObstacle != null) navigationObstacle.enabled = false;
@@ -64,9 +66,9 @@ namespace Assets.Scripts.Interactibles
             player.SetHeldItem(relatedItem);
         }
 
-        public virtual void DropItem()
+        public virtual void DropItem(PlayerController player)
         {
-            Debug.Log("Tentando dropar item");
+            //Debug.Log("Tentando dropar item");
             Debug.DrawLine(transform.position, transform.position + (Vector3.down * placeRayDist), Color.cyan);
 
             Ray ray = new(transform.position, Vector3.down);
@@ -75,7 +77,9 @@ namespace Assets.Scripts.Interactibles
 
             if (freeDrop && Physics.Raycast(ray, out var hit, placeRayDist, groundLayer))
             {
-                Debug.Log("lugar livre pra dropar");
+                //Debug.Log("lugar livre pra dropar");
+                if(triggersAnimation) player.TriggerAnimation();
+                
                 var buildSis = GridScripts.BuildSystem.instance;
 
                 var pos = buildSis.SnappedPosition(hit.point);
@@ -103,6 +107,7 @@ namespace Assets.Scripts.Interactibles
         {
             if (sender is PlayerController player)
             {
+                //if (triggersAnimation) player.TriggerAnimation();
                 switch (player.HeldItem.itemTag)
                 {
                     case ItemTag.None:

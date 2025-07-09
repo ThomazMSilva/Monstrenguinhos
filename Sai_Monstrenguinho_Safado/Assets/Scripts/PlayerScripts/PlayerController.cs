@@ -340,8 +340,7 @@ namespace Assets.Scripts.PlayerScripts
         {
             if (currentHeldInteractible == null && selectedInteractible == null) return;
             
-            playerAnim.SetTrigger("Action");
-            currentHeldInteractible?.DropItem();
+            currentHeldInteractible?.DropItem(this);
             selectedInteractible?.Interact(this);
         }
 
@@ -392,6 +391,11 @@ namespace Assets.Scripts.PlayerScripts
         public void SetNotInteracting()
         {
             isInteracting = false;
+        }
+
+        public void TriggerAnimation()
+        {
+            playerAnim.SetTrigger("Action");
         }
 
         public void SetHeldItem(HeldItem incomingTag)
