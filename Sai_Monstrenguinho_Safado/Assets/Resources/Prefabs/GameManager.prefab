@@ -5441,8 +5441,8 @@ MonoBehaviour:
       SpawnableClients:
       - {fileID: 11400000, guid: 2ccfb3370ee1db149accacc35b7a5fd5, type: 2}
       PreSpawn: 1
-      MinInterval: 20
-      MaxInterval: 30
+      MinInterval: 0
+      MaxInterval: 0
       SpawnCap: 1
       serviceTime: []
       AverageServiceTime: 0
@@ -5524,7 +5524,7 @@ MonoBehaviour:
       SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 60
+      TimeToPass: 80
       SuccessBased: 1
       SuccessfulClientsToPass: 2
     nextStageID: 7
