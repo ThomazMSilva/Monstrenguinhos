@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad2a97cd55d723948820206bd7a0b523, type: 3}
-  m_Name: ClientAttributes_D
+  m_Name: ClientAttributes_E_MEDIUM
   m_EditorClassIdentifier: 
-  clientName: Karina
-  baseToleranceTimeMin: 130
-  baseToleranceTimeMax: 130
-  cropsOrderedMin: 5
-  cropsOrderedMax: 6
-  cropPreference: 0
-  preferencePercentage: 50
+  clientName: Gilson
+  baseToleranceTimeMin: 80
+  baseToleranceTimeMax: 100
+  cropsOrderedMin: 2
+  cropsOrderedMax: 2
+  cropPreference: 2
+  preferencePercentage: 25
