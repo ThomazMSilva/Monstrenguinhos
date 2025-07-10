@@ -6,116 +6,6 @@ using System.Linq;
 
 namespace Assets.Scripts
 {
-    [System.Serializable]
-    public class StageAttributes
-    {
-        public string stageName;
-        public int stageID;
-        public bool isTutorial;
-        public bool isFinal;
-
-        [System.Serializable]
-        public class NpcAttributes
-        {
-            [Space(8f)]
-
-            public List<ClientAttributes> SpawnableClients = new(3);
-
-            [Space(8f), Header("Spawn"), Space(5f)]
-
-            public bool PreSpawn = true;
-            public float MinInterval = 50f;
-            public float MaxInterval = 60f;
-            private float currentInterval;
-            public float Interval{ get => currentInterval; set { currentInterval = value; } }
-            private float timeRemaining;
-            public float TimeRemaining{ get => timeRemaining; set { timeRemaining = value; } }
-            
-            private float timeWaitedWithNoClients;
-            public float TimeWaitedWithNoClients { get => timeWaitedWithNoClients; set => timeWaitedWithNoClients = value; }
-            private float timeWaitedWithClients;
-            public float TimeWaitedWithClients { get => timeWaitedWithClients; set => timeWaitedWithClients = value; }
-            
-            private float timeTakenFromNextStage;
-            public float TimeTakenFromNextStage { get => timeTakenFromNextStage; set => timeTakenFromNextStage = value; }
-
-            public int SpawnCap = 4;
-            private int spawnedAmount;
-            public int SpawnedAmount { get => spawnedAmount; set => spawnedAmount = value; }
-            private int clientsCurrentlyActive;
-            public int ClientsRemaining { get => clientsCurrentlyActive; set => clientsCurrentlyActive = value; }
-            public List<float> serviceTime;
-            public float AverageServiceTime;
-
-            public float AverageTime() => serviceTime.Average();
-        }
-
-        [System.Serializable]
-        public class EnemyAttributes
-        {
-            public List<GameObject> SpawnableCrittlings;
-            [Space(8f), Header("Spawn"), Space(5f)]
-
-            public float MinInterval = 15f;
-            public float MaxInterval = 20f;
-            private float currentInterval;
-            public float Interval { get => currentInterval; set { currentInterval = value; } }
-            private float timeRemaining;
-            public float TimeRemaining { get => timeRemaining; set { timeRemaining = value; } }
-            
-            private float timeWaitedBetweenSpawns;
-            public float TimeWaitedBetweenSpawns { get => timeWaitedBetweenSpawns; set => timeWaitedBetweenSpawns = value; }
-
-            public int MinHorde = 1;
-            public int MaxHorde = 2;
-            public int SpawnCap = 6;
-            private int spawnedAmount;
-            public int SpawnedAmount { get => spawnedAmount; set => spawnedAmount = value; }
-        }
-
-        [System.Serializable]
-        public class StageConditions
-        {
-            [Space(8f), Header("Condições de Passagem"), Space(8f)]
-
-            public bool TimeBased;
-            [Tooltip("Em segundos")]
-            public float TimeToPass = 300;
-
-            [Space(8f)]
-
-            public bool SuccessBased = true;
-            public int SuccessfulClientsToPass = 1;
-
-            [Space(8f), Header("Estado da Condição"), Space(8f)]
-            private float timeElapsed;
-            public float TimeElapsed { get => timeElapsed; set { timeElapsed = value; } }
-            private int successfulClientsPassed;
-            public int SuccessfulClientsPassed { get => successfulClientsPassed; set { successfulClientsPassed = value; } }
-            private int failedClientsPassed;
-            public int FailedClientsPassed { get => failedClientsPassed; set { failedClientsPassed = value; } }
-        }
-
-        public NpcAttributes Clients;
-        public EnemyAttributes Crittlings;
-        public StageConditions Conditions;
-
-        private float stageTime;
-        public float StageTime { get => stageTime; set => stageTime = value; }
-
-        [Space(8f)]
-
-        public int nextStageID;
-        public UnityEngine.Events.UnityEvent OnCompleted;
-
-        public void Reset()
-        {
-            Conditions.TimeElapsed = 0;
-            Conditions.SuccessfulClientsPassed = 0;
-            Conditions.FailedClientsPassed = 0;
-    }
-    }
-
     public class GameManager : MonoBehaviour
     {
         private static readonly string prefabPath = "Prefabs/GameManager";
@@ -158,19 +48,22 @@ namespace Assets.Scripts
         public bool IsLoading;
 
         [Space(8f)]
-        [SerializeField] private List<StageAttributes> stageAttributes = new(1);
-        public List<StageAttributes> StageAttributes => stageAttributes;
+        [SerializeField] private StageSO stage;
+
+        [SerializeField] private List<StageAttributes> stageAttributes;
+        private List<StageAttributes> _stageAttributes;
+        public List<StageAttributes> StageAttributes => _stageAttributes;
 
         private StageAttributes currentStageAttributes;
         public StageAttributes CurrentStage => currentStageAttributes;
 
-        public StageAttributes LastStage => stageAttributes.FirstOrDefault(s => s.isFinal);
+        public StageAttributes LastStage => _stageAttributes.FirstOrDefault(s => s.isFinal);
 
         public void PassToStage(int stageID)
         {
             if (currentStageAttributes != null && stageID == currentStageAttributes.stageID) return;
             
-            StageAttributes stageToGo = stageAttributes.FirstOrDefault(s => s.stageID == stageID);
+            StageAttributes stageToGo = _stageAttributes.FirstOrDefault(s => s.stageID == stageID);
 
             if (stageToGo == null) return;
          
@@ -185,7 +78,84 @@ namespace Assets.Scripts
         {
             if (!InstanceInitializedCorrectly()) return;
 
-            int firstStage = stageAttributes.Min(s => s.stageID);
+            if (stage != null && stage.attributes != null)
+            {
+                _stageAttributes = new List<StageAttributes>();
+                foreach (var original in stage.attributes)
+                {
+                    StageAttributes copy = new()
+                    {
+                        stageName = original.stageName,
+                        stageID = original.stageID,
+                        isTutorial = original.isTutorial,
+                        isFinal = original.isFinal,
+                        StageTime = original.StageTime,
+                        nextStageID = original.nextStageID,
+                        OnCompleted = original.OnCompleted
+                    };
+
+                    if (original.Clients != null)
+                    {
+                        copy.Clients = new StageAttributes.NpcAttributes()
+                        {
+                            SpawnableClients = new List<ClientAttributes>(original.Clients.SpawnableClients),
+                            PreSpawn = original.Clients.PreSpawn,
+                            MinInterval = original.Clients.MinInterval,
+                            MaxInterval = original.Clients.MaxInterval,
+                            Interval = original.Clients.Interval,
+                            TimeRemaining = original.Clients.TimeRemaining,
+                            ForceClientOnScreen = original.Clients.ForceClientOnScreen,
+                            waitToForce = original.Clients.waitToForce,
+                            waitForStageToEndBeforeSpawning = original.Clients.waitForStageToEndBeforeSpawning,
+                            CurrentTimeWaitedWithNoClients = original.Clients.CurrentTimeWaitedWithNoClients,
+                            TotalTimeWaitedWithNoClients = original.Clients.TotalTimeWaitedWithNoClients,
+                            TotalTimeWaitedWithClients = original.Clients.TotalTimeWaitedWithClients,
+                            TimeTakenFromNextStage = original.Clients.TimeTakenFromNextStage,
+                            SpawnCap = original.Clients.SpawnCap,
+                            SpawnedAmount = original.Clients.SpawnedAmount,
+                            ClientsRemaining = original.Clients.ClientsRemaining,
+                            ServiceTime = original.Clients.ServiceTime != null ? new List<float>(original.Clients.ServiceTime) : new List<float>(),
+                            AverageServiceTime = original.Clients.AverageServiceTime
+                        };
+                    }
+
+                    if (original.Crittlings != null)
+                    {
+                        copy.Crittlings = new StageAttributes.EnemyAttributes()
+                        {
+                            SpawnableCrittlings = original.Crittlings.SpawnableCrittlings != null ? new List<GameObject>(original.Crittlings.SpawnableCrittlings) : new List<GameObject>(),
+                            MinInterval = original.Crittlings.MinInterval,
+                            MaxInterval = original.Crittlings.MaxInterval,
+                            Interval = original.Crittlings.Interval,
+                            TimeRemaining = original.Crittlings.TimeRemaining,
+                            TimeWaitedBetweenSpawns = original.Crittlings.TimeWaitedBetweenSpawns,
+                            MinHorde = original.Crittlings.MinHorde,
+                            MaxHorde = original.Crittlings.MaxHorde,
+                            SpawnCap = original.Crittlings.SpawnCap,
+                            SpawnedAmount = original.Crittlings.SpawnedAmount
+                        };
+                    }
+
+                    if (original.Conditions != null)
+                    {
+                        copy.Conditions = new StageAttributes.StageConditions()
+                        {
+                            TimeBased = original.Conditions.TimeBased,
+                            TimeToPass = original.Conditions.TimeToPass,
+                            SuccessBased = original.Conditions.SuccessBased,
+                            SuccessfulClientsToPass = original.Conditions.SuccessfulClientsToPass,
+                            TimeElapsed = original.Conditions.TimeElapsed,
+                            SuccessfulClientsPassed = original.Conditions.SuccessfulClientsPassed,
+                            FailedClientsPassed = original.Conditions.FailedClientsPassed
+                        };
+                    }
+
+                    _stageAttributes.Add(copy);
+                }
+            }
+
+
+            int firstStage = _stageAttributes.Min(s => s.stageID);
             PassToStage(firstStage);
 
             _audioManager.Initialize(this);
@@ -221,7 +191,7 @@ namespace Assets.Scripts
 
         public void Restart()
         {
-            foreach(var stage in stageAttributes)
+            foreach(var stage in _stageAttributes)
             {
                 stage.Reset();
             }

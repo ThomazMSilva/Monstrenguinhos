@@ -47,16 +47,25 @@ namespace Assets.Scripts.ManagerScripts
                 switch (requiredCondition)
                 {
                     case RotationCondition.StageTimeBased:
-                        float rotationStepTime = 1 / conditions.TimeToPass;
-                        var currentRotationTime = Mathf.Lerp(0, 360 * multiplier, conditions.TimeElapsed * rotationStepTime);
+                        float currentRotationTime = 0;
+
+                        if (conditions.TimeBased)
+                        {
+                            float rotationStepTime = 1 / conditions.TimeToPass;
+                            currentRotationTime = Mathf.Lerp(0, 360 * multiplier, conditions.TimeElapsed * rotationStepTime);
+                        }
                         
                         if (currentRotationTime > highestValue) 
                             highestValue = currentRotationTime;
                         break;
 
                     case RotationCondition.StageSuccessBased:
-                        var rotationStepSuccess = 1 / conditions.SuccessfulClientsToPass;
-                        var currentRotationSuccess = Mathf.Lerp(0, 360 * multiplier, conditions.SuccessfulClientsPassed * rotationStepSuccess);
+                        float currentRotationSuccess = 0;
+                        if (conditions.SuccessBased)
+                        {
+                            var rotationStepSuccess = 1 / conditions.SuccessfulClientsToPass;
+                            currentRotationSuccess = Mathf.Lerp(0, 360 * multiplier, conditions.SuccessfulClientsPassed * rotationStepSuccess);
+                        }
 
                         if (currentRotationSuccess > highestValue)
                             highestValue = currentRotationSuccess;

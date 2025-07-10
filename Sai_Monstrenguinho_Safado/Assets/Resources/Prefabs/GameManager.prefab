@@ -5342,6 +5342,7 @@ MonoBehaviour:
       playerHitAudioClip: {fileID: 8300000, guid: 8c4959eed83922a45a5670e63058bc61, type: 3}
   isPaused: 0
   IsLoading: 0
+  stage: {fileID: 11400000, guid: 733b34ff8bdd94246a861ed0a1aa46bd, type: 2}
   stageAttributes:
   - stageName: Tutorial
     stageID: 0
@@ -5353,9 +5354,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 2
       MaxInterval: 4
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 1
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5383,9 +5385,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 25
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5414,9 +5417,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 20
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5445,9 +5449,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 20
       MaxInterval: 30
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 1
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5478,9 +5483,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 10
       MaxInterval: 15
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5511,9 +5517,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 10
       MaxInterval: 20
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5546,9 +5553,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 25
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5578,9 +5586,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 30
       MaxInterval: 40
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 1
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5614,9 +5623,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 30
       MaxInterval: 35
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 3
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5647,9 +5657,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 30
       MaxInterval: 40
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5680,9 +5691,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 0
       MaxInterval: 0
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 1
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
@@ -5713,9 +5725,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 25
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 3
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
@@ -5747,9 +5760,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 25
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 4
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
@@ -5779,9 +5793,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 2
       MaxInterval: 3
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 3
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
@@ -5810,9 +5825,10 @@ MonoBehaviour:
       PreSpawn: 1
       MinInterval: 15
       MaxInterval: 25
+      ForceClientOnScreen: 0
+      waitToForce: 5
+      waitForStageToEndBeforeSpawning: 0
       SpawnCap: 3
-      serviceTime: []
-      AverageServiceTime: 0
     Crittlings:
       SpawnableCrittlings:
       - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}

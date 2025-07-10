@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Assets.Scripts.NPCScripts
@@ -113,6 +114,7 @@ namespace Assets.Scripts.NPCScripts
 
         private void SpawnClient()
         {
+            if (game.CurrentStage.Clients.SpawnableClients.Count <= 0) return;
             var client = Instantiate(npcPrefab, transform.position, transform.rotation, npcParent).GetComponent<NPCBehaviour>();
             spawnedNPCs.Add(client);
             game.CurrentStage.Clients.SpawnedAmount += 1;
@@ -192,62 +194,102 @@ namespace Assets.Scripts.NPCScripts
             }
         }
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         private void Update()
         {
             if (game.IsPaused) return;
 
+            var client = game.CurrentStage.Clients;
+
             game.CurrentStage.StageTime += Time.deltaTime;
 
-            if(game.CurrentStage.Clients.ClientsRemaining <= 0)
+            if(client.ClientsRemaining <= 0)
             {
-                game.CurrentStage.Clients.TimeWaitedWithNoClients += Time.deltaTime;
+                client.TotalTimeWaitedWithNoClients += Time.deltaTime;
+                if (client.ForceClientOnScreen)
+                {
+                    client.CurrentTimeWaitedWithNoClients += Time.deltaTime;
+                }
             }
 
-            if(game.CurrentStage.Clients.ClientsRemaining > 0)
+            if(client.ClientsRemaining > 0)
             {
-                game.CurrentStage.Clients.TimeWaitedWithClients += Time.deltaTime;
+                client.TotalTimeWaitedWithClients += Time.deltaTime;
+                if (client.ForceClientOnScreen && client.CurrentTimeWaitedWithNoClients != 0)
+                {
+                    client.CurrentTimeWaitedWithNoClients = 0;
+                }
             }
         }
-#endif
+//#endif
         private IEnumerator SpawnRoutine()
         {
             while (true)
             {
                 if(isGamePaused) yield return waitUntilGameUnpauses;
 
-                while (spawnedNPCs.Count >= game.CurrentStage.Clients.SpawnCap)
-                {
-                    if (isGamePaused) yield return waitUntilGameUnpauses;
-                    yield return waitForCapCheck;
-                }
+                var clients = game.CurrentStage.Clients;
 
-                game.CurrentStage.Clients.Interval = Random.Range(game.CurrentStage.Clients.MinInterval, game.CurrentStage.Clients.MaxInterval);
+                yield return WaitForSpawnCap(clients);
 
-                game.CurrentStage.Clients.TimeRemaining = game.CurrentStage.Clients.Interval;
-
-                while (game.CurrentStage.Clients.TimeRemaining > 0)
-                {
-                    if (isGamePaused) yield return waitUntilGameUnpauses;
-                    game.CurrentStage.Clients.TimeRemaining -= Time.deltaTime;
-                    yield return null;
-                }
+                yield return WaitForClientInterval(clients);
                 
-                if(readyToPassStage)
-                {
-                    while (game.CurrentStage.Clients.ClientsRemaining > 0)
-                    {
-                        game.CurrentStage.Clients.TimeTakenFromNextStage += Time.deltaTime;
-                        yield return null;
-                    }
-                    readyToPassStage = false;
-                    game.PassToStage(game.CurrentStage.nextStageID);
-                }
+                yield return CheckStageProgression(clients);
 
                 SpawnClient();
             }
         }
-    
+        
+        private IEnumerator WaitForSpawnCap(StageAttributes.NpcAttributes clients)
+        {
+            while (spawnedNPCs.Count >= clients.SpawnCap)
+            {
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+                yield return waitForCapCheck;
+                if (readyToPassStage) yield break;
+            }
+        }
+
+        private IEnumerator WaitForClientInterval(StageAttributes.NpcAttributes clients)
+        {
+            clients.Interval = Random.Range(clients.MinInterval, clients.MaxInterval);
+
+            clients.TimeRemaining = clients.Interval;
+
+            while (clients.TimeRemaining > 0)
+            {
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+
+                if (clients.ForceClientOnScreen && clients.CurrentTimeWaitedWithNoClients >= clients.waitToForce)
+                {
+                    clients.CurrentTimeWaitedWithNoClients = 0;
+                    clients.TimeRemaining = 0;
+                    yield break;
+                }
+                if (readyToPassStage) yield break;
+
+                clients.TimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        private IEnumerator CheckStageProgression(StageAttributes.NpcAttributes clients)
+        {
+            if (readyToPassStage)
+            {
+                if (clients.waitForStageToEndBeforeSpawning)
+                {
+                    while (clients.ClientsRemaining > 0)
+                    {
+                        clients.TimeTakenFromNextStage += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                readyToPassStage = false;
+                game.PassToStage(game.CurrentStage.nextStageID);
+            }
+        }
+
         private void ReturnAllClients(NPCBehaviour except = null)
         {
             bool exc = (except != null); 
@@ -281,13 +323,14 @@ namespace Assets.Scripts.NPCScripts
 
         private IEnumerator StageTimer()
         {
-            game.CurrentStage.Conditions.TimeElapsed = 0;
+            var conditions = game.CurrentStage.Conditions;
+            conditions.TimeElapsed = 0;
             
-            while (game.CurrentStage.Conditions.TimeElapsed < game.CurrentStage.Conditions.TimeToPass)
+            while (conditions.TimeElapsed < conditions.TimeToPass)
             {
                 if (isGamePaused) yield return waitUntilGameUnpauses;
 
-                game.CurrentStage.Conditions.TimeElapsed += Time.deltaTime;
+                conditions.TimeElapsed += Time.deltaTime;
                 yield return null;
             }
             Debug.Log("Acabou o tempo do "+game.CurrentStage.stageName);

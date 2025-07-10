@@ -211,7 +211,7 @@ namespace Assets.Scripts.NPCScripts
         {
             if(toleranceRoutine != null) StopCoroutine(toleranceRoutine);
             StageAttributes stage = GameManager.Instance.CurrentStage;
-            stage.Clients.serviceTime.Add(serviceTime);
+            stage.Clients.ServiceTime.Add(serviceTime);
             stage.Clients.AverageServiceTime = stage.Clients.AverageTime();
 
             orderPlacement.SetActive(false);
