@@ -6,6 +6,7 @@ namespace Assets.Scripts.ManagerScripts
     public class UIReference : MonoBehaviour
     {
         [SerializeField] private UINavigationManager uiManager;
+
         public void LoadScene(string scene)
         {
             GameManager.Instance.LoadScene(scene);
@@ -13,8 +14,45 @@ namespace Assets.Scripts.ManagerScripts
         }
 
         [SerializeField] private GameObject optionsScreen;
+        [SerializeField] private UnityEngine.UI.Slider sfxSlider;
+        [SerializeField] private UnityEngine.UI.Slider musicSlider;
+        [SerializeField] private UnityEngine.UI.Slider generalSlider;
+
+        private void Awake()
+        {
+            InitializeAudioSettings();
+        }
+
+        private void InitializeAudioSettings()
+        {
+            var audioManager = GameManager.Instance.AudioManager;
+            if (generalSlider != null)
+            {
+                if (!PlayerPrefs.HasKey(audioManager.GeneralPrefs)) PlayerPrefs.SetFloat(audioManager.GeneralPrefs, generalSlider.value);
+                generalSlider.onValueChanged.AddListener(OnGeneralChanged);
+                generalSlider.value = PlayerPrefs.GetFloat(audioManager.GeneralPrefs);
+            }
+
+            if (musicSlider != null)
+            {
+                if (!PlayerPrefs.HasKey(audioManager.MusicPrefs)) PlayerPrefs.SetFloat(audioManager.MusicPrefs, musicSlider.value);
+                musicSlider.onValueChanged.AddListener(OnMusicChanged);
+                musicSlider.value = PlayerPrefs.GetFloat(audioManager.MusicPrefs);
+            }
+
+            if (sfxSlider != null)
+            {
+                if (!PlayerPrefs.HasKey(audioManager.SfxPrefs)) PlayerPrefs.SetFloat(audioManager.SfxPrefs, sfxSlider.value);
+                sfxSlider.onValueChanged.AddListener(OnSfxChanged);
+                sfxSlider.value = PlayerPrefs.GetFloat(audioManager.SfxPrefs);
+            }
+        }
 
         public void SetOptionsScreenActive(bool active) => uiManager.SetPanelActive(optionsScreen, active);
+
+        public void OnSfxChanged(float value) => GameManager.Instance.AudioManager.OnSfxChanged(value);
+        public void OnMusicChanged(float value) => GameManager.Instance.AudioManager.OnMusicChanged(value);
+        public void OnGeneralChanged(float value) => GameManager.Instance.AudioManager.OnGeneralChanged(value);
 
         [SerializeField] private GameObject creditsScreen;
 

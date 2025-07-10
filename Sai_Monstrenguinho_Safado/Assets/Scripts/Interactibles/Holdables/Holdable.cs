@@ -90,7 +90,7 @@ namespace Assets.Scripts.Interactibles
             }
         }
         
-        public virtual void ReturnToStartingPoint()
+        public virtual void ReturnToStartingPoint(bool clear = false)
         {
             if (originalParent == null)
             {

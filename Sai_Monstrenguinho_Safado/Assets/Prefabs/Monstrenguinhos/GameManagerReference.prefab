@@ -6623,6 +6623,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManager: {fileID: 2568013352213505571}
   optionsScreen: {fileID: 3451919353916341182}
+  sfxSlider: {fileID: 6972558722324344129}
+  musicSlider: {fileID: 3880934653449200211}
+  generalSlider: {fileID: 8306684962358080041}
   creditsScreen: {fileID: 9008170906068241630}
   controlsScreen: {fileID: 3568731713160980589}
   menuScreen: {fileID: 8155248344355830659}

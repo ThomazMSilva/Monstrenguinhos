@@ -31,7 +31,7 @@ namespace Assets.Scripts.Interactibles
                 if(triggersAnimation) player.TriggerAnimation();
 
                 if (player.HeldItem.transform.TryGetComponent<Holdable>(out var held))
-                    held.ReturnToStartingPoint();
+                    held.ReturnToStartingPoint(true);
                 
                 else 
                     player.SetHeldItem(new());

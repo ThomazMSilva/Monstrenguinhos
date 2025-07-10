@@ -7,8 +7,11 @@ namespace Assets.Scripts.ManagerScripts
     public class AudioManager
     {
         [SerializeField] private string generalPrefs = "GeneralVolumePref";
+        public string GeneralPrefs => generalPrefs;
         [SerializeField] private string musicPrefs = "MusicVolumePref";
+        public string MusicPrefs => musicPrefs;
         [SerializeField] private string sfxPrefs = "SFXVolumePref";
+        public string SfxPrefs => sfxPrefs;
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
         public AudioSource SfxSource => sfxSource;
@@ -23,16 +26,8 @@ namespace Assets.Scripts.ManagerScripts
         [SerializeField] private AudioReferences _audioReferences;
         public AudioReferences AudioClips => _audioReferences;
 
-        private MonoBehaviour _coroutineRunner;
-
         public void Initialize(MonoBehaviour coroutineRunner)
         {
-            if(coroutineRunner == null)
-            {
-                Debug.LogError("Audio Source não teve MonoBehaviour serializado.");
-            }
-
-            _coroutineRunner = coroutineRunner;
 
             if (generalSlider != null)
             {
@@ -81,19 +76,19 @@ namespace Assets.Scripts.ManagerScripts
             Object.Destroy(sfx.gameObject, clip.length);
         }
 
-        private void OnGeneralChanged(float value)
+        public void OnGeneralChanged(float value)
         {
             AudioListener.volume = value;
             PlayerPrefs.SetFloat(generalPrefs, value);
         }
 
-        private void OnMusicChanged(float value)
+        public void OnMusicChanged(float value)
         {
             musicSource.volume = value;
             PlayerPrefs.SetFloat(musicPrefs, value);
         }
 
-        private void OnSfxChanged(float value)
+        public void OnSfxChanged(float value)
         {
             sfxSource.volume = value;
             PlayerPrefs.SetFloat(sfxPrefs, value);
