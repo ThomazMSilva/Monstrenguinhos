@@ -35,6 +35,9 @@ namespace Assets.Scripts.Interactibles
                         PlantSeed(player);
                         break;
 
+                    case PlayerScripts.ItemTag.Crop: 
+                        break;
+
                     case PlayerScripts.ItemTag.Broom:
                         if (!broomInteraction) 
                             break;

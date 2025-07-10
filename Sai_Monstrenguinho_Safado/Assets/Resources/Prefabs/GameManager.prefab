@@ -1213,11 +1213,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5c8f6325a8ec2cb488fa5d0e3f9f05f4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a8e4dce343057044db77421fb58ad8b9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5309,6 +5309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a00b4057e222ca4eb917fb5f57750d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
   _sceneLoader:
     fadeCanvasGroup: {fileID: 1990601068669872197}
     fadeTime: 0.5
@@ -5340,6 +5341,7 @@ MonoBehaviour:
       pickingSeedAudioClip: {fileID: 8300000, guid: 8255d1df78431b647980ee72cf3bd3ba, type: 3}
       playerHitAudioClip: {fileID: 8300000, guid: 8c4959eed83922a45a5670e63058bc61, type: 3}
   isPaused: 0
+  IsLoading: 0
   stageAttributes:
   - stageName: Tutorial
     stageID: 0
@@ -5830,10 +5832,6 @@ MonoBehaviour:
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  optionsScreen: {fileID: 6764307416009737589}
-  creditsScreen: {fileID: 7809107946588094215}
-  controlsScreen: {fileID: 378891535186625282}
-  menuScreen: {fileID: 2526418947027334608}
 --- !u!1 &5941088186837337013
 GameObject:
   m_ObjectHideFlags: 0

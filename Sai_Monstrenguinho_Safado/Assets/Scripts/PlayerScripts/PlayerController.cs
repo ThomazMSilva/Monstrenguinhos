@@ -340,8 +340,9 @@ namespace Assets.Scripts.PlayerScripts
         {
             if (currentHeldInteractible == null && selectedInteractible == null) return;
             
-            currentHeldInteractible?.DropItem(this);
             selectedInteractible?.Interact(this);
+            if(selectedInteractible == null)
+                currentHeldInteractible?.DropItem(this);
         }
 
         private System.Collections.IEnumerator MoveToDestinationAI(Transform target, System.Action actionBefore = null, System.Action actionAfter = null)
