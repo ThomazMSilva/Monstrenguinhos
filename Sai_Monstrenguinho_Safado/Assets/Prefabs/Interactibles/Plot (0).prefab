@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 2171521741204294079}
+  triggersAnimation: 1
   cropSpriteRenderer: {fileID: 5527409782472608198}
   fadeMaterial: {fileID: 2100000, guid: 30a78ad253aefc4459e688342ace4064, type: 2}
   broomInteraction: 0
@@ -217,7 +218,7 @@ MonoBehaviour:
     isWatered: 0
     isReady: 0
   fadeDuration: 1.5
-  fadeStrength: 0.25
+  fadeStrength: 0.5
   fadeEase: 4
 --- !u!1 &5039511715997562021
 GameObject:

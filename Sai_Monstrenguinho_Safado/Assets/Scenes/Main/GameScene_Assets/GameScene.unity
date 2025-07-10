@@ -26239,7 +26239,7 @@ MonoBehaviour:
   speed: 4
   sprintMultiplier: 1.5
   rotationSpeed: 15
-  stopWhenInteracting: 1
+  stopWhenInteracting: 0
   hasInteractionCooldown: 0
   lerpRotation: 0
   pauseLocation: {fileID: 385500793}

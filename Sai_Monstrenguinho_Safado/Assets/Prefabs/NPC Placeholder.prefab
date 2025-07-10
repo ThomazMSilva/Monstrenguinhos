@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -4826,6 +4826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 2782149189306596163}
+  triggersAnimation: 1
   npcAnim: {fileID: 3456439284928381389}
   npcRenderer:
   - {fileID: 1827106532416741795}
@@ -4839,6 +4840,7 @@ MonoBehaviour:
   orderLayoutGroup: {fileID: 6014567894318155734}
   orderTimer: {fileID: 2281138210849647865}
   orderTMP: {fileID: 6158295776584438315}
+  maximumSize: 0
   orderFadeDuration: 1.5
   deliveredCrops: 
   orderImagePrefab: {fileID: 7399510674358752049, guid: d777b697c4ea62a4fa30b1c316a1b525, type: 3}
