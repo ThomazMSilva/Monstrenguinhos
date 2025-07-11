@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ClientAttributes_L_DIFICULT 2
   m_EditorClassIdentifier: 
   clientName: MinHo
-  baseToleranceTimeMin: 100
-  baseToleranceTimeMax: 110
+  baseToleranceTimeMin: 70
+  baseToleranceTimeMax: 80
   cropsOrderedMin: 3
   cropsOrderedMax: 3
-  cropPreference: 1
+  cropPreference: 3
   preferencePercentage: 20

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_I_DIFICULT
   m_EditorClassIdentifier: 
   clientName: "B\xE1rbara"
-  baseToleranceTimeMin: 90
-  baseToleranceTimeMax: 100
+  baseToleranceTimeMin: 70
+  baseToleranceTimeMax: 80
   cropsOrderedMin: 2
   cropsOrderedMax: 3
   cropPreference: 1

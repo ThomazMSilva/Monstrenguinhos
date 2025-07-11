@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_N_BOSS
   m_EditorClassIdentifier: 
   clientName: Karina
-  baseToleranceTimeMin: 180
-  baseToleranceTimeMax: 150
+  baseToleranceTimeMin: 120
+  baseToleranceTimeMax: 120
   cropsOrderedMin: 5
   cropsOrderedMax: 6
   cropPreference: 0

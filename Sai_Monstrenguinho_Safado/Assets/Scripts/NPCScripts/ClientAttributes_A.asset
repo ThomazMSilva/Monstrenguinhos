@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2a97cd55d723948820206bd7a0b523, type: 3}
   m_Name: ClientAttributes_A
   m_EditorClassIdentifier: 
-  clientName: Gerson
-  baseToleranceTimeMin: 60
-  baseToleranceTimeMax: 80
+  clientName: Tuto
+  baseToleranceTimeMin: 100
+  baseToleranceTimeMax: 100
   cropsOrderedMin: 1
-  cropsOrderedMax: 2
-  cropPreference: 1
-  preferencePercentage: 50
+  cropsOrderedMax: 1
+  cropPreference: 0
+  preferencePercentage: 64

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ClientAttributes_K_DIFICULT
   m_EditorClassIdentifier: 
   clientName: Biel
-  baseToleranceTimeMin: 100
-  baseToleranceTimeMax: 110
+  baseToleranceTimeMin: 70
+  baseToleranceTimeMax: 80
   cropsOrderedMin: 3
   cropsOrderedMax: 3
-  cropPreference: 2
+  cropPreference: 1
   preferencePercentage: 20

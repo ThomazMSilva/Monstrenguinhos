@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ClientAttributes_J_DIFICULT
   m_EditorClassIdentifier: 
   clientName: Gabi
-  baseToleranceTimeMin: 100
-  baseToleranceTimeMax: 110
+  baseToleranceTimeMin: 70
+  baseToleranceTimeMax: 80
   cropsOrderedMin: 2
   cropsOrderedMax: 3
-  cropPreference: 3
+  cropPreference: 2
   preferencePercentage: 20

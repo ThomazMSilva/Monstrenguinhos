@@ -19,7 +19,7 @@ MonoBehaviour:
     isFinal: 0
     Clients:
       SpawnableClients:
-      - {fileID: 11400000, guid: cc7965ad8de51bd4594c808238b881b1, type: 2}
+      - {fileID: 11400000, guid: 87c2b241dab10454a993858b65321bab, type: 2}
       PreSpawn: 0
       MinInterval: 3
       MaxInterval: 5
@@ -29,22 +29,22 @@ MonoBehaviour:
       SpawnCap: 1
     Crittlings:
       SpawnableCrittlings:
-      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
       MinInterval: 50
       MaxInterval: 60
       MinHorde: 1
       MaxHorde: 1
       SpawnCap: 2
     Conditions:
-      TimeBased: 0
-      TimeToPass: 0
+      TimeBased: 1
+      TimeToPass: 100
       SuccessBased: 1
       SuccessfulClientsToPass: 1
     nextStageID: 1
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 1
     stageID: 1
     isTutorial: 0
     isFinal: 0
@@ -52,174 +52,215 @@ MonoBehaviour:
       SpawnableClients:
       - {fileID: 11400000, guid: 302c26a6f056a9d42bc1c2ae8d8bf970, type: 2}
       PreSpawn: 0
-      MinInterval: 20
-      MaxInterval: 30
+      MinInterval: 15
+      MaxInterval: 15
       ForceClientOnScreen: 1
       waitToForce: 5
       waitForStageToEndBeforeSpawning: 0
       SpawnCap: 2
     Crittlings:
       SpawnableCrittlings:
-      - {fileID: 4164327085067446792, guid: 68f2e3c5946cdf042aa98d632a4b0e8e, type: 3}
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
+      MinInterval: 40
+      MaxInterval: 45
+      MinHorde: 1
+      MaxHorde: 1
+      SpawnCap: 2
     Conditions:
       TimeBased: 1
-      TimeToPass: 15
+      TimeToPass: 30
       SuccessBased: 0
       SuccessfulClientsToPass: 0
     nextStageID: 2
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 2
     stageID: 2
     isTutorial: 0
     isFinal: 0
     Clients:
-      SpawnableClients: []
+      SpawnableClients:
+      - {fileID: 11400000, guid: 754785574073a674b8fb812dbad7d7e1, type: 2}
+      - {fileID: 11400000, guid: 2ccfb3370ee1db149accacc35b7a5fd5, type: 2}
       PreSpawn: 0
-      MinInterval: 0
-      MaxInterval: 0
-      ForceClientOnScreen: 0
+      MinInterval: 10
+      MaxInterval: 15
+      ForceClientOnScreen: 1
       waitToForce: 5
       waitForStageToEndBeforeSpawning: 0
-      SpawnCap: 0
+      SpawnCap: 2
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
+      MinInterval: 35
+      MaxInterval: 40
+      MinHorde: 1
+      MaxHorde: 2
+      SpawnCap: 2
     Conditions:
       TimeBased: 1
-      TimeToPass: 30
+      TimeToPass: 90
       SuccessBased: 0
       SuccessfulClientsToPass: 0
     nextStageID: 3
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 3
     stageID: 3
     isTutorial: 0
     isFinal: 0
     Clients:
-      SpawnableClients: []
+      SpawnableClients:
+      - {fileID: 11400000, guid: 2a9a3949edaa56642bb661ad5ae18ce3, type: 2}
+      - {fileID: 11400000, guid: 5dec57598a792b241a80aec9cae22aa7, type: 2}
+      - {fileID: 11400000, guid: 2ccfb3370ee1db149accacc35b7a5fd5, type: 2}
       PreSpawn: 0
-      MinInterval: 0
-      MaxInterval: 0
-      ForceClientOnScreen: 0
+      MinInterval: 10
+      MaxInterval: 15
+      ForceClientOnScreen: 1
       waitToForce: 5
       waitForStageToEndBeforeSpawning: 0
-      SpawnCap: 0
+      SpawnCap: 2
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      MinInterval: 30
+      MaxInterval: 40
+      MinHorde: 1
+      MaxHorde: 2
+      SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 0.1
+      TimeToPass: 120
       SuccessBased: 0
       SuccessfulClientsToPass: 0
     nextStageID: 4
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 4
     stageID: 4
     isTutorial: 0
     isFinal: 0
     Clients:
-      SpawnableClients: []
+      SpawnableClients:
+      - {fileID: 11400000, guid: 5dec57598a792b241a80aec9cae22aa7, type: 2}
+      - {fileID: 11400000, guid: 1672b81f4f50fa4469614e6dfae361ad, type: 2}
+      - {fileID: 11400000, guid: f44cf661893f8f044b72ee42b31fe6bb, type: 2}
+      - {fileID: 11400000, guid: 24f5938c2aabfe843b33fe1aa1cc4da7, type: 2}
       PreSpawn: 0
-      MinInterval: 0
-      MaxInterval: 0
-      ForceClientOnScreen: 0
+      MinInterval: 20
+      MaxInterval: 25
+      ForceClientOnScreen: 1
       waitToForce: 5
       waitForStageToEndBeforeSpawning: 0
-      SpawnCap: 0
+      SpawnCap: 3
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      - {fileID: 4164327085067446792, guid: 018603cdb672fc541b6f3c47b3bd7441, type: 3}
+      MinInterval: 30
+      MaxInterval: 35
+      MinHorde: 1
+      MaxHorde: 3
+      SpawnCap: 4
     Conditions:
       TimeBased: 1
-      TimeToPass: 0.1
+      TimeToPass: 150
       SuccessBased: 0
       SuccessfulClientsToPass: 0
     nextStageID: 5
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 5
     stageID: 5
     isTutorial: 0
     isFinal: 0
     Clients:
-      SpawnableClients: []
+      SpawnableClients:
+      - {fileID: 11400000, guid: bbc7e6287803975499583b7e67e72e30, type: 2}
+      - {fileID: 11400000, guid: 443edfef53c15db4fb71eed8c9132416, type: 2}
+      - {fileID: 11400000, guid: 51cc4c32d8ee4b345b504d8b85bff52d, type: 2}
+      - {fileID: 11400000, guid: d9a00f781ce41694fa32dff474ded0f4, type: 2}
+      - {fileID: 11400000, guid: fefb08db95f60134e88a61baff8acf0a, type: 2}
+      - {fileID: 11400000, guid: 24f5938c2aabfe843b33fe1aa1cc4da7, type: 2}
       PreSpawn: 0
-      MinInterval: 0
-      MaxInterval: 0
-      ForceClientOnScreen: 0
+      MinInterval: 20
+      MaxInterval: 30
+      ForceClientOnScreen: 1
       waitToForce: 5
-      waitForStageToEndBeforeSpawning: 0
-      SpawnCap: 0
+      waitForStageToEndBeforeSpawning: 1
+      SpawnCap: 4
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: 83f55a0731afbf348bff5c3af1fe78a7, type: 3}
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: 018603cdb672fc541b6f3c47b3bd7441, type: 3}
+      MinInterval: 25
+      MaxInterval: 30
+      MinHorde: 2
+      MaxHorde: 3
+      SpawnCap: 6
     Conditions:
       TimeBased: 1
-      TimeToPass: 0.1
+      TimeToPass: 120
       SuccessBased: 0
       SuccessfulClientsToPass: 0
     nextStageID: 6
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
-  - stageName: 
+  - stageName: Level 6
     stageID: 6
     isTutorial: 0
-    isFinal: 0
+    isFinal: 1
     Clients:
-      SpawnableClients: []
+      SpawnableClients:
+      - {fileID: 11400000, guid: 07faf58cb839bcf478d8a54b80133d41, type: 2}
       PreSpawn: 0
       MinInterval: 0
       MaxInterval: 0
-      ForceClientOnScreen: 0
+      ForceClientOnScreen: 1
       waitToForce: 5
-      waitForStageToEndBeforeSpawning: 0
-      SpawnCap: 0
+      waitForStageToEndBeforeSpawning: 1
+      SpawnCap: 1
     Crittlings:
-      SpawnableCrittlings: []
-      MinInterval: 0
-      MaxInterval: 0
-      MinHorde: 0
-      MaxHorde: 0
-      SpawnCap: 0
+      SpawnableCrittlings:
+      - {fileID: 4164327085067446792, guid: c26569f341754754c9721bc1446f51a7, type: 3}
+      - {fileID: 4164327085067446792, guid: fab926cfec44b404fb443e8e14be358b, type: 3}
+      - {fileID: 4164327085067446792, guid: 018603cdb672fc541b6f3c47b3bd7441, type: 3}
+      MinInterval: 25
+      MaxInterval: 25
+      MinHorde: 2
+      MaxHorde: 3
+      SpawnCap: 6
     Conditions:
-      TimeBased: 1
-      TimeToPass: 0.1
-      SuccessBased: 0
-      SuccessfulClientsToPass: 0
-    nextStageID: 7
+      TimeBased: 0
+      TimeToPass: 0
+      SuccessBased: 1
+      SuccessfulClientsToPass: 1
+    nextStageID: 0
     OnCompleted:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 0
   - stageName: 
     stageID: 7
     isTutorial: 0

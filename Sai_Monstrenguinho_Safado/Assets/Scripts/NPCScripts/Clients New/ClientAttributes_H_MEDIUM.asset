@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_H_MEDIUM
   m_EditorClassIdentifier: 
   clientName: Ponyo
-  baseToleranceTimeMin: 110
-  baseToleranceTimeMax: 120
+  baseToleranceTimeMin: 80
+  baseToleranceTimeMax: 90
   cropsOrderedMin: 3
   cropsOrderedMax: 3
   cropPreference: 2

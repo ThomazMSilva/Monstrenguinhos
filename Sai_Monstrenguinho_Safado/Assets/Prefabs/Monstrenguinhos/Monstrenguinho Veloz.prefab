@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 9130691724831183256}
+  triggersAnimation: 1
   Manager: {fileID: 0}
   crittlingAnim: {fileID: 825067624574995154}
   spriteRenderer: {fileID: 778473395415026884}
@@ -57,13 +58,13 @@ MonoBehaviour:
   randomizeColor: 0
   hitsToFlee: 1
   agent: {fileID: 9087911344449678570}
-  cropPreferenceName: 3
+  cropPreferenceName: 1
   destinationThreshold: 1.5
   chasingSpeed: 1
-  fleeingSpeed: 6
+  fleeingSpeed: 14
   eatingSpeed: 0
   digestingSpeed: 0.01
-  eatingTime: 5
+  eatingTime: 8
   digestingTime: 4
   fadeOutTime: 3
 --- !u!195 &9087911344449678570

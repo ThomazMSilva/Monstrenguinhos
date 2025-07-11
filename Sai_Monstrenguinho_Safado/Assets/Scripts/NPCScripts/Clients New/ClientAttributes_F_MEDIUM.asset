@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClientAttributes_F_MEDIUM
   m_EditorClassIdentifier: 
   clientName: Ana
-  baseToleranceTimeMin: 90
-  baseToleranceTimeMax: 100
+  baseToleranceTimeMin: 70
+  baseToleranceTimeMax: 90
   cropsOrderedMin: 2
   cropsOrderedMax: 3
   cropPreference: 0
