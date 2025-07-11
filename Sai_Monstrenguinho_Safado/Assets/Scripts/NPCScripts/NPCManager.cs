@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Assets.Scripts.NPCScripts
@@ -286,6 +285,10 @@ namespace Assets.Scripts.NPCScripts
                     }
                 }
                 readyToPassStage = false;
+
+                game.CurrentStage.Conditions.SuccessfulClientsPassed = game.CurrentStage.Conditions.SuccessfulClientsToPass;
+                game.CurrentStage.Conditions.TimeElapsed = game.CurrentStage.Conditions.TimeToPass;
+
                 game.PassToStage(game.CurrentStage.nextStageID);
             }
         }

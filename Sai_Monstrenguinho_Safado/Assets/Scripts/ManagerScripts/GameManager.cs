@@ -78,6 +78,32 @@ namespace Assets.Scripts
         {
             if (!InstanceInitializedCorrectly()) return;
 
+            CloneStageAttributes();
+
+
+            int firstStage = _stageAttributes.Min(s => s.stageID);
+            PassToStage(firstStage);
+
+            _audioManager.Initialize(this);
+            _sceneLoader.Initialize(this);
+        }
+
+        private bool InstanceInitializedCorrectly()
+        {
+            if (_Instance != null)
+            {
+                Debug.LogError("Já tinha um GameManager na cena. Não continuando inicialização de " + _Instance.transform.root.gameObject);
+                Destroy(gameObject);
+                //return false;
+            }
+            _Instance = this;
+            Debug.Log("inicializou instancia de gm");
+            DontDestroyOnLoad(_Instance.transform.root.gameObject);
+            return true;
+        }
+
+        private void CloneStageAttributes()
+        {
             if (stage != null && stage.attributes != null)
             {
                 _stageAttributes = new List<StageAttributes>();
@@ -153,27 +179,6 @@ namespace Assets.Scripts
                     _stageAttributes.Add(copy);
                 }
             }
-
-
-            int firstStage = _stageAttributes.Min(s => s.stageID);
-            PassToStage(firstStage);
-
-            _audioManager.Initialize(this);
-            _sceneLoader.Initialize(this);
-        }
-
-        private bool InstanceInitializedCorrectly()
-        {
-            if (_Instance != null)
-            {
-                Debug.LogError("Já tinha um GameManager na cena. Não continuando inicialização de " + _Instance.transform.root.gameObject);
-                Destroy(gameObject);
-                //return false;
-            }
-            _Instance = this;
-            Debug.Log("inicializou instancia de gm");
-            DontDestroyOnLoad(_Instance.transform.root.gameObject);
-            return true;
         }
 
         public void QuitGame() => Application.Quit();

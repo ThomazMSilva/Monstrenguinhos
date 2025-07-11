@@ -54,6 +54,7 @@ namespace Assets.Scripts.ManagerScripts
         public void OnMusicChanged(float value) => GameManager.Instance.AudioManager.OnMusicChanged(value);
         public void OnGeneralChanged(float value) => GameManager.Instance.AudioManager.OnGeneralChanged(value);
 
+
         [SerializeField] private GameObject creditsScreen;
 
         public void SetCreditsScreenActive(bool active) => uiManager.SetPanelActive(creditsScreen, active);
