@@ -424,6 +424,7 @@ namespace Assets.Scripts.NPCScripts
 
         private void Start()
         {
+            PauseBehaviour(GameManager.Instance.IsPaused);
             GameManager.Instance.OnPause += PauseBehaviour;
             if(npcRenderer == null) npcRenderer = GetComponentsInChildren<Renderer>(true);
 

@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -3731,6 +3731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionDisplay: {fileID: 7449053370501825927}
+  triggersAnimation: 1
   npcAnim: {fileID: 869789612355880782}
   npcRenderer:
   - {fileID: 6584343103046483228}

@@ -208,6 +208,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ea0bc736-2743-41e2-92a7-3e895e04af7c",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e11d4bc6-1d2b-4592-8cd1-d68e5c8b79c5",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",

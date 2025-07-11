@@ -88,6 +88,7 @@ namespace Assets.Scripts.ClittlingScripts
         #region UNITY_METHODS
         private void Start()
         {
+            PauseBehaviour(GameManager.Instance.IsPaused);
             GameManager.Instance.OnPause += PauseBehaviour;
 
             originalPosition = transform.position;

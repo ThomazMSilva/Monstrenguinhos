@@ -39,9 +39,55 @@ namespace Assets.Scripts.NPCScripts
         private AudioClip successClip, failureClip;
 
         private bool isGamePaused;
+        private bool readyToPassStage;
         private WaitUntil waitUntilGameUnpauses;
         private WaitUntil waitUntilLastCLientFromStage;
         private Coroutine stageTimerRoutine;
+        #endregion
+
+        #region UNITY_METHODS
+        //#if UNITY_EDITOR
+        private void Update()
+        {
+            if (game.IsPaused) return;
+
+            var client = game.CurrentStage.Clients;
+
+            game.CurrentStage.StageTime += Time.deltaTime;
+
+            if(client.ClientsRemaining <= 0)
+            {
+                client.TotalTimeWaitedWithNoClients += Time.deltaTime;
+                if (client.ForceClientOnScreen)
+                {
+                    client.CurrentTimeWaitedWithNoClients += Time.deltaTime;
+                }
+            }
+
+            if(client.ClientsRemaining > 0)
+            {
+                client.TotalTimeWaitedWithClients += Time.deltaTime;
+                if (client.ForceClientOnScreen && client.CurrentTimeWaitedWithNoClients != 0)
+                {
+                    client.CurrentTimeWaitedWithNoClients = 0;
+                }
+            }
+        }
+//#endif
+        private void Start()
+        {
+            if (!TryInitializeTargetPositions()) return;
+
+            StartCoroutine(InitializeReferences());
+        }
+
+        private void OnDisable()
+        {
+            game.OnPause -= PauseBehaviour;
+            game.OnStagePassed -= OnStagePassed;
+            game.OnRestart -= Restart;
+            game.LastStage.OnCompleted.RemoveListener(Win);
+        }
         #endregion
 
         private bool TryInitializeTargetPositions()
@@ -111,6 +157,105 @@ namespace Assets.Scripts.NPCScripts
             return true;
         }
 
+        private IEnumerator InitializeReferences()
+        {
+            while (GameManager.Instance.IsLoading) yield return null;
+
+            CheckStartStageTimer();
+
+            game.OnPause += PauseBehaviour;
+            game.OnStagePassed += OnStagePassed;
+            game.OnRestart += Restart;
+            game.LastStage.OnCompleted.AddListener(Win);
+
+            waitForCapCheck = new(capCheckInterval);
+
+            StartCoroutine(SpawnRoutine());
+        }
+
+        #region SPAWN_LOGIC
+        private IEnumerator SpawnRoutine()
+        {
+            while (true)
+            {
+                if(isGamePaused) yield return waitUntilGameUnpauses;
+
+                var clients = game.CurrentStage.Clients;
+
+                yield return WaitForSpawnCap(clients);
+
+                yield return WaitForClientInterval(clients);
+                
+                yield return CheckStageProgression(clients);
+
+                SpawnClient();
+            }
+        }
+        
+        private IEnumerator WaitForSpawnCap(StageAttributes.NpcAttributes clients)
+        {
+            if(isGamePaused) yield return waitUntilGameUnpauses;
+
+            while (spawnedNPCs.Count >= clients.SpawnCap)
+            {
+                Debug.Log("Esperando spawn cap de cliente.");
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+                yield return waitForCapCheck;
+                if (readyToPassStage) yield break;
+            }
+        }
+
+        private IEnumerator WaitForClientInterval(StageAttributes.NpcAttributes clients)
+        {
+            if (isGamePaused) yield return waitUntilGameUnpauses;
+
+            clients.Interval = Random.Range(clients.MinInterval, clients.MaxInterval);
+
+            clients.TimeRemaining = clients.Interval;
+
+            while (clients.TimeRemaining > 0)
+            {
+                Debug.Log("Esperando intervalo de clientes.");
+                if (isGamePaused) yield return waitUntilGameUnpauses;
+
+                if (clients.ForceClientOnScreen && clients.CurrentTimeWaitedWithNoClients >= clients.waitToForce)
+                {
+                    clients.CurrentTimeWaitedWithNoClients = 0;
+                    clients.TimeRemaining = 0;
+                    yield break;
+                }
+                if (readyToPassStage) yield break;
+
+                clients.TimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+        }
+        
+        private IEnumerator CheckStageProgression(StageAttributes.NpcAttributes clients)
+        {
+            if (isGamePaused) yield return waitUntilGameUnpauses;
+
+            if (readyToPassStage)
+            {
+                Debug.Log("Loop de spawn identificou que tá pronto pra passar de estágio.");
+                if (clients.waitForStageToEndBeforeSpawning)
+                {
+                    while (clients.ClientsRemaining > 0)
+                    {
+                        Debug.Log("Esperando clientes do estagio irem embora, pra passar de estágio.");
+                        clients.TimeTakenFromNextStage += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                readyToPassStage = false;
+
+                game.CurrentStage.Conditions.SuccessfulClientsPassed = game.CurrentStage.Conditions.SuccessfulClientsToPass;
+                game.CurrentStage.Conditions.TimeElapsed = game.CurrentStage.Conditions.TimeToPass;
+
+                game.PassToStage(game.CurrentStage.nextStageID);
+            }
+        }
+
         private void SpawnClient()
         {
             if (game.CurrentStage.Clients.SpawnableClients.Count <= 0) return;
@@ -178,152 +323,9 @@ namespace Assets.Scripts.NPCScripts
                 }
             );
         }
+        #endregion
 
-        private bool readyToPassStage;
-
-        private void RemoveClientFromList(NPCBehaviour client)
-        {
-            spawnedNPCs.Remove(client);
-            foreach (var kvp in positionsOccupationDict)
-            {
-                if (kvp.Value != client) continue;
-                
-                positionsOccupationDict[kvp.Key] = null;
-                break;
-            }
-        }
-
-//#if UNITY_EDITOR
-        private void Update()
-        {
-            if (game.IsPaused) return;
-
-            var client = game.CurrentStage.Clients;
-
-            game.CurrentStage.StageTime += Time.deltaTime;
-
-            if(client.ClientsRemaining <= 0)
-            {
-                client.TotalTimeWaitedWithNoClients += Time.deltaTime;
-                if (client.ForceClientOnScreen)
-                {
-                    client.CurrentTimeWaitedWithNoClients += Time.deltaTime;
-                }
-            }
-
-            if(client.ClientsRemaining > 0)
-            {
-                client.TotalTimeWaitedWithClients += Time.deltaTime;
-                if (client.ForceClientOnScreen && client.CurrentTimeWaitedWithNoClients != 0)
-                {
-                    client.CurrentTimeWaitedWithNoClients = 0;
-                }
-            }
-        }
-//#endif
-        private IEnumerator SpawnRoutine()
-        {
-            while (true)
-            {
-                if(isGamePaused) yield return waitUntilGameUnpauses;
-
-                var clients = game.CurrentStage.Clients;
-
-                yield return WaitForSpawnCap(clients);
-
-                yield return WaitForClientInterval(clients);
-                
-                yield return CheckStageProgression(clients);
-
-                SpawnClient();
-            }
-        }
-        
-        private IEnumerator WaitForSpawnCap(StageAttributes.NpcAttributes clients)
-        {
-            while (spawnedNPCs.Count >= clients.SpawnCap)
-            {
-                if (isGamePaused) yield return waitUntilGameUnpauses;
-                yield return waitForCapCheck;
-                if (readyToPassStage) yield break;
-            }
-        }
-
-        private IEnumerator WaitForClientInterval(StageAttributes.NpcAttributes clients)
-        {
-            clients.Interval = Random.Range(clients.MinInterval, clients.MaxInterval);
-
-            clients.TimeRemaining = clients.Interval;
-
-            while (clients.TimeRemaining > 0)
-            {
-                if (isGamePaused) yield return waitUntilGameUnpauses;
-
-                if (clients.ForceClientOnScreen && clients.CurrentTimeWaitedWithNoClients >= clients.waitToForce)
-                {
-                    clients.CurrentTimeWaitedWithNoClients = 0;
-                    clients.TimeRemaining = 0;
-                    yield break;
-                }
-                if (readyToPassStage) yield break;
-
-                clients.TimeRemaining -= Time.deltaTime;
-                yield return null;
-            }
-        }
-
-        private IEnumerator CheckStageProgression(StageAttributes.NpcAttributes clients)
-        {
-            if (readyToPassStage)
-            {
-                if (clients.waitForStageToEndBeforeSpawning)
-                {
-                    while (clients.ClientsRemaining > 0)
-                    {
-                        clients.TimeTakenFromNextStage += Time.deltaTime;
-                        yield return null;
-                    }
-                }
-                readyToPassStage = false;
-
-                game.CurrentStage.Conditions.SuccessfulClientsPassed = game.CurrentStage.Conditions.SuccessfulClientsToPass;
-                game.CurrentStage.Conditions.TimeElapsed = game.CurrentStage.Conditions.TimeToPass;
-
-                game.PassToStage(game.CurrentStage.nextStageID);
-            }
-        }
-
-        private void ReturnAllClients(NPCBehaviour except = null)
-        {
-            bool exc = (except != null); 
-
-            foreach (var client in spawnedNPCs)
-            {
-                if (exc && client == except) continue;
-                client.ReturnHome();
-            }
-        }
-
-        private void PauseBehaviour(bool isPaused)
-        {
-            isGamePaused = isPaused;
-            if(isPaused)
-                waitUntilGameUnpauses = new(() => !isGamePaused);
-        }
-        
-        private void Restart()
-        {
-            ReturnAllClients(null);
-        }
-        
-        private void CheckStartStageTimer()
-        {
-            if (stageTimerRoutine != null) StopCoroutine(stageTimerRoutine);
-
-            if(game.CurrentStage.Conditions.TimeBased)
-                stageTimerRoutine = StartCoroutine(StageTimer());
-        }
-
+        #region STAGE_LOGIC
         private IEnumerator StageTimer()
         {
             var conditions = game.CurrentStage.Conditions;
@@ -341,10 +343,14 @@ namespace Assets.Scripts.NPCScripts
             stageTimerRoutine = null;
         }
 
-        public void Win() => OnWon?.Invoke();
+        private void CheckStartStageTimer()
+        {
+            if (stageTimerRoutine != null) StopCoroutine(stageTimerRoutine);
 
-        public void Lose() => OnLost?.Invoke();
-
+            if(game.CurrentStage.Conditions.TimeBased)
+                stageTimerRoutine = StartCoroutine(StageTimer());
+        }
+     
         public void OnStagePassed()
         {
             CheckStartStageTimer();
@@ -353,29 +359,45 @@ namespace Assets.Scripts.NPCScripts
             /*if(game.CurrentStage.Clients.PreSpawn)
                 SpawnClient();*/
         }
+        #endregion
 
-        private void Start()
+        private void RemoveClientFromList(NPCBehaviour client)
         {
-            if (!TryInitializeTargetPositions()) return;
+            spawnedNPCs.Remove(client);
+            foreach (var kvp in positionsOccupationDict)
+            {
+                if (kvp.Value != client) continue;
+                
+                positionsOccupationDict[kvp.Key] = null;
+                break;
+            }
+        }
+        
+        private void ReturnAllClients(NPCBehaviour except = null)
+        {
+            bool exc = (except != null); 
 
-            CheckStartStageTimer();
-
-            game.OnPause += PauseBehaviour;
-            game.OnStagePassed += OnStagePassed;
-            game.OnRestart += Restart;
-            game.LastStage.OnCompleted.AddListener(Win);
-
-            waitForCapCheck = new(capCheckInterval);
-
-            StartCoroutine(SpawnRoutine());
+            foreach (var client in spawnedNPCs)
+            {
+                if (exc && client == except) continue;
+                client.ReturnHome();
+            }
+        }
+     
+        private void Restart()
+        {
+            ReturnAllClients(null);
         }
 
-        private void OnDisable()
+        private void PauseBehaviour(bool isPaused)
         {
-            game.OnPause -= PauseBehaviour;
-            game.OnStagePassed -= OnStagePassed;
-            game.OnRestart -= Restart;
-            game.LastStage.OnCompleted.RemoveListener(Win);
+            isGamePaused = isPaused;
+            if(isPaused)
+                waitUntilGameUnpauses = new(() => !isGamePaused);
         }
+        
+        public void Win() => OnWon?.Invoke();
+
+        public void Lose() => OnLost?.Invoke();
     }
 }

@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
-    public class ResolutionManager : MonoBehaviour
+    public class GraphicsManager : MonoBehaviour
     {
         [SerializeField] private TMP_Dropdown resolutionDropdown;
+        [SerializeField] private TMP_Dropdown antiAliasingDropdown;
         [SerializeField] private Toggle fullScreenToggle;
+        [SerializeField] private Toggle vSyncToggle;
 
         private Resolution[] resolutions;
         private List<Resolution> filteredResolutions = new();
@@ -19,7 +21,8 @@ namespace Assets.Scripts.UI
 
         void Start()
         {
-            fullScreenToggle.isOn = Screen.fullScreen;
+            if (fullScreenToggle != null) fullScreenToggle.isOn = Screen.fullScreen;
+            if(vSyncToggle != null) vSyncToggle.isOn = QualitySettings.vSyncCount > 0;
 
             resolutionDropdown.ClearOptions();
 
@@ -76,5 +79,24 @@ namespace Assets.Scripts.UI
             Resolution resolution = filteredResolutions[resolutionIndex];
             Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         }
+    
+        public void SetAntialiasing(int value)
+        {
+            int antiAliasing = 0;
+            switch (value)
+            {
+                case 1: antiAliasing = 2; break;
+                case 2: antiAliasing = 4 ; break;
+                case 3: antiAliasing = 8 ; break;
+                default: break;
+            }
+            QualitySettings.antiAliasing = antiAliasing;
+        }
+
+        public void SetVSynchronization(bool active)
+        {
+            QualitySettings.vSyncCount = active ? 1 : 0;
+        }
+
     }
 }
