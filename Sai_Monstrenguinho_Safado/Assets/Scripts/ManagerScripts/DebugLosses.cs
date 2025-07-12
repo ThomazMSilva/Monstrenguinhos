@@ -32,6 +32,11 @@ namespace Assets.Scripts
             var star = visualFeedbacks[^currentFeedbacks];
 
             if (star == null || !star.activeSelf) return;
+
+            var particles = star.GetComponentInChildren<ParticleSystem>();
+
+            if (particles != null) particles.Play();
+
             var starParent = star.transform.parent;
 
             starParent.rotation = Quaternion.identity;

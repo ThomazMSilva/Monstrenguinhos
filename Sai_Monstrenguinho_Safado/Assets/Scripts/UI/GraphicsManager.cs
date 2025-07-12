@@ -22,11 +22,24 @@ namespace Assets.Scripts.UI
         void Start()
         {
             if (fullScreenToggle != null) fullScreenToggle.isOn = Screen.fullScreen;
-            if(vSyncToggle != null) vSyncToggle.isOn = QualitySettings.vSyncCount > 0;
 
+            int antiAliasingIndex = 0;
+            switch (QualitySettings.antiAliasing)
+            {
+                case 2: antiAliasingIndex = 1; break;
+                case 4: antiAliasingIndex = 2; break;
+                case 8: antiAliasingIndex = 3; break;
+                default: break;
+            }
+            antiAliasingDropdown.value = antiAliasingIndex;
+
+#if !UNITY_WEBGL
+            if(vSyncToggle != null) vSyncToggle.isOn = QualitySettings.vSyncCount > 0;
             resolutionDropdown.ClearOptions();
 
             InitializeResolutionOptions();
+#endif
+
         }
 
         private void InitializeResolutionOptions()
@@ -62,6 +75,7 @@ namespace Assets.Scripts.UI
         public void SetFullscreen(bool fullscreenState)
         {
             Screen.fullScreen = fullscreenState;
+//#if !UNITY_WEBGL
             if (fullscreenState)
             {
                 Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
@@ -72,12 +86,15 @@ namespace Assets.Scripts.UI
                 Screen.fullScreenMode = FullScreenMode.Windowed;
                 //UnityEditor.PlayerSettings.resizableWindow = true;
             }
+//#endif
         }
 
         public void SetResolution(int resolutionIndex)
         {
+#if !UNITY_WEBGL
             Resolution resolution = filteredResolutions[resolutionIndex];
             Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+#endif
         }
     
         public void SetAntialiasing(int value)
