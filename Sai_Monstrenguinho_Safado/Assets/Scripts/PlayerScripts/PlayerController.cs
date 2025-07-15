@@ -392,10 +392,13 @@ namespace Assets.Scripts.PlayerScripts
         public void SetNotInteracting()
         {
             isInteracting = false;
+            playerAnim.SetLayerWeight(1, 0);
         }
 
         public void TriggerAnimation()
         {
+            playerAnim.SetLayerWeight(1, 1);
+
             playerAnim.SetTrigger("Action");
         }
 

@@ -361,7 +361,7 @@ MonoBehaviour:
       MaxInterval: 20
       ForceClientOnScreen: 1
       waitToForce: 5
-      waitForStageToEndBeforeSpawning: 0
+      waitForStageToEndBeforeSpawning: 1
       SpawnCap: 2
     Crittlings:
       SpawnableCrittlings: []
@@ -405,7 +405,7 @@ MonoBehaviour:
       TimeToPass: 0
       SuccessBased: 1
       SuccessfulClientsToPass: 1
-    nextStageID: 12
+    nextStageID: 0
     OnCompleted:
       m_PersistentCalls:
         m_Calls: []
